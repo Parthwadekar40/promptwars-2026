@@ -6,10 +6,10 @@
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --font-serif: "Instrument Serif", Georgia, serif;
 
-  --color-paper: #f7f5f2;
+  --color-paper: #e4ded3;
   --color-ink: #171412;
-  --color-ink-muted: #716b66;
-  --color-line: #e6e1db;
+  --color-ink-muted: #6f675c;
+  --color-line: #d8d0c2;
 
   --color-brand-50: #efedff;
   --color-brand-100: #e2deff;
@@ -65,6 +65,22 @@ body {
 
 .hairline {
   border: 1px solid var(--color-line);
+}
+
+/* ————— image fusion (alpha-keyed art melts into the page) ————— */
+
+.float-art {
+  filter: drop-shadow(0 22px 38px rgba(23, 20, 18, 0.14));
+}
+
+.mask-fade-y {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 14%, black 86%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 14%, black 86%, transparent);
+}
+
+.mask-fade-all {
+  -webkit-mask-image: radial-gradient(ellipse 78% 78% at 50% 50%, black 52%, transparent 82%);
+  mask-image: radial-gradient(ellipse 78% 78% at 50% 50%, black 52%, transparent 82%);
 }
 
 /* ————— animated atmosphere (code-generated motion) ————— */

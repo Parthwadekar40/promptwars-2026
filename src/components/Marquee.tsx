@@ -8,9 +8,9 @@ export function Marquee({ items }: { items: string[] }) {
           <span key={i} className="flex items-center gap-12">
             <span className="eyebrow !text-[13px] !tracking-[0.22em] text-ink/70">{t}</span>
             <img
-              src={`${import.meta.env.BASE_URL}assets/img/glass-bar.webp`}
+              src={`${import.meta.env.BASE_URL}assets/img/glass-bar-alpha.webp`}
               alt=""
-              className="h-2.5 w-16 object-cover opacity-70"
+              className="h-2.5 w-16 object-contain opacity-80"
             />
           </span>
         ))}

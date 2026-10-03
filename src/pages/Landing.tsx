@@ -99,12 +99,12 @@ export function Landing() {
             className="flex justify-center md:justify-end"
           >
             <motion.img
-              src={`${import.meta.env.BASE_URL}assets/img/orb-main.webp`}
+              src={`${import.meta.env.BASE_URL}assets/img/orb-main-alpha.webp`}
               alt="Iridescent glass orb with soft pastel reflections"
               width="1024"
               height="1024"
               fetchPriority="high"
-              className="w-full max-w-[380px] rounded-[20px] md:max-w-[540px]"
+              className="float-art w-full max-w-[380px] md:max-w-[540px]"
               animate={reduce ? undefined : { y: [0, -12, 0] }}
               transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
             />
@@ -142,14 +142,14 @@ export function Landing() {
       {/* ————— FEATURES — glass-bar rule at brutal width, slab bleeding, deep staggers ————— */}
       <section id="features" className="relative overflow-hidden">
         <img
-          src={`${import.meta.env.BASE_URL}assets/img/glass-slab.webp`}
+          src={`${import.meta.env.BASE_URL}assets/img/glass-slab-alpha.webp`}
           alt=""
           aria-hidden
           loading="lazy"
           decoding="async"
           width="1024"
           height="1024"
-          className="animate-float pointer-events-none absolute -right-24 top-4 hidden w-[420px] rotate-[8deg] opacity-80 lg:block"
+          className="animate-float float-art pointer-events-none absolute -right-24 top-4 hidden w-[420px] rotate-[8deg] opacity-90 lg:block"
           style={{ ['--tilt' as string]: '8deg' }}
         />
         <div className="mx-auto w-full max-w-7xl px-6 py-24">
@@ -158,7 +158,7 @@ export function Landing() {
             Everything you need. <em className="font-serif font-normal italic tracking-normal text-ink-muted">Nothing you don't.</em>
           </h2>
           <motion.img
-            src={`${import.meta.env.BASE_URL}assets/img/glass-bar.webp`}
+            src={`${import.meta.env.BASE_URL}assets/img/glass-bar-alpha.webp`}
             alt=""
             aria-hidden
             loading="lazy"
@@ -166,10 +166,10 @@ export function Landing() {
             width="467"
             height="313"
             initial={reduce ? false : { opacity: 0, scaleX: 0.6 }}
-            whileInView={{ opacity: 0.85, scaleX: 1 }}
+            whileInView={{ opacity: 0.9, scaleX: 1 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 1.1, delay: 0.35, ease: EASE }}
-            className="mt-10 h-10 w-full origin-left rounded-[10px] object-cover"
+            className="float-art mt-10 h-10 w-full origin-left object-contain object-left"
           />
           <div className="mt-12 grid gap-px overflow-hidden rounded-[16px] border border-line bg-line sm:grid-cols-2">
             {CAPABILITIES.map((c, i) => (
@@ -192,19 +192,9 @@ export function Landing() {
         </div>
       </section>
 
-      {/* ————— QUOTE BAND — pebble art at full bleed, serif quote in its sky ————— */}
-      <section className="relative isolate overflow-hidden">
-        <img
-          src={`${import.meta.env.BASE_URL}assets/img/pebble-empty.webp`}
-          alt=""
-          aria-hidden
-          loading="lazy"
-          decoding="async"
-          width="1024"
-          height="1024"
-          className="absolute inset-0 -z-10 size-full object-cover"
-        />
-        <div className="mx-auto max-w-4xl px-6 pb-28 pt-20 text-center md:pb-36 md:pt-28">
+      {/* ————— QUOTE BAND — the pebble floats free, quote in its sky ————— */}
+      <section className="relative overflow-hidden">
+        <div className="mx-auto max-w-4xl px-6 pt-24 text-center md:pt-32">
           <motion.p
             initial={reduce ? false : { opacity: 0, y: 22 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -215,18 +205,32 @@ export function Landing() {
             “Simplicity is the soul of efficiency —<br />and beauty is its proof.”
           </motion.p>
         </div>
+        <motion.img
+          src={`${import.meta.env.BASE_URL}assets/img/pebble-empty-alpha.webp`}
+          alt=""
+          aria-hidden
+          loading="lazy"
+          decoding="async"
+          width="1024"
+          height="1024"
+          initial={reduce ? false : { opacity: 0, y: 26 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 1.2, delay: 0.5, ease: EASE }}
+          className="float-art mx-auto -mt-4 w-[520px] max-w-full"
+        />
       </section>
 
-      {/* ————— ORB-WIDE INTERLUDE — brutal full-bleed still with drifting caption ————— */}
-      <section className="relative isolate overflow-hidden border-y border-line">
+      {/* ————— ORB-WIDE INTERLUDE — art melts into the paper ————— */}
+      <section className="relative overflow-hidden border-y border-line">
         <img
-          src={`${import.meta.env.BASE_URL}assets/img/orb-wide.webp`}
+          src={`${import.meta.env.BASE_URL}assets/img/orb-wide-alpha.webp`}
           alt="Iridescent orb with a soft rainbow refraction across a cream studio floor"
           loading="lazy"
           decoding="async"
           width="1376"
           height="768"
-          className="animate-silk h-[42vh] min-h-[300px] w-full object-cover md:h-[56vh]"
+          className="animate-silk mask-fade-y w-full"
         />
         <motion.div
           initial={reduce ? false : { opacity: 0, x: -24 }}
@@ -309,7 +313,7 @@ export function Landing() {
               decoding="async"
               width="1376"
               height="768"
-              className="animate-silk absolute inset-0 z-0 size-full object-cover opacity-70"
+              className="animate-silk mask-fade-all absolute inset-0 z-0 size-full object-cover opacity-80"
             />
             <div className="relative z-10">
               <p className="text-ink-muted">Create your space and let the AI do the heavy lifting.</p>
