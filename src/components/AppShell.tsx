@@ -9,13 +9,32 @@ const NAV = [
   { to: '/connect', label: 'Settings' },
 ];
 
-/** App shell — hairline header, accessible nav (hamburger on mobile), quiet footer. */
+const GITHUB = 'https://github.com/Parthwadekar40';
+
+/** App shell — hairline header, accessible nav (hamburger on mobile), quiet footer, page-wide gradient follow. */
 export function AppShell({ children }: { children: ReactNode }) {
   const route = useRoute();
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex min-h-dvh flex-col">
+    <div
+      className="flex min-h-dvh flex-col"
+      onMouseMove={(e) => {
+        const el = e.currentTarget;
+        el.style.setProperty('--mx', `${e.clientX}px`);
+        el.style.setProperty('--my', `${e.clientY}px`);
+      }}
+    >
+      {/* the brand gradient from the top, following the cursor through the whole page */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-[1] transition-opacity"
+        style={{
+          background:
+            'radial-gradient(680px circle at var(--mx, 50%) var(--my, 12%), rgba(109,95,247,0.16), rgba(167,139,250,0.10) 32%, rgba(110,231,183,0.07) 55%, transparent 72%)',
+        }}
+      />
+
       <header className="sticky top-0 z-40 border-b border-line bg-paper/85 backdrop-blur-xl">
         <nav aria-label="Main" className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5">
           <a href="#/" className="flex items-center gap-2.5 font-display text-[17px] font-semibold tracking-tight text-ink">
@@ -76,18 +95,65 @@ export function AppShell({ children }: { children: ReactNode }) {
         )}
       </header>
 
-      <main id="main" className="flex-1">
+      <main id="main" className="relative z-[2] flex-1">
         {children}
       </main>
 
-      <footer className="border-t border-line">
-        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-3 px-6 py-8 text-[13px] text-ink-muted md:flex-row md:items-center">
-          <p>© 2026 · All rights reserved</p>
-          <nav aria-label="Footer" className="flex items-center gap-6">
-            <a className="transition-colors hover:text-ink" href="#/">Privacy</a>
-            <a className="transition-colors hover:text-ink" href="#/">Terms</a>
-            <a className="transition-colors hover:text-ink" href="#/connect">Contact</a>
-          </nav>
+      <footer className="relative z-[2] border-t border-line">
+        <div className="mx-auto max-w-7xl px-6 py-14">
+          <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
+            <div>
+              <a href="#/" className="flex items-center gap-2.5 font-display text-[17px] font-semibold tracking-tight text-ink">
+                <span aria-hidden className="size-[22px] rounded-[6px] bg-gradient-to-br from-brand-500 via-brand-300 to-mint-300" />
+                <span>PromptWars App</span>
+              </a>
+              <p className="mt-4 max-w-xs text-[13px] leading-relaxed text-ink-muted">
+                An intelligent workspace that turns your ideas into finished work — fast, private, and a genuine
+                pleasure to use.
+              </p>
+              <a
+                href={GITHUB}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex items-center gap-1.5 rounded-[8px] border border-line px-3 py-1.5 text-[13px] font-medium text-ink transition-colors hover:border-ink/25 hover:bg-ink/[0.04]"
+              >
+                GitHub ↗
+              </a>
+            </div>
+
+            <nav aria-label="Explore">
+              <p className="eyebrow">EXPLORE</p>
+              <ul className="mt-4 space-y-2.5 text-[13px] text-ink-muted">
+                <li><a className="transition-colors hover:text-ink" href="#/">Home</a></li>
+                <li><a className="transition-colors hover:text-ink" href="#/signin">Sign in</a></li>
+                <li><a className="transition-colors hover:text-ink" href="#/connect">Settings</a></li>
+              </ul>
+            </nav>
+
+            <nav aria-label="Legal">
+              <p className="eyebrow">LEGAL</p>
+              <ul className="mt-4 space-y-2.5 text-[13px] text-ink-muted">
+                <li><a className="transition-colors hover:text-ink" href="#/">Privacy</a></li>
+                <li><a className="transition-colors hover:text-ink" href="#/">Terms</a></li>
+                <li><a className="transition-colors hover:text-ink" href="#/connect">Contact</a></li>
+              </ul>
+            </nav>
+          </div>
+
+          <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-line pt-6 text-[13px] text-ink-muted md:flex-row md:items-center">
+            <p>
+              © 2026{' '}
+              <a
+                href={GITHUB}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-ink transition-colors hover:text-brand-600"
+              >
+                Parth Wadekar
+              </a>
+              . All rights reserved.
+            </p>
+          </div>
         </div>
       </footer>
     </div>

@@ -1,4 +1,3 @@
-import type { MouseEvent } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Badge, Button, GlassCard, Input, Section, Stat } from '../components/ui';
 import { Icon } from '../components/Icon';
@@ -23,13 +22,6 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 export function Landing() {
   const reduce = useReducedMotion();
 
-  const trackCursor = (e: MouseEvent<HTMLElement>) => {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--mx', `${e.clientX - r.left}px`);
-    el.style.setProperty('--my', `${e.clientY - r.top}px`);
-  };
-
   const words = ['Solve', 'it'];
   const accent = 'beautifully,';
   const tail = ['in', 'minutes.'];
@@ -37,16 +29,8 @@ export function Landing() {
   return (
     <>
       {/* ————— HERO — brutal scale, cursor spotlight, delayed word reveal ————— */}
-      <section onMouseMove={trackCursor} className="relative overflow-hidden">
+      <section className="relative overflow-hidden">
         <Atmosphere />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 transition-opacity"
-          style={{
-            background:
-              'radial-gradient(420px circle at var(--mx, 50%) var(--my, 30%), rgba(139,124,248,0.10), transparent 70%)',
-          }}
-        />
 
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 pb-14 pt-20 md:grid-cols-[1.08fr_0.92fr] md:pb-20 md:pt-28">
           <div>
@@ -146,36 +130,11 @@ export function Landing() {
 
       {/* ————— FEATURES — glass-bar rule at brutal width, slab bleeding, deep staggers ————— */}
       <section id="features" className="relative overflow-hidden">
-        <img
-          src={`${import.meta.env.BASE_URL}assets/img/glass-slab-alpha.webp`}
-          alt=""
-          aria-hidden
-          loading="lazy"
-          decoding="async"
-          width="1024"
-          height="1024"
-          className="animate-float float-art pointer-events-none absolute -right-24 top-4 hidden w-[420px] rotate-[8deg] opacity-90 lg:block"
-          style={{ ['--tilt' as string]: '8deg' }}
-        />
         <div className="mx-auto w-full max-w-7xl px-6 py-24">
           <Badge>Capabilities</Badge>
           <h2 className="t-h2 mt-5 max-w-2xl font-display font-semibold tracking-tight text-ink">
             Everything you need. <em className="font-serif font-normal italic tracking-normal text-ink-muted">Nothing you don't.</em>
           </h2>
-          <motion.img
-            src={`${import.meta.env.BASE_URL}assets/img/glass-bar-alpha.webp`}
-            alt=""
-            aria-hidden
-            loading="lazy"
-            decoding="async"
-            width="467"
-            height="313"
-            initial={reduce ? false : { opacity: 0, scaleX: 0.6 }}
-            whileInView={{ opacity: 0.9, scaleX: 1 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 1.1, delay: 0.35, ease: EASE }}
-            className="float-art mt-10 h-10 w-full origin-left object-contain object-left"
-          />
           <div className="mt-12 grid gap-px overflow-hidden rounded-[16px] border border-line bg-line sm:grid-cols-2">
             {CAPABILITIES.map((c, i) => (
               <motion.div
