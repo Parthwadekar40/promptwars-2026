@@ -51,17 +51,19 @@ export function Landing() {
 
           <motion.div
             initial={reduce ? false : { opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
             className="flex justify-center"
           >
-            <img
+            <motion.img
               src={`${import.meta.env.BASE_URL}assets/img/orb-main.webp`}
               alt="Iridescent glass orb with soft pastel reflections"
               width="1024"
               height="1024"
               fetchPriority="high"
               className="w-full max-w-[420px] rounded-[18px]"
+              animate={reduce ? undefined : { y: [0, -10, 0] }}
+              transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
             />
           </motion.div>
         </div>
@@ -99,18 +101,33 @@ export function Landing() {
         </div>
       </Section>
 
-      {/* dark story band — mission line over the divider's quiet sky */}
+      {/* dark story band — live mist loop over the mission line */}
       <section className="relative isolate overflow-hidden bg-[#0b0612]">
-        <img
-          src={`${import.meta.env.BASE_URL}assets/img/dark-divider.webp`}
-          alt=""
-          aria-hidden
-          loading="lazy"
-          decoding="async"
-          width="1376"
-          height="768"
-          className="absolute inset-0 -z-10 size-full object-cover opacity-90"
-        />
+        {reduce ? (
+          <img
+            src={`${import.meta.env.BASE_URL}assets/img/dark-divider.webp`}
+            alt=""
+            aria-hidden
+            loading="lazy"
+            decoding="async"
+            width="1376"
+            height="768"
+            className="absolute inset-0 -z-10 size-full object-cover opacity-90"
+          />
+        ) : (
+          <video
+            aria-hidden
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            poster={`${import.meta.env.BASE_URL}assets/img/dark-divider.webp`}
+            className="absolute inset-0 -z-10 size-full object-cover opacity-90"
+          >
+            <source src={`${import.meta.env.BASE_URL}assets/video/mist-loop.mp4`} type="video/mp4" />
+          </video>
+        )}
         <div className="mx-auto max-w-6xl px-6 py-24 md:py-28">
           <motion.p
             initial={reduce ? false : { opacity: 0, y: 14 }}
@@ -144,7 +161,7 @@ export function Landing() {
             decoding="async"
             width="1376"
             height="768"
-            className="absolute inset-0 z-0 size-full object-cover opacity-70"
+            className="animate-silk absolute inset-0 z-0 size-full object-cover opacity-70"
           />
           <div className="relative z-10">
             <p className="text-ink-muted">Create your space and let the AI do the heavy lifting.</p>
