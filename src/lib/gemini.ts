@@ -1,4 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
+import type { Result } from './result';
+export type { Result };
 
 /**
  * Google Gemini access — 2026-verified behavior:
@@ -14,8 +16,6 @@ export const MODELS = [
   'gemini-3.5-flash',
   'gemini-flash-lite-latest',
 ] as const;
-
-export type Result<T> = { ok: true; data: T } | { ok: false; error: string };
 
 export const getKey = (): string =>
   localStorage.getItem(KEY_STORE) || (import.meta.env.VITE_GEMINI_API_KEY as string) || '';

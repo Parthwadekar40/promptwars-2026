@@ -1,0 +1,14 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Each anonymous user can only touch their own data
+    match /users/{uid}/{doc=**} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+    // Optional shared/read-only collection for demo content
+    match /public/{doc=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}
