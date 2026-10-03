@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Badge, Button, GlassCard, Input } from '../components/ui';
 import { getKey, setKey, generate, hasKey } from '../lib/gemini';
 import { dbConfigured, ensureUser } from '../lib/db';
@@ -6,6 +7,7 @@ import { mailConfigured, sendEmail } from '../lib/mail';
 
 /** Settings: Gemini key connect + live service status (also our event-day health check). */
 export function Connect() {
+  const reduce = useReducedMotion();
   const [keyInput, setKeyInput] = useState(getKey());
   const [status, setStatus] = useState<string>();
 
@@ -40,6 +42,15 @@ export function Connect() {
 
   return (
     <section className="mx-auto flex max-w-2xl flex-col gap-6 px-6 py-16">
+      <motion.img
+        src={`${import.meta.env.BASE_URL}assets/img/orbs-trio.webp`}
+        alt=""
+        aria-hidden
+        initial={reduce ? false : { opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.25 }}
+        className="mx-auto w-56 rounded-2xl"
+      />
       <GlassCard>
         <Badge>SETTINGS</Badge>
         <h1 className="mt-3 font-display text-2xl font-bold text-ink">Connect your Google AI key</h1>
