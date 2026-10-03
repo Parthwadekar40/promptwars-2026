@@ -53,32 +53,16 @@ export function Landing() {
             initial={reduce ? false : { opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-            aria-hidden
+            className="flex justify-center"
           >
-            <div className="hairline relative rounded-[18px] bg-white/70 p-3 shadow-[0_2px_4px_rgba(23,20,18,0.04),0_32px_64px_-24px_rgba(23,20,18,0.18)] backdrop-blur-xl">
-              <div className="hairline flex items-center gap-2 rounded-[10px] bg-paper/80 px-4 py-2.5">
-                <span className="size-2 rounded-full bg-[#f28b82]" />
-                <span className="size-2 rounded-full bg-[#fbbc6b]" />
-                <span className="size-2 rounded-full bg-[#81c995]" />
-                <span className="eyebrow ml-2 truncate">workspace</span>
-              </div>
-              <div className="space-y-2.5 p-3">
-                {[88, 64, 96, 72].map((w, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <span className="size-7 shrink-0 rounded-[8px] bg-gradient-to-br from-brand-200 to-mint-300/60" />
-                    <div className="hairline h-8 rounded-[8px] bg-white/80" style={{ width: `${w}%` }} />
-                  </div>
-                ))}
-                <div className="hairline mt-4 rounded-[10px] bg-gradient-to-br from-brand-50 via-white to-mint-300/20 p-4">
-                  <div className="eyebrow">AI response</div>
-                  <div className="mt-2 space-y-2">
-                    <div className="h-2.5 w-[92%] rounded-full bg-ink/10" />
-                    <div className="h-2.5 w-[78%] rounded-full bg-ink/10" />
-                    <div className="h-2.5 w-[60%] rounded-full bg-brand-300/50" />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <img
+              src={`${import.meta.env.BASE_URL}assets/img/orb-main.webp`}
+              alt="Iridescent glass orb with soft pastel reflections"
+              width="1024"
+              height="1024"
+              fetchPriority="high"
+              className="w-full max-w-[420px] rounded-[18px]"
+            />
           </motion.div>
         </div>
 
@@ -115,16 +99,63 @@ export function Landing() {
         </div>
       </Section>
 
+      {/* dark story band — mission line over the divider's quiet sky */}
+      <section className="relative isolate overflow-hidden bg-[#0b0612]">
+        <img
+          src={`${import.meta.env.BASE_URL}assets/img/dark-divider.webp`}
+          alt=""
+          aria-hidden
+          loading="lazy"
+          decoding="async"
+          width="1376"
+          height="768"
+          className="absolute inset-0 -z-10 size-full object-cover opacity-90"
+        />
+        <div className="mx-auto max-w-6xl px-6 py-24 md:py-28">
+          <motion.p
+            initial={reduce ? false : { opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.6 }}
+            className="eyebrow !text-white/60"
+          >
+            Our philosophy
+          </motion.p>
+          <motion.h2
+            initial={reduce ? false : { opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.65, delay: 0.1 }}
+            className="mt-5 max-w-2xl font-display text-[2.1rem] font-semibold leading-[1.15] tracking-tight text-white md:text-[2.8rem]"
+          >
+            Technology should feel like <em className="font-serif font-normal italic tracking-normal text-white/75">light</em> —
+            quiet, precise, and quietly beautiful.
+          </motion.h2>
+        </div>
+      </section>
+
       <Section id="cta" eyebrow="Get started" title={<>Ready when <em className="font-serif font-normal italic tracking-normal text-ink-muted">you</em> are.</>}>
-        <GlassCard className="text-center">
-          <p className="text-ink-muted">Create your space and let the AI do the heavy lifting.</p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Button type="button" onClick={() => navigate('/signin')}>Create your account</Button>
-            <Button type="button" variant="ghost" onClick={() => navigate('/connect')}>Settings</Button>
-          </div>
-          <div className="mx-auto mt-8 max-w-sm text-left">
-            <label htmlFor="cta-email" className="eyebrow">Stay in the loop</label>
-            <Input id="cta-email" className="mt-2" type="email" placeholder="you@example.com" />
+        <GlassCard className="relative overflow-hidden text-center">
+          <img
+            src={`${import.meta.env.BASE_URL}assets/img/silk-backdrop.webp`}
+            alt=""
+            aria-hidden
+            loading="lazy"
+            decoding="async"
+            width="1376"
+            height="768"
+            className="absolute inset-0 z-0 size-full object-cover opacity-70"
+          />
+          <div className="relative z-10">
+            <p className="text-ink-muted">Create your space and let the AI do the heavy lifting.</p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <Button type="button" onClick={() => navigate('/signin')}>Create your account</Button>
+              <Button type="button" variant="ghost" onClick={() => navigate('/connect')}>Settings</Button>
+            </div>
+            <div className="mx-auto mt-8 max-w-sm text-left">
+              <label htmlFor="cta-email" className="eyebrow">Stay in the loop</label>
+              <Input id="cta-email" className="mt-2" type="email" placeholder="you@example.com" />
+            </div>
           </div>
         </GlassCard>
       </Section>

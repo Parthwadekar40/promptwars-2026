@@ -27,8 +27,18 @@ export function SignIn() {
   };
 
   return (
-    <section className="mx-auto flex max-w-md flex-col items-center px-6 py-20">
-      <motion.div initial={reduce ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="w-full">
+      <section className="mx-auto flex max-w-md flex-col items-center px-6 py-16">
+        <img
+          src={`${import.meta.env.BASE_URL}assets/img/glow-success.webp`}
+          alt=""
+          aria-hidden
+          loading="lazy"
+          decoding="async"
+          width="1024"
+          height="1024"
+          className="mb-6 w-40 rounded-2xl"
+        />
+        <motion.div initial={reduce ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="w-full">
         <GlassCard>
           <Badge>SECURE · ANONYMOUS-FIRST</Badge>
           <h1 className="mt-4 font-display text-2xl font-bold tracking-tight text-ink">Welcome</h1>
