@@ -33,7 +33,7 @@ export function Landing() {
 
         <div className="mx-auto grid max-w-6xl items-center gap-14 px-6 pb-16 pt-20 md:grid-cols-[1.05fr_0.95fr] md:pb-24 md:pt-28">
           <motion.div initial={reduce ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}>
-            <Badge>Powered by Google Gemini</Badge>
+            <Badge>Intelligent workspace</Badge>
             <h1 className="mt-6 font-display text-[2.9rem] font-semibold leading-[1.04] tracking-[-0.02em] text-ink md:text-[4.2rem]">
               Solve it <em className="text-gradient font-serif font-normal italic tracking-normal">beautifully</em>,
               <br />
