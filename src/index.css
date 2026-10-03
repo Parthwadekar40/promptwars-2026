@@ -1,24 +1,28 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --color-brand-50: #eef2ff;
-  --color-brand-100: #e0e7ff;
-  --color-brand-200: #c7d2fe;
-  --color-brand-300: #a5b4fc;
-  --color-brand-400: #818cf8;
-  --color-brand-500: #6366f1;
-  --color-brand-600: #4f46e5;
-  --color-brand-700: #4338ca;
-  --color-brand-800: #3730a3;
-  --color-brand-900: #312e81;
-  --color-accent-400: #22d3ee;
-  --color-accent-500: #06b6d4;
-  --color-surface: #0b1020;
-  --color-surface-2: #111834;
-  --color-ink: #e8ecf8;
-  --color-ink-muted: #9aa6c4;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-serif: "Instrument Serif", Georgia, serif;
+
+  --color-paper: #f7f5f2;
+  --color-ink: #171412;
+  --color-ink-muted: #716b66;
+  --color-line: #e6e1db;
+
+  --color-brand-50: #efedff;
+  --color-brand-100: #e2deff;
+  --color-brand-200: #c9c2ff;
+  --color-brand-300: #a78bfa;
+  --color-brand-400: #8b7cf8;
+  --color-brand-500: #6d5ff7;
+  --color-brand-600: #5b4bf5;
+  --color-brand-700: #4a3ad4;
+
+  --color-mint-300: #6ee7b7;
+  --color-peach-300: #fbcfe8;
+  --color-sky-300: #93c5fd;
 }
 
 html {
@@ -27,20 +31,40 @@ html {
 
 body {
   font-family: var(--font-body);
-  background: var(--color-surface);
+  background: var(--color-paper);
   color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: var(--color-brand-500);
-  color: white;
+  background: var(--color-ink);
+  color: var(--color-paper);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent-400);
+  outline: 2px solid var(--color-brand-600);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.text-gradient {
+  background: linear-gradient(100deg, var(--color-brand-600), var(--color-brand-300) 45%, var(--color-mint-300));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hairline {
+  border: 1px solid var(--color-line);
 }
 
 @media (prefers-reduced-motion: reduce) {

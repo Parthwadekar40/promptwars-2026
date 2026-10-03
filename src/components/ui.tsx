@@ -1,24 +1,24 @@
 import type { ReactNode, InputHTMLAttributes, ButtonHTMLAttributes } from 'react';
 
-/** Compact design-system primitives — glass recipe from the locked visual DNA. */
+/** Design-system primitives — warm-paper editorial recipe (hairlines, 12px radii, mono eyebrows). */
 
 export function Button({
   variant = 'primary',
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'ghost' }) {
   const base =
-    'inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 font-medium transition-all active:scale-[.98] disabled:opacity-50';
+    'inline-flex items-center justify-center gap-2 rounded-[10px] px-5 py-2.5 text-[15px] font-medium transition-all active:scale-[.98] disabled:opacity-50';
   const styles =
     variant === 'primary'
-      ? 'bg-brand-600 text-white shadow-lg shadow-brand-600/25 hover:bg-brand-500 hover:shadow-brand-500/30'
-      : 'border border-white/40 bg-white/40 text-ink backdrop-blur-md hover:bg-white/60';
+      ? 'bg-ink text-paper hover:bg-[#2b2622] shadow-[0_1px_2px_rgba(23,20,18,0.18)]'
+      : 'hairline bg-transparent text-ink hover:bg-white/70';
   return <button className={`${base} ${styles}`} {...props} />;
 }
 
 export function GlassCard({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
     <div
-      className={`rounded-2xl border border-white/50 bg-white/40 p-6 shadow-xl shadow-brand-900/5 backdrop-blur-xl ${className}`}
+      className={`hairline rounded-[14px] bg-white/60 p-6 shadow-[0_1px_2px_rgba(23,20,18,0.05),0_12px_32px_-16px_rgba(23,20,18,0.10)] backdrop-blur-sm ${className}`}
     >
       {children}
     </div>
@@ -27,7 +27,8 @@ export function GlassCard({ children, className = '' }: { children: ReactNode; c
 
 export function Badge({ children }: { children: ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-200/60 bg-brand-50/70 px-3 py-1 text-xs font-medium tracking-wide text-brand-700">
+    <span className="eyebrow inline-flex items-center gap-2">
+      <span aria-hidden className="size-1.5 rounded-full bg-brand-500" />
       {children}
     </span>
   );
@@ -35,9 +36,9 @@ export function Badge({ children }: { children: ReactNode }) {
 
 export function Stat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="text-center">
-      <div className="font-display text-3xl font-bold tracking-tight text-ink">{value}</div>
-      <div className="mt-1 text-sm text-ink-muted">{label}</div>
+    <div>
+      <div className="font-display text-3xl font-semibold tracking-tight text-ink">{value}</div>
+      <div className="eyebrow mt-1.5">{label}</div>
     </div>
   );
 }
@@ -46,7 +47,7 @@ export function Input(props: InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
       {...props}
-      className={`w-full rounded-xl border border-white/60 bg-white/60 px-4 py-2.5 text-ink placeholder:text-ink-muted/70 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-400/40 ${props.className ?? ''}`}
+      className={`hairline w-full rounded-[10px] bg-white/70 px-4 py-2.5 text-[15px] text-ink placeholder:text-ink-muted/60 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-400/30 ${props.className ?? ''}`}
     />
   );
 }
@@ -59,14 +60,16 @@ export function Section({
 }: {
   id?: string;
   eyebrow: string;
-  title: string;
+  title: ReactNode;
   children: ReactNode;
 }) {
   return (
-    <section id={id} className="mx-auto w-full max-w-6xl px-6 py-16">
+    <section id={id} className="mx-auto w-full max-w-6xl px-6 py-20">
       <Badge>{eyebrow}</Badge>
-      <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink md:text-4xl">{title}</h2>
-      <div className="mt-8">{children}</div>
+      <h2 className="mt-5 max-w-2xl font-display text-[2.1rem] font-semibold leading-[1.12] tracking-tight text-ink md:text-[2.6rem]">
+        {title}
+      </h2>
+      <div className="mt-10">{children}</div>
     </section>
   );
 }
