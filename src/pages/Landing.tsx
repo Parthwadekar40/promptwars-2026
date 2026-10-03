@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Badge, Button, GlassCard, Input, Section, Stat } from '../components/ui';
 import { Icon } from '../components/Icon';
 import { Atmosphere } from '../components/Atmosphere';
 import { Marquee } from '../components/Marquee';
 import { navigate } from '../lib/router';
+import { sendEmail } from '../lib/mail';
 
 const CAPABILITIES = [
   { title: 'Understands, then delivers', body: 'Google Gemini reasons through your request and produces finished work in real time.' },
@@ -21,6 +23,25 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 /** Landing template — copy is a slot: swap with problem-specific language at T+0. */
 export function Landing() {
   const reduce = useReducedMotion();
+  const [notifyEmail, setNotifyEmail] = useState('');
+  const [notifyStatus, setNotifyStatus] = useState<string>();
+  const [notifyBusy, setNotifyBusy] = useState(false);
+
+  const notify = async () => {
+    const email = notifyEmail.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setNotifyStatus('⚠ Please enter a valid email.');
+      return;
+    }
+    setNotifyBusy(true);
+    setNotifyStatus('Adding you…');
+    const r = await sendEmail({
+      user_name: email,
+      message: `New waitlist signup from the landing page: ${email}`,
+    });
+    setNotifyStatus(r.ok ? "✅ You're on the list — we'll be in touch." : `⚠ ${r.error}`);
+    setNotifyBusy(false);
+  };
 
   const words = ['Solve', 'it'];
   const accent = 'beautifully,';
@@ -321,11 +342,21 @@ export function Landing() {
               <div className="mx-auto mt-8 max-w-sm">
                 <label htmlFor="cta-email" className="eyebrow">Stay in the loop</label>
                 <div className="mt-2 flex gap-2">
-                  <Input id="cta-email" type="email" placeholder="you@example.com" />
-                  <Button type="button" variant="ghost" aria-label="Notify me">
+                  <Input
+                    id="cta-email"
+                    type="email"
+                    placeholder="you@example.com"
+                    value={notifyEmail}
+                    onChange={(e) => setNotifyEmail(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') void notify();
+                    }}
+                  />
+                  <Button type="button" variant="ghost" aria-label="Notify me" onClick={notify} disabled={notifyBusy}>
                     <Icon name="bell" className="size-4" />
                   </Button>
                 </div>
+                <p aria-live="polite" className="mt-2 min-h-5 text-[13px] text-ink-muted">{notifyStatus}</p>
               </div>
             </div>
           </GlassCard>

@@ -1,14 +1,27 @@
 # PromptWars 2026
 
-> Build repository for **PromptWars 2026** — the 3-hour AI build challenge at Google Office, Gurugram.
+> An intelligent workspace powered by Google Gemini — fast, private, and a genuine pleasure to use.
 
-**Status:** starter scaffold pushed & CI-verified · final solution lands on event day.
+**Live:** https://parthwadekar40.github.io/promptwars-2026/
+
+## What it does
+
+- **Landing** — the product story: brutal-scale type, a glass-study film loop, drifting atmosphere, page-wide brand-gradient cursor glow.
+- **Sign in** — Firebase Anonymous Auth (no passwords to leak) + display-name capture.
+- **Settings** — connect a Google AI Studio key (stored in the visitor's `localStorage` only) + one-tap live health checks for every integration.
 
 ## Stack
 
-- Vite + React 19 + TypeScript (strict) · Tailwind CSS v4 · Framer Motion
-- Google Gemini API (`@google/genai`, Google AI Studio) — 2026-verified model chain
-- Vitest + React Testing Library · GitHub Pages deployment via Actions
+- Vite 7 · React 19 · TypeScript (strict) · Tailwind CSS v4 · Framer Motion
+- Vitest + React Testing Library (4/4 passing) · GitHub Pages deployed via GitHub Actions
+
+## Services
+
+| Service | Where | What for |
+|---|---|---|
+| Google Gemini API | `src/lib/gemini.ts` | AI generation — bring-your-own key from AI Studio |
+| Firebase Anonymous Auth + Firestore | `src/lib/db.ts` (REST, ~2 KB — no heavy SDK) | Private sessions + per-user data |
+| EmailJS | `src/lib/mail.ts` (REST) | Waitlist / notify emails |
 
 ## Run locally
 
@@ -19,8 +32,14 @@ npm test         # test suite
 npm run build    # production build → dist/
 ```
 
-## Security note
+## Security
 
-No secrets live in this repository. The Gemini API key is injected at **build time** via the
-`GEMINI_API_KEY` Actions secret, and end users may supply their own key (stored only in
-`localStorage`). See `src/lib/gemini.ts`.
+- **No secrets live in this repository.** Build-time keys are injected via GitHub Actions secrets (`GEMINI_API_KEY`, `FIREBASE_*`, `EMAILJS_*`).
+- Firebase / EmailJS web config is public-by-design (it must ship in any client bundle); access is enforced by **Firestore Security Rules** and EmailJS **origin allowlisting** — never by hiding config.
+- User-supplied Gemini keys are stored only in the visitor's `localStorage`, and are sent only to Google.
+
+## Design system
+
+- Type: Instrument Sans · Instrument Serif *italic* · Inter · JetBrains Mono
+- Paper `#e4ded3` · ink `#171412` · brand gradient `#6d5ff7 → #a78bfa → #6ee7b7`
+- All art is custom-generated glass imagery, background-keyed to melt seamlessly into the page
