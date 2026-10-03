@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Badge, Button, GlassCard, Input } from '../components/ui';
-import { ensureUser } from '../lib/db';
-import { saveDoc } from '../lib/db';
+import { Icon } from '../components/Icon';
+import { ensureUser, saveDoc } from '../lib/db';
 import { navigate } from '../lib/router';
 
 /** Sign-in template: Firebase Anonymous session + display-name capture (no passwords to leak). */
@@ -40,6 +40,7 @@ export function SignIn() {
         />
         <motion.div initial={reduce ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="w-full">
         <GlassCard>
+          <Icon name="user" className="size-11" />
           <Badge>SECURE · ANONYMOUS-FIRST</Badge>
           <h1 className="mt-4 font-display text-2xl font-bold tracking-tight text-ink">Welcome</h1>
           <p className="mt-2 text-sm text-ink-muted">

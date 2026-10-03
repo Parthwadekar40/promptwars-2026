@@ -37,7 +37,7 @@ export function Badge({ children }: { children: ReactNode }) {
 export function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div>
-      <div className="font-display text-3xl font-semibold tracking-tight text-ink">{value}</div>
+      <div className="font-display text-[clamp(1.85rem,2.6vw,2.35rem)] font-semibold tracking-tight text-ink">{value}</div>
       <div className="eyebrow mt-1.5">{label}</div>
     </div>
   );
@@ -66,7 +66,7 @@ export function Section({
   return (
     <section id={id} className="mx-auto w-full max-w-6xl px-6 py-20">
       <Badge>{eyebrow}</Badge>
-      <h2 className="mt-5 max-w-2xl font-display text-[2.1rem] font-semibold leading-[1.12] tracking-tight text-ink md:text-[2.6rem]">
+      <h2 className="t-h2 mt-5 max-w-2xl font-display font-semibold tracking-tight text-ink">
         {title}
       </h2>
       <div className="mt-10">{children}</div>

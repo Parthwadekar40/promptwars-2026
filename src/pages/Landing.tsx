@@ -1,6 +1,7 @@
 import type { MouseEvent } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Badge, Button, GlassCard, Input, Section, Stat } from '../components/ui';
+import { Icon } from '../components/Icon';
 import { Atmosphere } from '../components/Atmosphere';
 import { Marquee } from '../components/Marquee';
 import { navigate } from '../lib/router';
@@ -53,7 +54,7 @@ export function Landing() {
               <Badge>Intelligent workspace</Badge>
             </motion.div>
 
-            <h1 className="mt-7 font-display text-[3.1rem] font-semibold leading-[1.02] tracking-[-0.025em] text-ink md:text-[5rem]">
+            <h1 className="t-hero mt-7 font-display font-semibold tracking-[-0.025em] text-ink">
               {[...words, accent, ...tail].map((w, i) => (
                 <motion.span
                   key={w}
@@ -87,8 +88,14 @@ export function Landing() {
               transition={{ duration: 1, delay: 1.65, ease: EASE }}
               className="mt-9 flex flex-wrap items-center gap-3"
             >
-              <Button type="button" onClick={() => navigate('/signin')}>Get started</Button>
-              <Button type="button" variant="ghost" onClick={() => navigate('/connect')}>Connect AI key</Button>
+              <Button type="button" onClick={() => navigate('/signin')}>
+                <Icon name="plus" className="size-4" />
+                Get started
+              </Button>
+              <Button type="button" variant="ghost" onClick={() => navigate('/connect')}>
+                <Icon name="gear" className="size-4" />
+                Connect AI key
+              </Button>
             </motion.div>
           </div>
 
@@ -154,7 +161,7 @@ export function Landing() {
         />
         <div className="mx-auto w-full max-w-7xl px-6 py-24">
           <Badge>Capabilities</Badge>
-          <h2 className="mt-5 max-w-2xl font-display text-[2.4rem] font-semibold leading-[1.08] tracking-tight text-ink md:text-[3.2rem]">
+          <h2 className="t-h2 mt-5 max-w-2xl font-display font-semibold tracking-tight text-ink">
             Everything you need. <em className="font-serif font-normal italic tracking-normal text-ink-muted">Nothing you don't.</em>
           </h2>
           <motion.img
@@ -200,7 +207,7 @@ export function Landing() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-120px' }}
             transition={{ duration: 1.1, delay: 0.3, ease: EASE }}
-            className="font-serif text-[1.9rem] italic leading-snug text-ink/85 md:text-[2.9rem]"
+            className="t-quote font-serif italic leading-snug text-ink/85"
           >
             “Simplicity is the soul of efficiency —<br />and beauty is its proof.”
           </motion.p>
@@ -287,7 +294,7 @@ export function Landing() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-140px' }}
             transition={{ duration: 1.15, delay: 0.65, ease: EASE }}
-            className="mt-6 max-w-3xl font-display text-[2.3rem] font-semibold leading-[1.12] tracking-tight text-white md:text-[3.4rem]"
+            className="t-h2 mt-6 max-w-3xl font-display font-semibold tracking-tight text-white"
           >
             Technology should feel like{' '}
             <em className="font-serif font-normal italic tracking-normal text-white/75">light</em> — quiet,
@@ -318,12 +325,23 @@ export function Landing() {
             <div className="relative z-10">
               <p className="text-ink-muted">Create your space and let the AI do the heavy lifting.</p>
               <div className="mt-6 flex flex-wrap justify-center gap-3">
-                <Button type="button" onClick={() => navigate('/signin')}>Create your account</Button>
-                <Button type="button" variant="ghost" onClick={() => navigate('/connect')}>Settings</Button>
+                <Button type="button" onClick={() => navigate('/signin')}>
+                  <Icon name="plus" className="size-4" />
+                  Create your account
+                </Button>
+                <Button type="button" variant="ghost" onClick={() => navigate('/connect')}>
+                  <Icon name="gear" className="size-4" />
+                  Settings
+                </Button>
               </div>
-              <div className="mx-auto mt-8 max-w-sm text-left">
+              <div className="mx-auto mt-8 max-w-sm">
                 <label htmlFor="cta-email" className="eyebrow">Stay in the loop</label>
-                <Input id="cta-email" className="mt-2" type="email" placeholder="you@example.com" />
+                <div className="mt-2 flex gap-2">
+                  <Input id="cta-email" type="email" placeholder="you@example.com" />
+                  <Button type="button" variant="ghost" aria-label="Notify me">
+                    <Icon name="bell" className="size-4" />
+                  </Button>
+                </div>
               </div>
             </div>
           </GlassCard>
