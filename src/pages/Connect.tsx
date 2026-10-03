@@ -36,9 +36,9 @@ export function Connect() {
   };
 
   const rows = [
-    { label: 'Google Gemini', ok: hasKey() || !!getKey(), note: 'AI features', action: testAI, icon: 'chat' as const },
-    { label: 'Firebase', ok: dbConfigured(), note: 'Data & sessions', action: testDB, icon: 'user' as const },
-    { label: 'EmailJS', ok: mailConfigured(), note: 'Email from site', action: testMail, icon: 'bell' as const },
+    { label: 'Google Gemini', ok: hasKey() || !!getKey(), note: 'AI features', action: testAI },
+    { label: 'Firebase', ok: dbConfigured(), note: 'Data & sessions', action: testDB },
+    { label: 'EmailJS', ok: mailConfigured(), note: 'Email from site', action: testMail },
   ];
 
   return (
@@ -82,18 +82,14 @@ export function Connect() {
         <ul className="mt-4 space-y-3">
           {rows.map((r) => (
             <li key={r.label} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/50 bg-white/50 px-4 py-3">
-              <div className="flex items-center gap-3">
-                <Icon name={r.icon} className="size-6" />
-                <div>
-                  <p className="font-medium text-ink">
-                    <span aria-hidden className={r.ok ? 'text-green-600' : 'text-amber-600'}>{r.ok ? '●' : '○'}</span>{' '}
-                    {r.label}
-                  </p>
-                  <p className="text-sm text-ink-muted">{r.note}</p>
-                </div>
+              <div>
+                <p className="font-medium text-ink">
+                  <span aria-hidden className={r.ok ? 'text-green-600' : 'text-amber-600'}>{r.ok ? '●' : '○'}</span>{' '}
+                  {r.label}
+                </p>
+                <p className="text-sm text-ink-muted">{r.note}</p>
               </div>
               <Button type="button" variant="ghost" onClick={r.action} className="!px-4 !py-2 text-sm">
-                <Icon name="search" className="size-4" />
                 Test
               </Button>
             </li>

@@ -89,11 +89,9 @@ export function Landing() {
               className="mt-9 flex flex-wrap items-center gap-3"
             >
               <Button type="button" onClick={() => navigate('/signin')}>
-                <Icon name="plus" className="size-4" />
                 Get started
               </Button>
               <Button type="button" variant="ghost" onClick={() => navigate('/connect')}>
-                <Icon name="gear" className="size-4" />
                 Connect AI key
               </Button>
             </motion.div>
@@ -196,6 +194,35 @@ export function Landing() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ————— GLASS FILM — the material itself, looping, melting into paper ————— */}
+      <section aria-label="Glass study" className="relative overflow-hidden">
+        <div className="relative h-[clamp(300px,46vh,500px)]">
+          <video
+            className="absolute inset-0 size-full object-cover mask-fade-y"
+            src={`${import.meta.env.BASE_URL}assets/video/glass-spheres-loop.mp4`}
+            poster={`${import.meta.env.BASE_URL}assets/img/glass-study.webp`}
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-hidden
+          />
+          <div
+            className="absolute inset-0"
+            style={{ background: 'radial-gradient(65% 75% at 50% 50%, rgba(228,222,211,0.5), rgba(228,222,211,0) 72%)' }}
+          />
+          <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
+            <p className="eyebrow">THE MATERIAL</p>
+            <h2 className="t-h2 mt-3">
+              Your idea, taking <em>form</em>.
+            </h2>
+          </div>
+          <p className="absolute bottom-6 left-6 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-muted">
+            Study 01 · Glass &amp; light
+          </p>
         </div>
       </section>
 
@@ -326,11 +353,9 @@ export function Landing() {
               <p className="text-ink-muted">Create your space and let the AI do the heavy lifting.</p>
               <div className="mt-6 flex flex-wrap justify-center gap-3">
                 <Button type="button" onClick={() => navigate('/signin')}>
-                  <Icon name="plus" className="size-4" />
                   Create your account
                 </Button>
                 <Button type="button" variant="ghost" onClick={() => navigate('/connect')}>
-                  <Icon name="gear" className="size-4" />
                   Settings
                 </Button>
               </div>

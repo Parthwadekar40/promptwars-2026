@@ -2,7 +2,6 @@ import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { navigate, useRoute } from '../lib/router';
 import { Button } from './ui';
-import { Icon } from './Icon';
 
 const NAV = [
   { to: '/', label: 'Home' },
@@ -40,7 +39,6 @@ export function AppShell({ children }: { children: ReactNode }) {
             ))}
             <li>
               <Button type="button" onClick={() => navigate('/signin')} className="!px-4 !py-2 !text-[14px]">
-                <Icon name="plus" className="size-4" />
                 Get started
               </Button>
             </li>
@@ -88,10 +86,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <nav aria-label="Footer" className="flex items-center gap-6">
             <a className="transition-colors hover:text-ink" href="#/">Privacy</a>
             <a className="transition-colors hover:text-ink" href="#/">Terms</a>
-            <a className="flex items-center gap-1.5 transition-colors hover:text-ink" href="#/connect">
-              <Icon name="chat" className="size-4" />
-              Contact
-            </a>
+            <a className="transition-colors hover:text-ink" href="#/connect">Contact</a>
           </nav>
         </div>
       </footer>

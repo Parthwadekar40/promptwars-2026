@@ -1,6 +1,6 @@
 const ICONS = {
   user: 'icon-user.webp',
-  plus: 'icon-plus.webp',
+
   chat: 'icon-chat.webp',
   pencil: 'icon-pencil.webp',
   trash: 'icon-trash.webp',
