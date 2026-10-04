@@ -13,6 +13,8 @@ const NAV = [
 ];
 
 const GITHUB = 'https://github.com/Parthwadekar40';
+const LINKEDIN = 'https://www.linkedin.com/in/parth-wadekar-18027728b';
+const INSTAGRAM = 'https://www.instagram.com/parthwadekar16';
 
 /** App shell — hairline header, accessible nav (hamburger on mobile), quiet footer, page-wide gradient follow. */
 export function AppShell({ children }: { children: ReactNode }) {
@@ -156,22 +158,22 @@ export function AppShell({ children }: { children: ReactNode }) {
                 pleasure to use.
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
-                <a
-                  href={GITHUB}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-[8px] border border-line px-3 py-1.5 text-[13px] font-medium text-ink transition-colors hover:border-ink/25 hover:bg-ink/[0.04]"
-                >
-                  GitHub ↗
-                </a>
-                <a
-                  href={whatsappLink('919975181905', 'Hi Parth!')}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-[8px] border border-line px-3 py-1.5 text-[13px] font-medium text-ink transition-colors hover:border-ink/25 hover:bg-ink/[0.04]"
-                >
-                  WhatsApp ↗
-                </a>
+                {[
+                  { label: 'GitHub ↗', href: GITHUB },
+                  { label: 'LinkedIn ↗', href: LINKEDIN },
+                  { label: 'Instagram ↗', href: INSTAGRAM },
+                  { label: 'WhatsApp ↗', href: whatsappLink('919975181905', 'Hi Parth!') },
+                ].map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-[8px] border border-line px-3 py-1.5 text-[13px] font-medium text-ink transition-colors hover:border-ink/25 hover:bg-ink/[0.04]"
+                  >
+                    {s.label}
+                  </a>
+                ))}
               </div>
             </div>
 

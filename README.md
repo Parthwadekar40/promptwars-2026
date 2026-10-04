@@ -2,6 +2,8 @@
 
 > An intelligent workspace powered by Google Gemini — fast, private, and a genuine pleasure to use.
 
+**Author:** [Parth Wadekar](https://github.com/Parthwadekar40) · [LinkedIn](https://www.linkedin.com/in/parth-wadekar-18027728b) · [Instagram](https://www.instagram.com/parthwadekar16)
+
 **Live:** https://parthwadekar40.github.io/promptwars-2026/
 
 ## What it does
