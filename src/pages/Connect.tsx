@@ -5,6 +5,7 @@ import { Icon } from '../components/Icon';
 import { getKey, setKey, generate, hasKey } from '../lib/gemini';
 import { dbConfigured, ensureUser } from '../lib/db';
 import { mailConfigured, sendEmail } from '../lib/mail';
+import { getProfile } from '../lib/auth';
 
 /** Settings: Gemini key connect + live service status (also our event-day health check). */
 export function Connect() {
@@ -30,9 +31,17 @@ export function Connect() {
   };
 
   const testMail = async () => {
+    const me = getProfile();
+    if (!me?.email) {
+      setStatus('⚠ Sign in first — the test email goes to your signed-in address.');
+      return;
+    }
     setStatus('Sending test email…');
-    const r = await sendEmail({ user_name: 'Settings page', message: 'EmailJS test from the live site.' });
-    setStatus(r.ok ? '✅ Email sent — check your inbox.' : `⚠ ${r.error}`);
+    const r = await sendEmail(me.email, {
+      user_name: me.name,
+      message: 'EmailJS test from the live site.',
+    });
+    setStatus(r.ok ? `✅ Email sent to ${me.email} — check the inbox.` : `⚠ ${r.error}`);
   };
 
   const rows = [

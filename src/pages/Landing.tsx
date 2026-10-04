@@ -37,7 +37,7 @@ export function Landing() {
     }
     setNotifyBusy(true);
     setNotifyStatus('Adding you…');
-    const r = await sendEmail({
+    const r = await sendEmail(email, {
       user_name: email,
       message: `New waitlist signup from the landing page: ${email}`,
     });

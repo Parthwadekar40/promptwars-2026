@@ -19,15 +19,12 @@ function read(): Pending | null {
   }
 }
 
-/** Issue a fresh code and email it. */
+/** Issue a fresh code and email it to the person who is signing in. */
 export async function issueOtp(email: string, name: string): Promise<Result<void>> {
   const code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000).padStart(6, '0');
   sessionStorage.setItem(KEY, JSON.stringify({ code, email, name, exp: Date.now() + TTL_MS }));
-  const r = await sendEmail({
+  const r = await sendEmail(email, {
     user_name: name || email,
-    email,
-    user_email: email,
-    to_email: email,
     passcode: code,
     otp: code,
     message: `Your verification code is ${code} — valid for 5 minutes.`,

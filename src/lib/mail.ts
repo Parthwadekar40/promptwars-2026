@@ -7,9 +7,14 @@ const PUBLIC_KEY = (import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string) || '';
 
 export const mailConfigured = (): boolean => !!(SERVICE && TEMPLATE && PUBLIC_KEY);
 
-/** Send one templated email. `params` must match the template's {{placeholders}}. */
-export async function sendEmail(params: Record<string, string>): Promise<Result<string>> {
+/**
+ * Send one templated email to an EXPLICIT recipient — the address the person
+ * typed, never a fixed inbox. The recipient is injected under every common
+ * template param name so the template's "To Email" can use any of them.
+ */
+export async function sendEmail(to: string, params: Record<string, string>): Promise<Result<string>> {
   if (!mailConfigured()) return { ok: false, error: 'Email service not configured' };
+  if (!to?.trim()) return { ok: false, error: 'Missing recipient address' };
   try {
     const r = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
       method: 'POST',
@@ -18,7 +23,7 @@ export async function sendEmail(params: Record<string, string>): Promise<Result<
         service_id: SERVICE,
         template_id: TEMPLATE,
         user_id: PUBLIC_KEY,
-        template_params: params,
+        template_params: { ...params, email: to, user_email: to, to_email: to },
       }),
     });
     if (!r.ok) return { ok: false, error: `Email failed (${r.status}): ${await r.text()}` };
