@@ -1,7 +1,17 @@
 import type { Analysis } from '../lib/analyze';
 
-/** Starter decisions — and the first one doubles as the instant sample (and the offline fallback). */
+/**
+ * Starter decisions. The first is the scenario from the challenge brief itself (a student weighing a
+ * 6-month internship for the stipend, proximity and "industry experience") — it doubles as the instant
+ * sample and as the graceful fallback when the AI is rate-limited.
+ */
 export const EXAMPLES = [
+  {
+    label: 'A 6-month internship',
+    decision:
+      "I've been offered a 6-month analyst internship at a company 15 minutes from my home. The stipend is ₹25,000 a month and it's 40 hours a week, weekdays. My classes run until 3 pm, and my end-semester exams in December fall in the middle of the internship. They promised \"exposure to real projects\" but haven't said who would mentor me.",
+    leaning: 'Mainly because the stipend is good, the company is close to home, and it will give me industry experience.',
+  },
   {
     label: 'A job offer in another city',
     decision:
@@ -23,75 +33,95 @@ export const EXAMPLES = [
 ] as const;
 
 export const SAMPLE: Analysis = {
-  title: 'Bengaluru offer vs. Pune',
+  title: '6-month internship',
   heard:
-    "You're deciding whether to move to Bengaluru for a higher-paying product role or stay in Pune, where your family, friends and a stable job are.",
+    "You're deciding whether to accept a 6-month analyst internship near home — good stipend, full-time hours — while classes run until 3 pm and your December exams fall in the middle of it.",
   noticedFirst:
-    'The 40% raise and the title — the first things you mention, and the reasons you give for leaning toward the move.',
+    'The stipend, the short commute and the promise of "industry experience" — the three reasons you give for saying yes.',
   outside:
-    'Almost nothing here describes what daily work in the new role would be like — or what staying could become if you asked for change.',
+    'Almost nothing here is about what you would actually learn, who would teach you, or how the internship fits around your semester.',
   assumptions: [
     {
-      text: 'The 40% raise will feel like a 40% raise.',
-      hint: 'Compare rent, commute and living costs line by line; work out your real monthly surplus in each city.',
+      text: '"Industry experience" will automatically mean real learning.',
+      hint: 'Ask for the project list and a sample week; talk to a former intern about what they actually did.',
     },
     {
-      text: 'The new role will be the learning you are missing.',
-      hint: 'Ask to speak with two people on the team about what they learned in their first year.',
+      text: 'A good stipend makes the trade worth it.',
+      hint: 'Work out the stipend per hour after travel and lost study time, then compare it with a lighter option.',
     },
     {
-      text: "Your current job can't change — so leaving is the only fix.",
-      hint: 'Have one honest conversation with your manager about scope before Friday.',
+      text: 'You can carry 40 working hours on top of classes until 3 pm.',
+      hint: 'Draw one real week hour by hour — travel, classes, assignments, sleep.',
     },
     {
-      text: 'Distance from family is something you can adjust to later.',
-      hint: 'Picture a typical month: how often would you actually be home, and what would be missed?',
+      text: 'The December exams will somehow work out.',
+      hint: 'Ask now, in writing, whether leave or flexible hours are possible during exam weeks.',
+    },
+  ],
+  conflicts: [
+    {
+      text: "You want industry experience, yet you haven't asked who would mentor you or what the role involves day to day.",
+      hint: 'What would make you confident this role teaches skills you cannot get elsewhere?',
+    },
+    {
+      text: '"Close to home" saves commute time, but full-time hours leave little room for the college schedule you described.',
+      hint: 'Which matters more this semester — the commute you save or the study time you lose?',
+    },
+    {
+      text: 'The stipend is your first reason, experience your second — they can point to different choices.',
+      hint: 'If the stipend were half, would you still want it? If the learning were thin, would the stipend alone be enough?',
     },
   ],
   risks: [
     {
-      text: 'Offer details harden after you accept — scope, reporting line, bonus structure.',
-      hint: 'Vague answers to concrete questions about your first 90 days.',
+      text: 'Academics slip when internship hours and exam weeks collide.',
+      hint: 'You are skipping lectures or missing assignment deadlines within the first month.',
     },
     {
-      text: 'Starting over socially eats into the gain.',
-      hint: 'You cannot name three people you would see weekly in your first month.',
+      text: 'The role turns out to be routine tasks with little mentoring.',
+      hint: 'By week three you have had no feedback from a senior and own nothing.',
     },
     {
-      text: "The new company's stability is unknown.",
-      hint: 'Little public information on funding, attrition or leadership turnover.',
+      text: 'Burnout from stacking full-time hours on top of classes.',
+      hint: 'Sleep and weekends disappear, and you start to dread both.',
     },
   ],
   missing: [
     {
-      text: "Your parents' view — and what they may need from you in the next 3–5 years.",
-      hint: 'Family needs change slowly, then suddenly; you have not said how they feel.',
+      text: 'The impact on your academics — grades, attendance rules and exam timing.',
+      hint: 'December exams overlap the internship; attendance or credit rules may limit what is possible.',
     },
     {
-      text: 'Your own definition of "growth".',
-      hint: 'Title, skills, income and autonomy pull in different directions; the offer may serve one and cost another.',
+      text: 'Actual learning and mentorship.',
+      hint: 'Experience is only valuable if someone teaches, reviews your work and gives you real responsibility.',
     },
     {
-      text: 'How reversible each path is.',
-      hint: 'Moving back is possible but costs time and money; leaving a stable job may be harder to undo than it looks.',
+      text: 'Long-term career prospects.',
+      hint: 'Could this lead to a pre-placement offer, a strong reference, or skills the next employer asks for?',
     },
     {
-      text: 'Whether the Friday deadline is real.',
-      hint: 'Deadlines are often negotiable, and urgency narrows what we notice.',
+      text: 'Other ways to spend the same six months.',
+      hint: 'A research project, a lighter part-time role or a project of your own might offer more learning for less strain.',
     },
   ],
   traps: [
-    { text: 'Anchoring', hint: 'The raise figure may be shaping how you read everything else about the offer.' },
-    { text: 'Deadline pressure', hint: 'Friday may be making a negotiable choice feel urgent.' },
+    {
+      text: 'Convenience bias',
+      hint: 'A short commute and a steady payout are vivid and immediate; learning and career effects are distant and easy to underweight.',
+    },
+    {
+      text: 'Social proof',
+      hint: 'When everyone seems to collect internships, "experience" can feel mandatory before you have checked its quality.',
+    },
   ],
   otherSide:
-    "Staying in Pune isn't only comfort. It keeps your support network, your savings rate may be nearly identical once costs are counted, and the offer itself could be leverage to reshape your current role. A year of deliberately building new skills where you already have stability can be a fast route to growth, with a smaller downside.",
+    "Declining isn't \"missing out\". Six months of full attention on coursework — or on one deep project you choose yourself — can build stronger grades, sharper skills and a better portfolio than a role with unclear mentorship. And internships that fit more closely tend to keep appearing, often after another semester of preparation.",
   questions: [
-    'If the salary were identical, would you still want this job? What does your answer tell you?',
-    'What exactly have you stopped learning at your current job — and have you asked for it?',
-    'A year from now, which regret would be harder to live with: having moved, or having stayed? Why?',
-    "Who haven't you talked to yet — your parents, someone on the new team, someone who made a similar move?",
-    'What would you need to see by Friday to feel settled either way — and can you ask for it?',
+    'What exactly would you be doing in a typical week — and who would teach you?',
+    'How would 40 hours of work fit around classes until 3 pm and the December exams? What would have to give?',
+    'If the stipend were half as much, would you still want this internship? What does your answer tell you?',
+    "Which skills would you have in six months that you couldn't get from this semester's courses or a project of your own?",
+    'Who could you talk to — a former intern, a senior, a faculty member — before you answer?',
   ],
   care: '',
 };

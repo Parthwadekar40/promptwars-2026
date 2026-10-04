@@ -53,7 +53,7 @@ export function YourCall({ title, decision, leaning, answers, examined, total }:
 
   return (
     <section aria-labelledby="your-call" className="mt-20">
-      <p className="eyebrow">07 · Your call</p>
+      <p className="eyebrow">08 · Your call</p>
       <h2 id="your-call" className="mt-2 font-display text-[clamp(1.45rem,2.6vw,1.9rem)] font-semibold tracking-tight text-ink">
         This part is <em>yours.</em>
       </h2>

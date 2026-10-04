@@ -14,17 +14,21 @@ export type { Result };
  */
 const KEY_STORE = 'pw_gemini_key';
 export const MODELS = [
+  'gemini-3.5-flash-lite', // measured fastest at event time — ordered by latency, then by depth
+  'gemini-3-flash-preview',
+  'gemini-3.1-flash-lite',
   'gemini-3.5-flash',
   'gemini-3.6-flash',
   'gemini-3.7-flash',
-  'gemini-3.1-flash-lite',
-  'gemini-3.5-flash-lite',
-  'gemini-flash-latest',
   'gemini-flash-lite-latest',
+  'gemini-flash-latest',
 ] as const;
 
 const COOLDOWN_MS = 60_000;
-const HEDGE_MS = 7_000;
+const HEDGE_MS = 9_000;
+
+/** The model that answered last — tried first next time, so the session settles on whatever is fast right now. */
+let preferred = '';
 const coolUntil = new Map<string, number>();
 
 export const getKey = (): string =>
@@ -48,8 +52,9 @@ interface GenOpts {
 /** Models not cooling down, in preference order (all of them if every one is cooling). */
 function chain(): string[] {
   const now = Date.now();
-  const ready = MODELS.filter((m) => (coolUntil.get(m) ?? 0) <= now);
-  return ready.length ? [...ready] : [...MODELS];
+  const ready: string[] = MODELS.filter((m) => (coolUntil.get(m) ?? 0) <= now);
+  const order = ready.length ? ready : [...MODELS];
+  return order.includes(preferred) ? [preferred, ...order.filter((m) => m !== preferred)] : order;
 }
 
 export type Attempt = (signal: AbortSignal) => Promise<Result<string>>;
@@ -105,6 +110,7 @@ export async function generate(prompt: string, opts: GenOpts = {}): Promise<Resu
     ...(opts.schema ? { responseSchema: opts.schema as Schema } : {}),
   });
 
+  const won: string[] = []; // models that answered, in order — the first is the winner
   const attempt = (model: string): Attempt => async (signal) => {
     try {
       const res = await ai.models.generateContent({
@@ -112,7 +118,10 @@ export async function generate(prompt: string, opts: GenOpts = {}): Promise<Resu
         contents: prompt,
         config: { ...configFor(model), abortSignal: signal },
       });
-      if (res.text) return { ok: true, data: res.text };
+      if (res.text) {
+        won.push(model);
+        return { ok: true, data: res.text };
+      }
       return {
         ok: false,
         error:
@@ -131,6 +140,7 @@ export async function generate(prompt: string, opts: GenOpts = {}): Promise<Resu
   };
 
   const r = await firstSuccess(chain().map(attempt), HEDGE_MS);
+  if (r.ok && won[0]) preferred = won[0];
   return r.ok ? r : { ok: false, error: /API key/.test(r.error) ? r.error : `Gemini request failed: ${r.error}` };
 }
 

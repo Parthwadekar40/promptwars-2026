@@ -37,14 +37,14 @@ export function Compose({ decision, leaning, error, onDecision, onLeaning, onSub
           className="mt-2.5"
         />
         <div id="decision-hint" className="mt-2 flex justify-between text-[13px] text-ink-muted">
-          <span>Describe it the way you would tell a friend.</span>
+          <span>Include the details: money, time, people, constraints — the way you would tell a friend.</span>
           <span aria-hidden>
             {decision.length}/{LIMITS.decision}
           </span>
         </div>
 
         <label htmlFor="leaning" className="eyebrow mt-7 block">
-          Which way are you leaning — and why? <span className="normal-case tracking-normal">(optional)</span>
+          Your main reasons — which way are you leaning, and why? <span className="normal-case tracking-normal">(optional)</span>
         </label>
         <Textarea
           id="leaning"
@@ -52,7 +52,7 @@ export function Compose({ decision, leaning, error, onDecision, onLeaning, onSub
           maxLength={LIMITS.leaning}
           value={leaning}
           onChange={(e) => onLeaning(e.target.value)}
-          placeholder="Naming your lean helps show what you noticed first."
+          placeholder="e.g. The stipend is good, it is close to home, and it will give me industry experience."
           className="mt-2.5"
         />
 

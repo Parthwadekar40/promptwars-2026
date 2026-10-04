@@ -31,7 +31,15 @@ export function Think({ autoSample = false }: { autoSample?: boolean }) {
       <Atmosphere />
       <div className="mx-auto max-w-3xl px-6 pb-28 pt-14 md:pt-20">
         {t.phase !== 'results' && (
-          <header className="mb-9">
+          <header className="relative mb-9">
+            <img
+              src={`${import.meta.env.BASE_URL}assets/img/hero-sphere.webp`}
+              alt=""
+              aria-hidden
+              width="760"
+              height="760"
+              className="pointer-events-none absolute -right-28 -top-24 hidden w-[330px] md:block"
+            />
             <Badge>Think</Badge>
             <h1 className="t-h2 mt-5 font-display font-semibold tracking-tight text-ink">
               What are you <em>deciding?</em>

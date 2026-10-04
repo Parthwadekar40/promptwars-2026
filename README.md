@@ -11,22 +11,24 @@ A *penumbra* is the half-lit edge of a shadow — the part you half-see. That is
 
 ---
 
-## 1 · The challenge → what is built (requirements traceability)
+## 1 · The official brief → what is built (requirements traceability)
 
-> **The problem.** *"We often make decisions based on what we notice first, while overlooking assumptions, risks, and important factors."*
-> **The challenge.** *"Build an AI-powered thinking companion that spots what might be missing, asks thoughtful questions, and helps users examine their reasoning."*
-> **The goal.** *"Improve decision-making — without making the decision for the user."*
+> **Problem statement.** *"People often make decisions based on the information that is most visible to them. In the process, they may overlook important factors, rely on unstated assumptions, or fail to recognize conflicts within their own reasoning."*
+> **Challenge.** *"Build an AI-powered solution that helps users identify potential blind spots in their reasoning when considering a decision. The solution should encourage users to examine their assumptions, recognize what they may have overlooked, and explore questions that could lead to a more informed decision. The system should not make the decision for the user."*
 
-| # | Requirement (verbatim from the brief) | How Penumbra delivers it | Where |
+| # | Requirement (verbatim) | How Penumbra delivers it | Where |
 |---|---|---|---|
-| 1 | "what we **notice first**" | A *spotlight card* puts **what you noticed first** (in the light) beside **what sits outside the light** (in the shadow) | `components/think/SpotlightCard.tsx`, `lib/analyze.ts` (`noticedFirst`, `outside`) |
-| 2 | "overlooking **assumptions**" | Lens 01 — hidden assumptions, each with a cheap way to test it this week | `Results.tsx` · schema `assumptions[{assumption, check}]` |
-| 3 | "overlooking **risks**" | Lens 02 — risks in the shadows, each with an early warning sign | schema `risks[{risk, warningSign}]` |
-| 4 | "overlooking **important factors**" | Lens 03 — people, resources, time horizons, reversibility you never mentioned · Lens 04 — the strongest case for the option you are *not* leaning toward · Lens 05 — thinking traps (anchoring, sunk cost…) | schema `missing`, `otherSide`, `traps` |
-| 5 | "**spots what might be missing**" | One AI pass returns all five lenses at once, specific to *your* details (generic advice is forbidden by the prompt) | `lib/analyze.ts` → `analyzeDecision()` |
-| 6 | "**asks thoughtful questions**" | 4–5 open, situation-specific questions per decision; you answer them in place. Leading / yes-no questions are prohibited | `analyze.ts` (rule 3), `Results.tsx` Lens 06 |
-| 7 | "**helps users examine their reasoning**" | **Examine** (mark each blind spot examined, answer questions, live progress meter) → **Reflect** (a second pass quotes *your own answers* and points out *tensions* between them) | `hooks/useThinking.ts`, `ProgressBar.tsx`, `ReflectionCard.tsx`, `analyze.ts` → `reflectOn()` |
-| 8 | "**without making the decision for the user**" | **Neutrality guard in three layers** (see §3) + a final **Your call** step that only the user can write, saved to a private journal | `lib/guard.ts` (+ tests), `YourCall.tsx`, `lib/journal.ts` |
+| 1 | "information that is **most visible** to them" | A *spotlight card* sets **what you noticed first** (in the light) beside **what sits outside the light** | `think/SpotlightCard.tsx` · `analyze.ts` (`noticedFirst`, `outside`) |
+| 2 | "rely on **unstated assumptions**" | Lens 01 — assumptions you never stated, each with a cheap way to test it this week | `Results.tsx` · schema `assumptions[{assumption, check}]` |
+| 3 | "fail to recognize **conflicts within their own reasoning**" | Lens 02 — your *stated reasons* are held up against *the facts you gave*; conflicts are quoted in your own words. The Reflect pass later names **tensions between your answers** | schema `conflicts[{conflict, toResolve}]` · `analyze.ts` rule 6 · `reflectOn()` |
+| 4 | "**overlook important factors**" | Lens 04 — other commitments, what you would *actually* get, where each option leads in 1–5 years, alternatives, people affected, reversibility · plus Lens 03 risks, Lens 05 the strongest case for the side you are *not* leaning toward, Lens 06 thinking traps | schema `missing`, `risks`, `otherSide`, `traps` |
+| 5 | "**examine** their assumptions, **recognize** what they may have overlooked" | **Examine**: tick each item you have actually checked; a live meter counts *blind spots examined* (it measures your reflection, never the decision) | `useThinking.ts` · `ProgressBar.tsx` |
+| 6 | "**explore questions** that could lead to a more informed decision" | Five open, situation-specific questions per decision, answered in place. Yes/no and leading questions are prohibited by the prompt | `analyze.ts` · `Results.tsx` Lens 07 |
+| 7 | "**should not make the decision** for the user … think more critically" | **Neutrality guard in three layers** (§3) + a final **Your call** step only the user can write, saved to a private journal | `lib/guard.ts` (+ tests) · `YourCall.tsx` · `lib/journal.ts` |
+| 8 | "demonstrate **meaningful use of AI**" | Schema-constrained analysis; a **second, dependent AI pass** that consumes *your* answers (quotes them, finds tensions); reasons-vs-facts conflict detection; model chain with hedged requests | `analyze.ts` · `gemini.ts` |
+| 9 | "deployed and accessible through a **working link**" | GitHub Pages, deployed by GitHub Actions after lint + tests | `.github/workflows/deploy.yml` |
+| 10 | "**no organizer-provided dataset**" | None needed — prompting + structured output. The brief's own example ships as the built-in sample | `data/examples.ts` |
+| 11 | The brief's example: *a student weighing a 6-month internship for the stipend, proximity and "industry experience"* | It is the default example and the instant sample: it surfaces **impact on academics**, **actual learning and mentorship**, **long-term career prospects**, and questions each assumption | open `#/think?sample` |
 
 ## 2 · Google services
 
@@ -50,8 +52,8 @@ A *penumbra* is the half-lit edge of a shadow — the part you half-see. That is
 
 `Describe` → `Illuminate` → `Examine` → `Reflect` → `Your call`
 
-- **Describe** — the decision, and (optionally) which way you are leaning. Three starter examples.
-- **Illuminate** — spotlight card (noticed first ⟷ outside the light), then six lenses.
+- **Describe** — the details of the decision, and (optionally) your own reasons for leaning one way. Four starter examples, the first being the brief's internship scenario.
+- **Illuminate** — spotlight card (noticed first ⟷ outside the light), then **seven lenses**: assumptions · conflicts in your reasoning · risks · overlooked factors · the other side · thinking traps · questions.
 - **Examine** — tick items you have actually checked; answer the questions. A sticky meter counts *blind spots examined* (it measures your reflection, never the decision).
 - **Reflect** — what your answers changed, a tension worth noticing, what is still unexamined, one question to sit with.
 - **Your call** — written by you; saved to the **journal** (device, or private cloud when signed in); copy as Markdown; delete any time.
@@ -122,7 +124,7 @@ Without a key the site still works: **See a sample** shows a full pre-written an
 
 ## 8 · Demo path (2 minutes)
 
-1. **Home** → *See a sample* → the spotlight card, six lenses, 13 things to examine.
+1. **Home** → *See a sample* (the brief's internship scenario) → the spotlight card, seven lenses, 19 things to examine.
 2. Tick a few items, answer a question → watch the meter → **Reflect** → read the tension it finds in *your* words.
 3. Write **Your call** → *Save to my journal* → **Journal** (copy as Markdown, delete).
 4. Back on **Think**, try your own decision (or an example chip) with the live AI.

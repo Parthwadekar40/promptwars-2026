@@ -3,7 +3,7 @@ import { analyzeDecision, reflectOn, validateDecision } from '../lib/analyze';
 import type { Analysis, Answered, Item, Reflection } from '../lib/analyze';
 import { EXAMPLES, SAMPLE } from '../data/examples';
 
-export type Kind = 'a' | 'r' | 'm';
+export type Kind = 'a' | 'c' | 'r' | 'm';
 export const markKey = (kind: Kind, i: number): string => `${kind}${i}`;
 
 type Phase = 'compose' | 'loading' | 'results';
@@ -75,7 +75,9 @@ export function useThinking() {
         .filter((x) => x.answer.length >= MIN_ANSWER),
     [analysis, answers],
   );
-  const total = analysis ? analysis.assumptions.length + analysis.risks.length + analysis.missing.length + analysis.questions.length : 0;
+  const total = analysis
+    ? analysis.assumptions.length + analysis.conflicts.length + analysis.risks.length + analysis.missing.length + analysis.questions.length
+    : 0;
   const done = Object.values(marks).filter(Boolean).length + answered.length;
 
   const reflect = async () => {
@@ -83,7 +85,12 @@ export function useThinking() {
     setReflecting(true);
     setReflectError('');
     const tag = (kind: Kind, xs: Item[]) => xs.map((x, i) => ({ text: x.text, on: !!marks[markKey(kind, i)] }));
-    const all = [...tag('a', analysis.assumptions), ...tag('r', analysis.risks), ...tag('m', analysis.missing)];
+    const all = [
+      ...tag('a', analysis.assumptions),
+      ...tag('c', analysis.conflicts),
+      ...tag('r', analysis.risks),
+      ...tag('m', analysis.missing),
+    ];
     const r = await reflectOn({
       decision,
       leaning,

@@ -49,6 +49,7 @@ export function neutralize(a: Analysis): { clean: Analysis; removed: number } {
     outside: keepText(a.outside, t),
     otherSide: keepText(a.otherSide, t),
     assumptions: keepItems(a.assumptions, t),
+    conflicts: keepItems(a.conflicts, t),
     risks: keepItems(a.risks, t),
     missing: keepItems(a.missing, t),
     traps: keepItems(a.traps, t),

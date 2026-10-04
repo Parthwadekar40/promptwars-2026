@@ -103,29 +103,34 @@ export function Results({ a, removed, sample, marks, onMark, answers, onAnswer, 
       </Reveal>
 
       {a.assumptions.length > 0 && (
-        <Lens n="01" eyebrow="Underneath" title="Assumptions you may be making">
+        <Lens n="01" eyebrow="Underneath" title="Assumptions you did not state">
           <Rows kind="a" items={a.assumptions} hintLabel="Check it" marks={marks} onMark={onMark} />
         </Lens>
       )}
+      {a.conflicts.length > 0 && (
+        <Lens n="02" eyebrow="Within your reasoning" title="Where your own reasoning pulls against itself">
+          <Rows kind="c" items={a.conflicts} hintLabel="To resolve" marks={marks} onMark={onMark} />
+        </Lens>
+      )}
       {a.risks.length > 0 && (
-        <Lens n="02" eyebrow="In the shadows" title="Risks worth a second look">
+        <Lens n="03" eyebrow="In the shadows" title="Risks worth a second look">
           <Rows kind="r" items={a.risks} hintLabel="Early sign" marks={marks} onMark={onMark} />
         </Lens>
       )}
       {a.missing.length > 0 && (
-        <Lens n="03" eyebrow="Missing from the picture" title="People and factors you did not mention">
+        <Lens n="04" eyebrow="Overlooked" title="Important factors you did not mention">
           <Rows kind="m" items={a.missing} hintLabel="Why it matters" marks={marks} onMark={onMark} />
         </Lens>
       )}
       {a.otherSide && (
-        <Lens n="04" eyebrow="The other side" title="The strongest case for what you are not leaning toward">
+        <Lens n="05" eyebrow="The other side" title="The strongest case for what you are not leaning toward">
           <blockquote className="rounded-[14px] border-l-2 border-brand-600 bg-white/55 p-6 font-serif text-[clamp(1.1rem,1.9vw,1.35rem)] italic leading-relaxed text-ink">
             {a.otherSide}
           </blockquote>
         </Lens>
       )}
       {a.traps.length > 0 && (
-        <Lens n="05" eyebrow="Thinking traps" title="Patterns that might be at play">
+        <Lens n="06" eyebrow="Thinking traps" title="Patterns that might be at play">
           <ul className="grid gap-3 sm:grid-cols-2">
             {a.traps.map((t) => (
               <li key={t.text} className="hairline rounded-[14px] bg-white/55 p-5">
@@ -137,7 +142,7 @@ export function Results({ a, removed, sample, marks, onMark, answers, onAnswer, 
         </Lens>
       )}
       {a.questions.length > 0 && (
-        <Lens n="06" eyebrow="Questions" title="Questions worth sitting with">
+        <Lens n="07" eyebrow="Questions" title="Questions worth sitting with">
           <ol className="space-y-4">
             {a.questions.map((q, i) => (
               <li key={q} className="hairline rounded-[14px] bg-white/55 p-5">

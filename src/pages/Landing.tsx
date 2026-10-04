@@ -11,13 +11,13 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 const ASSETS = `${import.meta.env.BASE_URL}assets`;
 
 const LENSES = [
-  'ASSUMPTIONS', 'RISKS', 'MISSING VOICES', 'TIME HORIZONS', 'REVERSIBILITY',
-  'SECOND-ORDER EFFECTS', 'THE OTHER SIDE', 'ANCHORS',
+  'UNSTATED ASSUMPTIONS', 'CONFLICTS IN YOUR REASONING', 'RISKS', 'WHAT YOU OVERLOOKED', 'TIME HORIZONS',
+  'REVERSIBILITY', 'THE OTHER SIDE', 'ANCHORS',
 ];
 
 const STEPS = [
-  { title: 'Describe', body: 'Tell it the decision the way you would tell a friend — and which way you are leaning.' },
-  { title: 'Illuminate', body: 'See what sits outside your light: hidden assumptions, risks in the shadows, voices you never mentioned.' },
+  { title: 'Describe', body: 'Give the details of the decision — and your own reasons for leaning one way.' },
+  { title: 'Illuminate', body: 'See what sits outside your light: unstated assumptions, conflicts within your own reasoning, risks, and factors you overlooked.' },
   { title: 'Examine', body: 'Answer questions written for your situation. Mark what you have actually checked. Reflect on what shifted.' },
   { title: 'Decide', body: 'You write the call — and what would change your mind. Penumbra never does. It files the entry in a private journal.' },
 ];
@@ -69,7 +69,7 @@ export function Landing() {
             >
               {profile
                 ? "Bring a decision when you're ready. Penumbra will show you what is outside the light — and leave the choice to you."
-                : 'Describe a decision. Penumbra shows the assumptions, risks and missing pieces you overlooked, asks the questions worth sitting with, then steps back. The decision stays yours.'}
+                : 'Describe a decision and your reasons. Penumbra shows the assumptions you never stated, what you overlooked, and where your own reasoning conflicts — then asks the questions worth sitting with and steps back. The decision stays yours.'}
             </motion.p>
 
             <motion.div
@@ -94,14 +94,14 @@ export function Landing() {
             className="flex justify-center md:justify-end"
           >
             <motion.img
-              src={`${ASSETS}/img/orb-main-alpha.webp`}
-              alt="A glass sphere casting a soft shadow"
-              width="1024"
-              height="1024"
+              src={`${ASSETS}/img/hero-sphere.webp`}
+              alt="A glass sphere on paper, casting a soft shadow with a rainbow caustic"
+              width="760"
+              height="760"
               fetchPriority="high"
-              className="float-art mask-fade-all w-full max-w-[380px] md:max-w-[540px]"
-              animate={reduce ? undefined : { y: [0, -12, 0] }}
-              transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+              className="w-full max-w-[400px] md:max-w-[580px]"
+              animate={reduce ? undefined : { y: [0, -6, 0] }}
+              transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
             />
           </motion.div>
         </div>
@@ -113,7 +113,7 @@ export function Landing() {
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-6 py-12 md:grid-cols-4">
           {[
             { v: '0', l: 'Verdicts, by design' },
-            { v: '6', l: 'Lenses on every decision' },
+            { v: '7', l: 'Lenses on every decision' },
             { v: '4–5', l: 'Questions written for you' },
             { v: '1', l: 'Decision-maker: you' },
           ].map((s, i) => (
@@ -158,6 +158,48 @@ export function Landing() {
         </div>
       </section>
 
+      {/* ————— THE MIRROR — examine your reasoning ————— */}
+      <section id="mirror" className="relative overflow-hidden">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 md:grid-cols-[0.75fr_1.25fr] md:py-28">
+          <Reveal>
+            <img
+              src={`${ASSETS}/img/mirror.webp`}
+              alt="A tall mirror reflecting a brighter version of the same room"
+              loading="lazy"
+              decoding="async"
+              width="540"
+              height="820"
+              className="mx-auto w-full max-w-[380px]"
+            />
+          </Reveal>
+          <div>
+            <Badge>Examine your reasoning</Badge>
+            <h2 className="t-h2 mt-5 max-w-xl font-display font-semibold tracking-tight text-ink">
+              Hold your thinking up to <em className="text-ink-muted">a&nbsp;mirror.</em>
+            </h2>
+            <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-ink-muted">
+              Answer the questions in your own words and Penumbra reflects them back — quoting you, noticing where one answer
+              pulls against another, naming what is still unexamined. It never tells you which side is right.
+            </p>
+            <ul className="mt-8 grid max-w-xl gap-px overflow-hidden rounded-[14px] border border-line bg-line sm:grid-cols-3">
+              {[
+                { t: 'Your words, quoted', b: 'Built from what you actually wrote.' },
+                { t: 'Tensions, named', b: 'Where two of your answers pull apart.' },
+                { t: 'Nothing decided', b: 'It ends with a question, never a verdict.' },
+              ].map((x) => (
+                <li key={x.t} className="bg-paper p-5">
+                  <p className="font-display font-semibold tracking-tight text-ink">{x.t}</p>
+                  <p className="mt-1.5 text-[14px] leading-relaxed text-ink-muted">{x.b}</p>
+                </li>
+              ))}
+            </ul>
+            <a href="#/think?sample" className="mt-7 inline-block text-[15px] font-medium text-brand-700 underline underline-offset-4">
+              See a reflection in the sample →
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* ————— PERSPECTIVE FILM ————— */}
       <section aria-label="Perspectives" className="relative overflow-hidden">
         <div className="relative h-[clamp(300px,46vh,500px)]">
@@ -186,16 +228,6 @@ export function Landing() {
 
       {/* ————— THE BLIND SPOT — dark, with a light you move ————— */}
       <section className="relative isolate overflow-hidden bg-[#0b0a10]">
-        <img
-          src={`${ASSETS}/img/dark-divider.webp`}
-          alt=""
-          aria-hidden
-          loading="lazy"
-          decoding="async"
-          width="1376"
-          height="768"
-          className="animate-silk absolute inset-0 -z-10 size-full object-cover opacity-80"
-        />
         <Atmosphere dark />
         <div className="mx-auto max-w-4xl px-6 pt-28 text-center md:pt-36">
           <p className="eyebrow !text-white/60">The blind spot</p>
@@ -206,7 +238,23 @@ export function Landing() {
           </Reveal>
           <p className="mt-6 text-white/65">Move through the dark. Everything here was always in the room.</p>
         </div>
-        <Spotlight />
+        <div className="relative mt-2">
+          <img
+            src={`${ASSETS}/img/periphery.webp`}
+            alt=""
+            aria-hidden
+            loading="lazy"
+            decoding="async"
+            width="1440"
+            height="611"
+            className="block min-h-[440px] w-full object-cover"
+            style={{
+              maskImage: 'linear-gradient(to bottom, transparent 0, #000 26%)',
+              WebkitMaskImage: 'linear-gradient(to bottom, transparent 0, #000 26%)',
+            }}
+          />
+          <Spotlight className="absolute inset-x-0 top-0 h-[62%]" />
+        </div>
         <p className="sr-only">
           Thoughts that sit just outside attention: an assumption, sunk cost, who is missing, second-order effects, the deadline,
           reversibility, the other side, anchoring.
@@ -222,10 +270,10 @@ export function Landing() {
               <p className="eyebrow">The neutrality guard — in action</p>
               <ul className="mt-6 space-y-4 text-[15px] leading-relaxed">
                 {[
-                  { kept: false, text: 'You should take the offer.' },
-                  { kept: false, text: 'Honestly, the better option is to stay.' },
-                  { kept: true, text: 'What would have to be true for taking the offer to be the right call?' },
-                  { kept: true, text: 'What are you assuming about how quickly you would build a life there?' },
+                  { kept: false, text: 'You should take the internship.' },
+                  { kept: false, text: 'Honestly, the better option is to decline.' },
+                  { kept: true, text: 'What would have to be true for this internship to be worth the study time it costs?' },
+                  { kept: true, text: 'What are you assuming about the mentoring you would get?' },
                 ].map((l) => (
                   <li key={l.text} className="flex gap-4">
                     <span className={`eyebrow w-16 shrink-0 pt-0.5 ${l.kept ? '!text-emerald-800' : '!text-red-700'}`}>{l.kept ? 'Kept' : 'Removed'}</span>
@@ -258,18 +306,22 @@ export function Landing() {
       {/* ————— BEGIN ————— */}
       <Section id="begin" eyebrow="Begin" title={<>Bring a decision. <em className="text-ink-muted">Leave with better questions.</em></>}>
         <Reveal>
-          <GlassCard className="relative overflow-hidden text-center">
+          <GlassCard className="relative overflow-hidden text-center !p-0">
             <img
-              src={`${ASSETS}/img/silk-backdrop.webp`}
+              src={`${ASSETS}/img/paths.webp`}
               alt=""
               aria-hidden
               loading="lazy"
               decoding="async"
-              width="1376"
-              height="768"
-              className="animate-silk mask-fade-all absolute inset-0 z-0 size-full object-cover opacity-80"
+              width="1280"
+              height="714"
+              className="absolute inset-0 z-0 size-full object-cover object-bottom"
+              style={{
+                maskImage: 'linear-gradient(to bottom, transparent 0, #000 38%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, transparent 0, #000 38%)',
+              }}
             />
-            <div className="relative z-10">
+            <div className="relative z-10 px-6 pb-64 pt-12 md:pb-72">
               <p className="mx-auto max-w-md text-ink-muted">
                 No sign-up needed. Your words are used only to write the analysis — nothing is saved unless you choose to.
               </p>

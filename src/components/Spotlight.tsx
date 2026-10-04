@@ -41,7 +41,7 @@ function Layer({ className }: { className: string }) {
  * A dark field of half-hidden thoughts. A soft light follows the pointer — or drifts by itself —
  * and reveals them: the blind spot, made literal. Motion-safe, pauses off-screen.
  */
-export function Spotlight() {
+export function Spotlight({ className = 'relative h-[clamp(280px,40vh,400px)]' }: { className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
 
@@ -92,7 +92,7 @@ export function Spotlight() {
 
   const mask = 'radial-gradient(210px circle at var(--sx, 50%) var(--sy, 50%), #000 0%, rgba(0,0,0,0.55) 45%, transparent 100%)';
   return (
-    <div ref={ref} className="relative h-[clamp(280px,40vh,400px)] touch-pan-y overflow-hidden">
+    <div ref={ref} className={`touch-pan-y overflow-hidden ${className}`}>
       <Layer className="text-white/[0.13]" />
       <div className="absolute inset-0" style={{ maskImage: mask, WebkitMaskImage: mask }}>
         <Layer className="text-white" />

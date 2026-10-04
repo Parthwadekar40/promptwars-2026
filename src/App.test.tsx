@@ -32,7 +32,7 @@ describe('App shell', () => {
   it('opens the instant sample straight from a shared link', async () => {
     window.location.hash = '#/think?sample';
     render(<App />);
-    expect(await screen.findByRole('heading', { level: 1, name: /bengaluru offer/i })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { level: 1, name: /6-month internship/i })).toBeInTheDocument();
     window.location.hash = '#/';
   });
 

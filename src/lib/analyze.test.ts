@@ -25,6 +25,7 @@ describe('analysis engine', () => {
     expect(a.assumptions).toEqual([{ text: 'Users will wait', hint: 'Ask five' }]);
     expect(a.questions).toEqual(['One?']);
     expect(a.risks).toEqual([]);
+    expect(a.conflicts).toEqual([]);
     expect(toAnalysis(undefined).title).toBe('Your decision');
   });
 });

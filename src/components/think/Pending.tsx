@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 const STEPS = [
   'Reading what you wrote…',
   'Testing the assumptions…',
-  'Looking for who is missing…',
-  'Finding the other side…',
+  'Listening for conflicts in your reasoning…',
+  'Finding what you overlooked…',
   'Writing questions for you…',
 ];
 
-/** Loading state — a sphere breathing in its own penumbra, with honest progress copy. */
+/** Loading state — a lens held over your decision, with honest progress copy. */
 export function Pending() {
   const [i, setI] = useState(0);
   useEffect(() => {
@@ -16,8 +16,16 @@ export function Pending() {
     return () => clearInterval(t);
   }, []);
   return (
-    <div role="status" aria-live="polite" className="flex flex-col items-center gap-8 py-24 text-center">
-      <span aria-hidden className="pen-orb" />
+    <div role="status" aria-live="polite" className="flex min-h-[52vh] flex-col items-center justify-center gap-2 py-10 text-center">
+      <img
+        src={`${import.meta.env.BASE_URL}assets/img/lens.webp`}
+        alt=""
+        aria-hidden
+        width="720"
+        height="720"
+        className="animate-float w-[min(320px,70vw)]"
+        style={{ '--tilt': '-2deg' } as React.CSSProperties}
+      />
       <p className="eyebrow">{STEPS[i]}</p>
     </div>
   );

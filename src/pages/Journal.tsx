@@ -52,6 +52,14 @@ export function Journal() {
 
         {state && state.entries.length === 0 && (
           <GlassCard className="mt-10 text-center">
+            <img
+              src={`${import.meta.env.BASE_URL}assets/img/pebble-empty-alpha.webp`}
+              alt=""
+              aria-hidden
+              width="1024"
+              height="1024"
+              className="mx-auto -mt-4 w-44"
+            />
             <p className="font-display text-xl font-semibold text-ink">Nothing here yet.</p>
             <p className="mt-2 text-ink-muted">Your first reflection will land here once you write your call.</p>
             <Button type="button" className="mt-5" onClick={() => navigate('/think')}>

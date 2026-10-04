@@ -20,10 +20,10 @@ describe('Think workspace', () => {
 
     const bar = screen.getByRole('progressbar', { name: /blind spots examined/i });
     expect(bar).toHaveAttribute('aria-valuenow', '0');
-    await userEvent.click(screen.getByRole('button', { name: /examined: the 40% raise will feel/i }));
+    await userEvent.click(screen.getByRole('button', { name: /examined: .industry experience. will automatically/i }));
     expect(bar).toHaveAttribute('aria-valuenow', '1');
 
-    await userEvent.type(screen.getByLabelText(/if the salary were identical/i), 'Yes — I like the team and the problem.');
+    await userEvent.type(screen.getByLabelText(/if the stipend were half as much/i), 'Yes — I like the team and the problem.');
     expect(bar).toHaveAttribute('aria-valuenow', '2');
     expect(screen.getByRole('button', { name: /^reflect$/i })).toBeEnabled();
   });
