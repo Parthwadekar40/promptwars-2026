@@ -1,53 +1,137 @@
-# PromptWars 2026
+# Penumbra — a thinking companion for *The Blind Spot*
 
-> An intelligent workspace powered by Google Gemini — fast, private, and a genuine pleasure to use.
+> Describe a decision. Penumbra shows you what you are **not** looking at — the assumptions, risks and missing pieces — asks the questions worth sitting with, and then steps back. **The decision stays yours.**
+
+**Live:** https://parthwadekar40.github.io/promptwars-2026/ · **Try it in 10 seconds:** [open the instant sample](https://parthwadekar40.github.io/promptwars-2026/#/think?sample)
 
 **Author:** [Parth Wadekar](https://github.com/Parthwadekar40) · [LinkedIn](https://www.linkedin.com/in/parth-wadekar-18027728b) · [Instagram](https://www.instagram.com/parthwadekar16)
 
-**Live:** https://parthwadekar40.github.io/promptwars-2026/
+Built for **PromptWars 2026** (Google for Developers × EI SVPCET), challenge **"The Blind Spot"**.
+A *penumbra* is the half-lit edge of a shadow — the part you half-see. That is where blind spots live.
 
-## What it does
+---
 
-- **Landing** — the product story: brutal-scale type, a glass-study film loop, drifting atmosphere, page-wide brand-gradient cursor glow.
-- **Sign in** — Firebase Anonymous Auth (no passwords to leak) + display-name capture.
-- **Settings** — connect a Google AI Studio key (stored in the visitor's `localStorage` only) + one-tap live health checks for every integration.
+## 1 · The challenge → what is built (requirements traceability)
 
-## Demo path (2 minutes)
+> **The problem.** *"We often make decisions based on what we notice first, while overlooking assumptions, risks, and important factors."*
+> **The challenge.** *"Build an AI-powered thinking companion that spots what might be missing, asks thoughtful questions, and helps users examine their reasoning."*
+> **The goal.** *"Improve decision-making — without making the decision for the user."*
 
-1. **Sign up** with your email → the OTP code lands in your inbox → verify → the hero greets you by name.
-2. **Settings** → paste a free Google AI Studio key → run the three service checks (Gemini · Firebase · EmailJS — all green ●).
-3. Explore the landing: glass-study film loop, drifting atmosphere, the brand gradient following your cursor.
+| # | Requirement (verbatim from the brief) | How Penumbra delivers it | Where |
+|---|---|---|---|
+| 1 | "what we **notice first**" | A *spotlight card* puts **what you noticed first** (in the light) beside **what sits outside the light** (in the shadow) | `components/think/SpotlightCard.tsx`, `lib/analyze.ts` (`noticedFirst`, `outside`) |
+| 2 | "overlooking **assumptions**" | Lens 01 — hidden assumptions, each with a cheap way to test it this week | `Results.tsx` · schema `assumptions[{assumption, check}]` |
+| 3 | "overlooking **risks**" | Lens 02 — risks in the shadows, each with an early warning sign | schema `risks[{risk, warningSign}]` |
+| 4 | "overlooking **important factors**" | Lens 03 — people, resources, time horizons, reversibility you never mentioned · Lens 04 — the strongest case for the option you are *not* leaning toward · Lens 05 — thinking traps (anchoring, sunk cost…) | schema `missing`, `otherSide`, `traps` |
+| 5 | "**spots what might be missing**" | One AI pass returns all five lenses at once, specific to *your* details (generic advice is forbidden by the prompt) | `lib/analyze.ts` → `analyzeDecision()` |
+| 6 | "**asks thoughtful questions**" | 4–5 open, situation-specific questions per decision; you answer them in place. Leading / yes-no questions are prohibited | `analyze.ts` (rule 3), `Results.tsx` Lens 06 |
+| 7 | "**helps users examine their reasoning**" | **Examine** (mark each blind spot examined, answer questions, live progress meter) → **Reflect** (a second pass quotes *your own answers* and points out *tensions* between them) | `hooks/useThinking.ts`, `ProgressBar.tsx`, `ReflectionCard.tsx`, `analyze.ts` → `reflectOn()` |
+| 8 | "**without making the decision for the user**" | **Neutrality guard in three layers** (see §3) + a final **Your call** step that only the user can write, saved to a private journal | `lib/guard.ts` (+ tests), `YourCall.tsx`, `lib/journal.ts` |
 
-## Stack
+## 2 · Google services
 
-- Vite 7 · React 19 · TypeScript (strict) · Tailwind CSS v4 · Framer Motion
-- Vitest + React Testing Library (4/4 passing) · GitHub Pages deployed via GitHub Actions
-
-## Services
-
-| Service | Where | What for |
+| Service | Role | Where |
 |---|---|---|
-| Google Gemini API | `src/lib/gemini.ts` | AI generation — bring-your-own key from AI Studio |
-| Firebase Anonymous Auth + Firestore | `src/lib/db.ts` (REST, ~2 KB — no heavy SDK) | Private sessions + per-user data |
-| EmailJS | `src/lib/mail.ts` (REST) | Waitlist / notify emails |
+| **Gemini API** (`@google/genai`, Google AI Studio key) | Structured analysis + reflection via `responseSchema` JSON output. Model chain across **7 Gemini models** (independent quota buckets) with instant failover, 60 s cool-down for rate-limited models and **hedged requests** (the next model races a slow one; the loser is aborted) | `src/lib/gemini.ts`, `src/lib/analyze.ts` |
+| **Firebase Authentication** (Identity Toolkit REST) | Email + password accounts, session refresh | `src/lib/db.ts`, `src/pages/Auth.tsx` |
+| **Cloud Firestore** (REST) | Private per-user **decision journal** at `users/{uid}/reflections`; owner-only security rules | `src/lib/db.ts`, `src/lib/journal.ts`, [`firestore.rules`](firestore.rules) |
+| **Google Fonts** | Instrument Sans / Instrument Serif / Inter / JetBrains Mono | `index.html` |
 
-## Run locally
+*(Firebase is called over REST — ~3 KB instead of the ~120 KB SDK.)*
+
+## 3 · "It never decides for you" — enforced, not promised
+
+1. **Prompt.** Hard rules: never recommend, rank, score or choose; no verdicts, not even softened ones; questions must be open and may never steer toward an option. The person's text is wrapped in data tags and treated as data, not instructions.
+2. **Schema.** The response format has **no "recommendation" field at all** — the model has nowhere to put a verdict.
+3. **Code.** [`lib/guard.ts`](src/lib/guard.ts) inspects every sentence of every response (questions are exempt — they are the product) against advice patterns (*"you should…"*, *"I recommend…"*, *"the better option…"*, *"go with…"*). Anything that matches is **removed before you see it**, and the UI states the result: *"Neutrality check passed"* or *"removed N lines that read like advice"*. Unit-tested.
+4. **UX.** The final step, **Your call**, is a blank page for the user's own words plus *"what would change my mind"*. Penumbra files it in a private journal and says nothing.
+
+## 4 · The experience
+
+`Describe` → `Illuminate` → `Examine` → `Reflect` → `Your call`
+
+- **Describe** — the decision, and (optionally) which way you are leaning. Three starter examples.
+- **Illuminate** — spotlight card (noticed first ⟷ outside the light), then six lenses.
+- **Examine** — tick items you have actually checked; answer the questions. A sticky meter counts *blind spots examined* (it measures your reflection, never the decision).
+- **Reflect** — what your answers changed, a tension worth noticing, what is still unexamined, one question to sit with.
+- **Your call** — written by you; saved to the **journal** (device, or private cloud when signed in); copy as Markdown; delete any time.
+- **Instant sample** — `#/think?sample` loads a pre-written analysis with zero latency (also the graceful fallback when the AI is rate-limited and the untouched starter example is used).
+- A **care note** appears first if the situation touches someone's safety or wellbeing.
+
+## 5 · Architecture
+
+```
+src/
+  lib/         analyze.ts   prompts · response schema · defensive parsing · analyze & reflect
+               guard.ts     neutrality guard (pure functions)
+               gemini.ts    model chain · cool-down · hedged requests · structured output
+               journal.ts   device + cloud journal, Markdown export     db.ts  Firebase REST (auth + Firestore)
+               auth.ts · otp.ts · mail.ts · router.ts · result.ts
+  hooks/       useThinking.ts   one session: describe → illuminate → examine → reflect
+  components/  think/ (Compose · Pending · Results · SpotlightCard · ProgressBar · ReflectionCard · YourCall)
+               Spotlight · Reveal · Atmosphere · Marquee · AppShell · ErrorBoundary · ui
+  pages/       Landing · Think · Journal · Auth · Connect (settings) · Privacy · NotFound
+  data/        examples.ts   starter decisions + the instant sample
+```
+
+Stack: Vite 7 · React 19 · TypeScript (strict) · Tailwind CSS v4 · Framer Motion · Vitest + React Testing Library · GitHub Actions → GitHub Pages.
+
+## 6 · Quality
+
+### Efficiency
+- First load ≈ **125 KB gzip** (app 79 KB + motion 45 KB). The Gemini SDK (56 KB gz) and the Think workspace (10 KB gz) are **lazy chunks** loaded only when needed.
+- **Failover without waiting:** the SDK's built-in 5× retry cost ~25 s on a rate-limited model — it is disabled; failover is instant. Hedged requests cap the tail latency at ~7 s + one normal call. Losers are cancelled with `AbortController`.
+- Typical analysis: **≈ 3–5 s**; reflection **≈ 2–4 s**.
+- Journal merge is **O(n)** (`Map` by id); progress is derived with `useMemo`; the pointer-spotlight animation pauses off-screen (`IntersectionObserver`) and cleans up on unmount.
+
+### Security
+- **No secrets in the repo.** Keys are injected at build time from GitHub Actions secrets; `.env*` is git-ignored. A user's own AI key stays in their browser (`localStorage`) and is sent only to the AI provider. (A static site cannot hide a shared demo key — production would proxy it server-side.)
+- **Content-Security-Policy** (build-time `<meta>`): scripts `'self'`; network limited to the four Google endpoints + the mail API; `object-src 'none'`.
+- **Prompt-injection hardening:** user text is stripped of control characters and `<` `>` (so it cannot close the data tags), length-bounded, and delimited as data.
+- Firestore rules ([`firestore.rules`](firestore.rules)): a user can read/write only `users/{their uid}/…`; everything else is denied.
+- No `dangerouslySetInnerHTML`; external links use `rel="noopener noreferrer"`; an error boundary keeps stack traces out of the UI; a [privacy page](https://parthwadekar40.github.io/promptwars-2026/#/privacy) states exactly what happens to your words.
+
+### Accessibility
+- Landmarks (`header` / `nav` / `main` / `footer`), a **skip link**, one `h1` per view and a clean `h2` hierarchy.
+- Every field has a real `<label>`; the examine toggles are `aria-pressed` buttons with names; the meter is a `role="progressbar"`; results and status messages use `aria-live`; errors use `role="alert"`.
+- **Focus management:** after the analysis arrives, focus moves to the result heading.
+- Fully keyboard-operable (native `<details>` for the journal); visible `:focus-visible` ring.
+- **Contrast:** secondary text darkened to **5.3 : 1** on the paper background (WCAG AA).
+- `prefers-reduced-motion` disables every animation, the flashlight drift and the reveal effects.
+
+### Testing — `npm test` (28 tests, run in CI before every deploy)
+| Area | What is proven |
+|---|---|
+| Neutrality guard | flags advice ("you should", "I recommend", "better option"); lets questions through; removes & counts offending lines in analyses and reflections; leaves clean output untouched |
+| Analysis engine | rejects too-short input before any network call; strips `<` `>` so user text cannot break out of its data tags; parses messy model output without throwing |
+| Failover | a faster hedged model wins and the slow one is aborted; instant failover on error; last error reported when all fail; model chain has independent buckets |
+| Journal | Markdown export; device save / newest-first / delete; saving twice overwrites instead of duplicating |
+| UI flows | empty-input guard; sample → counting examined blind spots; the final call needs the user's words, then lands in the journal; 404; shared-link sample; auth validation; `Button` styling regression |
+
+## 7 · Run it
 
 ```bash
 npm install
-npm run dev      # dev server
-npm test         # test suite
-npm run build    # production build → dist/
+cp .env.example .env     # add a free Google AI Studio key (VITE_GEMINI_API_KEY) — optional: Firebase / EmailJS
+npm run dev              # dev server
+npm test                 # 28 tests
+npm run build            # type-check + production build → dist/
 ```
 
-## Security
+Without a key the site still works: **See a sample** shows a full pre-written analysis, and Settings lets anyone paste their own free key.
 
-- **No secrets live in this repository.** Build-time keys are injected via GitHub Actions secrets (`GEMINI_API_KEY`, `FIREBASE_*`, `EMAILJS_*`).
-- Firebase / EmailJS web config is public-by-design (it must ship in any client bundle); access is enforced by **Firestore Security Rules** and EmailJS **origin allowlisting** — never by hiding config.
-- User-supplied Gemini keys are stored only in the visitor's `localStorage`, and are sent only to Google.
+## 8 · Demo path (2 minutes)
 
-## Design system
+1. **Home** → *See a sample* → the spotlight card, six lenses, 13 things to examine.
+2. Tick a few items, answer a question → watch the meter → **Reflect** → read the tension it finds in *your* words.
+3. Write **Your call** → *Save to my journal* → **Journal** (copy as Markdown, delete).
+4. Back on **Think**, try your own decision (or an example chip) with the live AI.
+5. Optional: **Sign up** (email + one-time code) → the journal now syncs privately across devices.
 
-- Type: Instrument Sans · Instrument Serif *italic* · Inter · JetBrains Mono
-- Paper `#e4ded3` · ink `#171412` · brand gradient `#6d5ff7 → #a78bfa → #6ee7b7`
-- All art is custom-generated glass imagery, background-keyed to melt seamlessly into the page
+## 9 · Design
+
+Warm paper `#e4ded3` · ink `#171412` · brand violet `#5b4bf5` → mint `#6ee7b7`. Type: Instrument Sans · *Instrument Serif* (italic accents) · Inter · JetBrains Mono. The metaphor runs through everything: **light and shadow** — the spotlight card, the dark "blind spot" band whose hidden thoughts you reveal with a moving light, the breathing orb while it thinks.
+
+---
+
+MIT © 2026 Parth Wadekar

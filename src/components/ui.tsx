@@ -4,6 +4,7 @@ import type { ReactNode, InputHTMLAttributes, ButtonHTMLAttributes, TextareaHTML
 
 export function Button({
   variant = 'primary',
+  className = '',
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'ghost' }) {
   const base =
@@ -12,7 +13,7 @@ export function Button({
     variant === 'primary'
       ? 'bg-ink text-paper hover:bg-[#2b2622] shadow-[0_1px_2px_rgba(23,20,18,0.18)]'
       : 'hairline bg-transparent text-ink hover:bg-white/70';
-  return <button className={`${base} ${styles}`} {...props} />;
+  return <button {...props} className={`${base} ${styles} ${className}`} />;
 }
 
 export function GlassCard({ children, className = '' }: { children: ReactNode; className?: string }) {
