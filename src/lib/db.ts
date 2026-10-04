@@ -35,6 +35,8 @@ function friendlyAuthError(msg?: string): string {
       return 'This account has been disabled.';
     case 'TOO_MANY_ATTEMPTS_TRY_LATER':
       return 'Too many attempts — try again in a few minutes.';
+    case 'OPERATION_NOT_ALLOWED':
+      return 'Email sign-in is not enabled yet on this project.';
     default:
       return msg ?? 'Something went wrong.';
   }

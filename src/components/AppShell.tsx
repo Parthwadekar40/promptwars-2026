@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { navigate, useRoute } from '../lib/router';
 import { Button } from './ui';
 import { clearProfile, useProfile } from '../lib/auth';
-import { signOut } from '../lib/db';
+import { hasSession, refreshSession, signOut } from '../lib/db';
 import { whatsappLink } from '../lib/mail';
 
 const NAV = [
@@ -26,6 +26,11 @@ export function AppShell({ children }: { children: ReactNode }) {
     setOpen(false);
     navigate('/');
   };
+
+  // keep the Firebase session fresh across reloads (also pulls refreshSession into the bundle)
+  useEffect(() => {
+    if (hasSession()) void refreshSession();
+  }, []);
 
   return (
     <div
