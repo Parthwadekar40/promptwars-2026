@@ -45,7 +45,12 @@ const lines = { type: 'ARRAY', items: str } as const;
 export const ANALYSIS_SCHEMA = {
   type: 'OBJECT',
   properties: {
-    title: str, heard: str, noticedFirst: str, outside: str, otherSide: str, care: str,
+    title: str,
+    heard: str,
+    noticedFirst: str,
+    outside: str,
+    otherSide: str,
+    care: str,
     assumptions: pairs('assumption', 'check'),
     conflicts: pairs('conflict', 'toResolve'),
     risks: pairs('risk', 'warningSign'),
@@ -53,7 +58,19 @@ export const ANALYSIS_SCHEMA = {
     traps: pairs('name', 'whereItShows'),
     questions: lines,
   },
-  required: ['title', 'heard', 'noticedFirst', 'outside', 'otherSide', 'assumptions', 'conflicts', 'risks', 'missing', 'traps', 'questions'],
+  required: [
+    'title',
+    'heard',
+    'noticedFirst',
+    'outside',
+    'otherSide',
+    'assumptions',
+    'conflicts',
+    'risks',
+    'missing',
+    'traps',
+    'questions',
+  ],
 };
 
 export const REFLECT_SCHEMA = {

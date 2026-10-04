@@ -1,4 +1,4 @@
-import { listEntries, removeEntry, saveEntry, toMarkdown } from './journal';
+import { listEntries, removeEntry, reviewLink, saveEntry, toMarkdown } from './journal';
 
 const base = {
   at: new Date('2026-10-04T10:00:00Z').getTime(),
@@ -39,5 +39,15 @@ describe('decision journal', () => {
     const { entries } = await listEntries();
     expect(entries).toHaveLength(1);
     expect(entries[0].call).toBe('Updated call');
+  });
+
+  it('builds a prefilled calendar event for a review 30 days out', () => {
+    const url = new URL(reviewLink(base, 30, new Date('2026-10-04T10:00:00Z')));
+    expect(url.origin + url.pathname).toBe('https://calendar.google.com/calendar/render');
+    expect(url.searchParams.get('action')).toBe('TEMPLATE');
+    expect(url.searchParams.get('text')).toBe('Revisit my decision: Bengaluru offer vs. Pune');
+    expect(url.searchParams.get('dates')).toBe('20261103/20261104'); // all-day, 30 days later
+    expect(url.searchParams.get('details')).toContain('I will ask for two more weeks before answering.');
+    expect(url.searchParams.get('details')).toContain('If the team lead cannot describe my first 90 days.');
   });
 });

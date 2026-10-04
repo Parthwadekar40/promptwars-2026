@@ -7,8 +7,14 @@ import { useProfile } from '../../lib/auth';
 import { ASSETS, EASE } from './shared';
 
 const LENSES = [
-  'UNSTATED ASSUMPTIONS', 'CONFLICTS IN YOUR REASONING', 'RISKS', 'WHAT YOU OVERLOOKED', 'TIME HORIZONS',
-  'REVERSIBILITY', 'THE OTHER SIDE', 'ANCHORS',
+  'UNSTATED ASSUMPTIONS',
+  'CONFLICTS IN YOUR REASONING',
+  'RISKS',
+  'WHAT YOU OVERLOOKED',
+  'TIME HORIZONS',
+  'REVERSIBILITY',
+  'THE OTHER SIDE',
+  'ANCHORS',
 ];
 
 export function Hero() {
@@ -23,7 +29,11 @@ export function Hero() {
 
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 pb-14 pt-20 md:grid-cols-[1.08fr_0.92fr] md:pb-20 md:pt-28">
           <div>
-            <motion.div initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.2 }}>
+            <motion.div
+              initial={reduce ? false : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.9, delay: 0.2 }}
+            >
               <Badge>A thinking companion</Badge>
             </motion.div>
 
@@ -36,7 +46,11 @@ export function Hero() {
                   transition={{ duration: 1, delay: 0.35 + i * 0.16, ease: EASE }}
                   className="mr-[0.28em] inline-block"
                 >
-                  {w === accent ? <em className="text-gradient font-serif font-normal italic tracking-normal">{accent}</em> : w}
+                  {w === accent ? (
+                    <em className="text-gradient font-serif font-normal italic tracking-normal">{accent}</em>
+                  ) : (
+                    w
+                  )}
                 </motion.span>
               ))}
             </h1>
@@ -86,7 +100,11 @@ export function Hero() {
           </motion.div>
         </div>
 
-        <motion.div initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, delay: 1.9 }}>
+        <motion.div
+          initial={reduce ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, delay: 1.9 }}
+        >
           <Marquee items={LENSES} />
         </motion.div>
 

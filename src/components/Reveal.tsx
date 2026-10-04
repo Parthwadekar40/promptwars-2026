@@ -4,7 +4,15 @@ import type { ReactNode } from 'react';
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 /** Emerges from shadow into light — blur + rise, once, motion-safe. */
-export function Reveal({ children, delay = 0, className }: { children: ReactNode; delay?: number; className?: string }) {
+export function Reveal({
+  children,
+  delay = 0,
+  className,
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}) {
   const reduce = useReducedMotion();
   return (
     <motion.div

@@ -26,7 +26,10 @@ describe('Think workspace', () => {
     await userEvent.click(screen.getByRole('button', { name: /examined: .industry experience. will automatically/i }));
     expect(bar).toHaveAttribute('aria-valuenow', '1');
 
-    await userEvent.type(screen.getByLabelText(/if the stipend were half as much/i), 'Yes — I like the team and the problem.');
+    await userEvent.type(
+      screen.getByLabelText(/if the stipend were half as much/i),
+      'Yes — I like the team and the problem.',
+    );
     expect(bar).toHaveAttribute('aria-valuenow', '2');
     expect(screen.getByRole('button', { name: /^reflect$/i })).toBeEnabled();
   });
@@ -37,10 +40,17 @@ describe('Think workspace', () => {
     await userEvent.click(await screen.findByRole('button', { name: /save to my journal/i }));
     expect(screen.getByText(/write your call first/i)).toBeInTheDocument();
 
+    expect(screen.queryByRole('link', { name: /review in 30 days/i })).not.toBeInTheDocument();
     await userEvent.type(screen.getByLabelText(/^my call$/i), 'I will ask for two more weeks.');
+    expect(screen.getByRole('link', { name: /review in 30 days/i })).toHaveAttribute(
+      'href',
+      expect.stringContaining('calendar.google.com'),
+    );
     await userEvent.click(screen.getByRole('button', { name: /save to my journal/i }));
     const status = await screen.findByText(/saved on this device/i);
-    expect(within(status.parentElement as HTMLElement).getByRole('link', { name: /open journal/i })).toBeInTheDocument();
+    expect(
+      within(status.parentElement as HTMLElement).getByRole('link', { name: /open journal/i }),
+    ).toBeInTheDocument();
     expect(JSON.parse(localStorage.getItem('pw_journal') ?? '[]')).toHaveLength(1);
   });
 
@@ -48,12 +58,22 @@ describe('Think workspace', () => {
     const reflectOn = vi.mocked(analyze.reflectOn);
     reflectOn.mockResolvedValueOnce({
       ok: true,
-      data: { removed: 0, reflection: { shifted: ['You named the stipend as the real driver.'], tension: 'You want learning, but ranked pay first.', stillOpen: ['Who would mentor you?'], oneQuestion: 'What would make this worth the study time?' } },
+      data: {
+        removed: 0,
+        reflection: {
+          shifted: ['You named the stipend as the real driver.'],
+          tension: 'You want learning, but ranked pay first.',
+          stillOpen: ['Who would mentor you?'],
+          oneQuestion: 'What would make this worth the study time?',
+        },
+      },
     });
     render(<Think />);
     await userEvent.click(screen.getByRole('button', { name: /see a sample/i }));
     expect(screen.getByRole('button', { name: /^reflect$/i })).toBeDisabled(); // nothing examined yet
-    await userEvent.click(await screen.findByRole('button', { name: /examined: .industry experience. will automatically/i }));
+    await userEvent.click(
+      await screen.findByRole('button', { name: /examined: .industry experience. will automatically/i }),
+    );
     await userEvent.click(screen.getByRole('button', { name: /^reflect$/i }));
     expect(await screen.findByText(/a tension worth noticing/i)).toBeInTheDocument();
     expect(screen.getByText(/you want learning, but ranked pay first/i)).toBeInTheDocument();

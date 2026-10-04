@@ -16,7 +16,7 @@ describe("the brief's own scenario", () => {
     expect(all).toMatch(/long-term|career/);
   });
 
-  it('questions assumptions and names conflicts in the person\'s own reasoning', () => {
+  it("questions assumptions and names conflicts in the person's own reasoning", () => {
     expect(SAMPLE.assumptions.length).toBeGreaterThanOrEqual(3);
     expect(SAMPLE.conflicts.length).toBeGreaterThanOrEqual(2);
     expect(SAMPLE.questions.length).toBe(5);

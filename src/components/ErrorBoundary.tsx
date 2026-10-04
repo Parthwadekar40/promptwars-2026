@@ -14,9 +14,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, { failed: 
         <section className="mx-auto flex min-h-[60vh] max-w-md flex-col items-center justify-center px-6 text-center">
           <p className="eyebrow">SOMETHING SLIPPED</p>
           <h1 className="t-h2 mt-4">One moment, please.</h1>
-          <p className="mt-3 text-ink-muted">
-            The page hit an unexpected error — a refresh almost always fixes it.
-          </p>
+          <p className="mt-3 text-ink-muted">The page hit an unexpected error — a refresh almost always fixes it.</p>
           <button
             type="button"
             onClick={() => window.location.reload()}

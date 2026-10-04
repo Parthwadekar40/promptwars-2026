@@ -30,7 +30,16 @@ function Check({ on, label, onClick }: { on: boolean; label: string; onClick: ()
         on ? 'border-brand-600 bg-brand-600 text-white' : 'border-ink/30 bg-white/60 hover:border-ink/60'
       }`}
     >
-      <svg viewBox="0 0 16 16" aria-hidden className={`size-3.5 ${on ? 'opacity-100' : 'opacity-0'}`} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        viewBox="0 0 16 16"
+        aria-hidden
+        className={`size-3.5 ${on ? 'opacity-100' : 'opacity-0'}`}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M3.5 8.5l3 3 6-7" />
       </svg>
     </button>
@@ -45,7 +54,10 @@ function Lens({ n, eyebrow, title, children }: { n: string; eyebrow: string; tit
         <p className="eyebrow">
           {n} · {eyebrow}
         </p>
-        <h2 id={id} className="mt-2 font-display text-[clamp(1.45rem,2.6vw,1.9rem)] font-semibold tracking-tight text-ink">
+        <h2
+          id={id}
+          className="mt-2 font-display text-[clamp(1.45rem,2.6vw,1.9rem)] font-semibold tracking-tight text-ink"
+        >
           {title}
         </h2>
         <div className="mt-5">{children}</div>
@@ -54,7 +66,19 @@ function Lens({ n, eyebrow, title, children }: { n: string; eyebrow: string; tit
   );
 }
 
-function Rows({ kind, items, hintLabel, marks, onMark }: { kind: Kind; items: Item[]; hintLabel: string; marks: Record<string, boolean>; onMark: (k: string) => void }) {
+function Rows({
+  kind,
+  items,
+  hintLabel,
+  marks,
+  onMark,
+}: {
+  kind: Kind;
+  items: Item[];
+  hintLabel: string;
+  marks: Record<string, boolean>;
+  onMark: (k: string) => void;
+}) {
   return (
     <ul className="hairline divide-y divide-line overflow-hidden rounded-[14px] bg-white/55">
       {items.map((it, i) => (
@@ -85,12 +109,18 @@ export function Results({ a, removed, sample, marks, onMark, answers, onAnswer, 
         <aside role="note" className="mb-8 rounded-[14px] border border-mint-300/70 bg-mint-300/15 p-5">
           <p className="eyebrow !text-ink">A note before anything else</p>
           <p className="mt-2 leading-relaxed text-ink">{a.care}</p>
-          <p className="mt-2 text-[14px] text-ink-muted">In India, Tele-MANAS offers free, confidential support 24×7 on 14416.</p>
+          <p className="mt-2 text-[14px] text-ink-muted">
+            In India, Tele-MANAS offers free, confidential support 24×7 on 14416.
+          </p>
         </aside>
       )}
 
       <p className="eyebrow">What is outside the light</p>
-      <h1 ref={headingRef} tabIndex={-1} className="t-h2 mt-3 font-display font-semibold tracking-tight text-ink outline-none">
+      <h1
+        ref={headingRef}
+        tabIndex={-1}
+        className="t-h2 mt-3 font-display font-semibold tracking-tight text-ink outline-none"
+      >
         {a.title}
       </h1>
       <p className="mt-3 text-[13px] text-ink-muted">
@@ -146,7 +176,10 @@ export function Results({ a, removed, sample, marks, onMark, answers, onAnswer, 
           <ol className="space-y-4">
             {a.questions.map((q, i) => (
               <li key={q} className="hairline rounded-[14px] bg-white/55 p-5">
-                <label htmlFor={`q${i}`} className="flex gap-3 font-display text-[17px] font-medium leading-snug text-ink">
+                <label
+                  htmlFor={`q${i}`}
+                  className="flex gap-3 font-display text-[17px] font-medium leading-snug text-ink"
+                >
                   <span className="eyebrow pt-1">{String(i + 1).padStart(2, '0')}</span>
                   {q}
                 </label>

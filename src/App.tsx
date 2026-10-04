@@ -29,7 +29,15 @@ export default function App() {
   return (
     <ErrorBoundary>
       <AppShell>
-        <Suspense fallback={<p role="status" className="eyebrow py-32 text-center">Loading…</p>}>{page}</Suspense>
+        <Suspense
+          fallback={
+            <p role="status" className="eyebrow py-32 text-center">
+              Loading…
+            </p>
+          }
+        >
+          {page}
+        </Suspense>
       </AppShell>
     </ErrorBoundary>
   );

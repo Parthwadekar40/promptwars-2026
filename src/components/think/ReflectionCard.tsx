@@ -33,7 +33,9 @@ export function ReflectionCard({ r }: { r: Reflection }) {
         </>
       )}
       {r.oneQuestion && (
-        <p className="mt-7 font-serif text-[clamp(1.3rem,2.4vw,1.7rem)] italic leading-snug text-ink">{r.oneQuestion}</p>
+        <p className="mt-7 font-serif text-[clamp(1.3rem,2.4vw,1.7rem)] italic leading-snug text-ink">
+          {r.oneQuestion}
+        </p>
       )}
     </GlassCard>
   );

@@ -10,7 +10,8 @@ export const EXAMPLES = [
     label: 'A 6-month internship',
     decision:
       "I've been offered a 6-month analyst internship at a company 15 minutes from my home. The stipend is ₹25,000 a month and it's 40 hours a week, weekdays. My classes run until 3 pm, and my end-semester exams in December fall in the middle of the internship. They promised \"exposure to real projects\" but haven't said who would mentor me.",
-    leaning: 'Mainly because the stipend is good, the company is close to home, and it will give me industry experience.',
+    leaning:
+      'Mainly because the stipend is good, the company is close to home, and it will give me industry experience.',
   },
   {
     label: 'A job offer in another city',
@@ -115,7 +116,7 @@ export const SAMPLE: Analysis = {
     },
   ],
   otherSide:
-    "Declining isn't \"missing out\". Six months of full attention on coursework — or on one deep project you choose yourself — can build stronger grades, sharper skills and a better portfolio than a role with unclear mentorship. And internships that fit more closely tend to keep appearing, often after another semester of preparation.",
+    'Declining isn\'t "missing out". Six months of full attention on coursework — or on one deep project you choose yourself — can build stronger grades, sharper skills and a better portfolio than a role with unclear mentorship. And internships that fit more closely tend to keep appearing, often after another semester of preparation.',
   questions: [
     'What exactly would you be doing in a typical week — and who would teach you?',
     'How would 40 hours of work fit around classes until 3 pm and the December exams? What would have to give?',

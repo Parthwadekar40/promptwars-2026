@@ -1,8 +1,12 @@
 import { firstSuccess, MODELS } from './gemini';
 import type { Attempt } from './gemini';
 
-const ok = (data: string): Attempt => async () => ({ ok: true, data });
-const fail = (error: string): Attempt => async () => ({ ok: false, error });
+const ok =
+  (data: string): Attempt =>
+  async () => ({ ok: true, data });
+const fail =
+  (error: string): Attempt =>
+  async () => ({ ok: false, error });
 
 describe('model failover', () => {
   it('lets a faster hedged attempt win and aborts the slow one', async () => {

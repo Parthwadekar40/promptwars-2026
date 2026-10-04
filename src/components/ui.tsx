@@ -2,18 +2,23 @@ import type { ReactNode, InputHTMLAttributes, ButtonHTMLAttributes, TextareaHTML
 
 /** Design-system primitives — warm-paper editorial recipe (hairlines, 12px radii, mono eyebrows). */
 
+const BUTTON_BASE =
+  'inline-flex items-center justify-center gap-2 rounded-[10px] px-5 py-2.5 text-[15px] font-medium transition-all active:scale-[.98] disabled:opacity-50';
+
+/** Class string for anything that should look like a button (also used by link-buttons). */
+export const buttonClass = (variant: 'primary' | 'ghost' = 'primary'): string =>
+  `${BUTTON_BASE} ${
+    variant === 'primary'
+      ? 'bg-ink text-paper hover:bg-[#2b2622] shadow-[0_1px_2px_rgba(23,20,18,0.18)]'
+      : 'hairline bg-transparent text-ink hover:bg-white/70'
+  }`;
+
 export function Button({
   variant = 'primary',
   className = '',
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'ghost' }) {
-  const base =
-    'inline-flex items-center justify-center gap-2 rounded-[10px] px-5 py-2.5 text-[15px] font-medium transition-all active:scale-[.98] disabled:opacity-50';
-  const styles =
-    variant === 'primary'
-      ? 'bg-ink text-paper hover:bg-[#2b2622] shadow-[0_1px_2px_rgba(23,20,18,0.18)]'
-      : 'hairline bg-transparent text-ink hover:bg-white/70';
-  return <button {...props} className={`${base} ${styles} ${className}`} />;
+  return <button {...props} className={`${buttonClass(variant)} ${className}`} />;
 }
 
 export function GlassCard({ children, className = '' }: { children: ReactNode; className?: string }) {
@@ -38,7 +43,9 @@ export function Badge({ children }: { children: ReactNode }) {
 export function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div>
-      <div className="font-display text-[clamp(1.85rem,2.6vw,2.35rem)] font-semibold tracking-tight text-ink">{value}</div>
+      <div className="font-display text-[clamp(1.85rem,2.6vw,2.35rem)] font-semibold tracking-tight text-ink">
+        {value}
+      </div>
       <div className="eyebrow mt-1.5">{label}</div>
     </div>
   );
@@ -76,9 +83,7 @@ export function Section({
   return (
     <section id={id} className="mx-auto w-full max-w-6xl px-6 py-20">
       <Badge>{eyebrow}</Badge>
-      <h2 className="t-h2 mt-5 max-w-2xl font-display font-semibold tracking-tight text-ink">
-        {title}
-      </h2>
+      <h2 className="t-h2 mt-5 max-w-2xl font-display font-semibold tracking-tight text-ink">{title}</h2>
       <div className="mt-10">{children}</div>
     </section>
   );

@@ -16,7 +16,11 @@ export function Pending() {
     return () => clearInterval(t);
   }, []);
   return (
-    <div role="status" aria-live="polite" className="flex min-h-[52vh] flex-col items-center justify-center gap-2 py-10 text-center">
+    <div
+      role="status"
+      aria-live="polite"
+      className="flex min-h-[52vh] flex-col items-center justify-center gap-2 py-10 text-center"
+    >
       <img
         src={`${import.meta.env.BASE_URL}assets/img/lens.webp`}
         alt=""

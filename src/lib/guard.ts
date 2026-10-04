@@ -36,8 +36,7 @@ const keepItems = (items: Item[], tally: { n: number }): Item[] =>
     return !bad;
   });
 
-const keepLines = (lines: string[], tally: { n: number }): string[] =>
-  lines.filter((l) => keepText(l, tally) !== '');
+const keepLines = (lines: string[], tally: { n: number }): string[] => lines.filter((l) => keepText(l, tally) !== '');
 
 /** Remove every advice-shaped line from an analysis; reports how many were removed. */
 export function neutralize(a: Analysis): { clean: Analysis; removed: number } {

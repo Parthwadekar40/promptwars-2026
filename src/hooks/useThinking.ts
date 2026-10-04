@@ -76,7 +76,11 @@ export function useThinking() {
     [analysis, answers],
   );
   const total = analysis
-    ? analysis.assumptions.length + analysis.conflicts.length + analysis.risks.length + analysis.missing.length + analysis.questions.length
+    ? analysis.assumptions.length +
+      analysis.conflicts.length +
+      analysis.risks.length +
+      analysis.missing.length +
+      analysis.questions.length
     : 0;
   const done = Object.values(marks).filter(Boolean).length + answered.length;
 
@@ -104,8 +108,28 @@ export function useThinking() {
   };
 
   return {
-    phase, decision, leaning, error, analysis, removed, sample, marks, answers, answered,
-    reflection, reflecting, reflectError, total, done,
-    setDecision, setLeaning, submit, loadSample, reset, toggle, setAnswer, reflect,
+    phase,
+    decision,
+    leaning,
+    error,
+    analysis,
+    removed,
+    sample,
+    marks,
+    answers,
+    answered,
+    reflection,
+    reflecting,
+    reflectError,
+    total,
+    done,
+    setDecision,
+    setLeaning,
+    submit,
+    loadSample,
+    reset,
+    toggle,
+    setAnswer,
+    reflect,
   };
 }

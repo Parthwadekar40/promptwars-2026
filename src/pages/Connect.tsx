@@ -78,8 +78,18 @@ export function Connect() {
             placeholder="AIza…"
             className="max-w-sm"
           />
-          <Button type="button" onClick={save}>Save key</Button>
-          <Button type="button" variant="ghost" onClick={() => { setKeyInput(''); setKey(''); setStatus('Key removed.'); }}>
+          <Button type="button" onClick={save}>
+            Save key
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => {
+              setKeyInput('');
+              setKey('');
+              setStatus('Key removed.');
+            }}
+          >
             <Icon name="trash" className="size-4" />
             Remove
           </Button>
@@ -90,10 +100,15 @@ export function Connect() {
         <h2 className="font-display text-lg font-semibold text-ink">Service status</h2>
         <ul className="mt-4 space-y-3">
           {rows.map((r) => (
-            <li key={r.label} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/50 bg-white/50 px-4 py-3">
+            <li
+              key={r.label}
+              className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/50 bg-white/50 px-4 py-3"
+            >
               <div>
                 <p className="font-medium text-ink">
-                  <span aria-hidden className={r.ok ? 'text-green-600' : 'text-amber-600'}>{r.ok ? '●' : '○'}</span>{' '}
+                  <span aria-hidden className={r.ok ? 'text-green-600' : 'text-amber-600'}>
+                    {r.ok ? '●' : '○'}
+                  </span>{' '}
                   {r.label}
                 </p>
                 <p className="text-sm text-ink-muted">{r.note}</p>
@@ -104,7 +119,9 @@ export function Connect() {
             </li>
           ))}
         </ul>
-        <p aria-live="polite" className="mt-4 min-h-5 text-sm text-ink-muted">{status}</p>
+        <p aria-live="polite" className="mt-4 min-h-5 text-sm text-ink-muted">
+          {status}
+        </p>
       </GlassCard>
     </section>
   );

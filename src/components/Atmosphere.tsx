@@ -7,7 +7,7 @@ const SPARKS = [
   { left: '83%', top: '55%', delay: '4.2s', size: 4 },
   { left: '36%', top: '82%', delay: '5.1s', size: 5 },
   { left: '90%', top: '34%', delay: '1.2s', size: 6 },
-  { left: '6%',  top: '48%', delay: '3.8s', size: 4 },
+  { left: '6%', top: '48%', delay: '3.8s', size: 4 },
   { left: '52%', top: '12%', delay: '5.6s', size: 5 },
 ];
 

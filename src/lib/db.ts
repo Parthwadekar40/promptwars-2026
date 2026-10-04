@@ -64,14 +64,11 @@ export async function signUpEmail(name: string, email: string, password: string)
 export async function signInEmail(email: string, password: string): Promise<Result<Profile>> {
   if (!dbConfigured()) return { ok: false, error: 'Firebase not configured' };
   try {
-    const r = await fetch(
-      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, returnSecureToken: true }),
-      },
-    );
+    const r = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, returnSecureToken: true }),
+    });
     const d = await r.json();
     if (!r.ok) return { ok: false, error: friendlyAuthError(d?.error?.message) };
     storeTokens(d);
@@ -118,14 +115,11 @@ export function signOut(): void {
 async function signInAnonymously(): Promise<Result<string>> {
   if (!dbConfigured()) return { ok: false, error: 'Firebase not configured' };
   try {
-    const r = await fetch(
-      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ returnSecureToken: true }),
-      },
-    );
+    const r = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ returnSecureToken: true }),
+    });
     const d = await r.json();
     if (!r.ok) return { ok: false, error: d?.error?.message ?? 'Sign-in failed' };
     storeTokens(d);

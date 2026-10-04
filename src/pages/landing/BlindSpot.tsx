@@ -35,8 +35,8 @@ export function BlindSpot() {
           <Spotlight className="absolute inset-x-0 top-0 h-[50%] md:h-[60%]" />
         </div>
         <p className="sr-only">
-          Thoughts that sit just outside attention: an assumption, sunk cost, who is missing, second-order effects, the deadline,
-          reversibility, the other side, anchoring.
+          Thoughts that sit just outside attention: an assumption, sunk cost, who is missing, second-order effects, the
+          deadline, reversibility, the other side, anchoring.
         </p>
       </section>
     </>

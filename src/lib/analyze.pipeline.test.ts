@@ -54,10 +54,19 @@ describe('analysis pipeline (model mocked)', () => {
   it('reflection quotes the answers it was given and passes through the guard', async () => {
     generateJSON.mockResolvedValue({
       ok: true,
-      data: { shifted: ['You said the stipend matters most.'], tension: 'I recommend you decline.', stillOpen: ['Who mentors you?'], oneQuestion: 'What would settle this?' },
+      data: {
+        shifted: ['You said the stipend matters most.'],
+        tension: 'I recommend you decline.',
+        stillOpen: ['Who mentors you?'],
+        oneQuestion: 'What would settle this?',
+      },
     });
     const r = await reflectOn({
-      decision, leaning: '', answers: [{ question: 'Why?', answer: 'The stipend matters most.' }], examined: ['Experience means learning.'], open: ['Grades slip.'],
+      decision,
+      leaning: '',
+      answers: [{ question: 'Why?', answer: 'The stipend matters most.' }],
+      examined: ['Experience means learning.'],
+      open: ['Grades slip.'],
     });
     expect(r.ok).toBe(true);
     if (!r.ok) return;

@@ -44,7 +44,8 @@ export function Compose({ decision, leaning, error, onDecision, onLeaning, onSub
         </div>
 
         <label htmlFor="leaning" className="eyebrow mt-7 block">
-          Your main reasons — which way are you leaning, and why? <span className="normal-case tracking-normal">(optional)</span>
+          Your main reasons — which way are you leaning, and why?{' '}
+          <span className="normal-case tracking-normal">(optional)</span>
         </label>
         <Textarea
           id="leaning"

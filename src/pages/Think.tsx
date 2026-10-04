@@ -82,7 +82,13 @@ export function Think({ autoSample = false }: { autoSample?: boolean }) {
                 onAnswer={t.setAnswer}
                 headingRef={heading}
               />
-              <ProgressBar done={t.done} total={t.total} reflecting={t.reflecting} error={t.reflectError} onReflect={t.reflect} />
+              <ProgressBar
+                done={t.done}
+                total={t.total}
+                reflecting={t.reflecting}
+                error={t.reflectError}
+                onReflect={t.reflect}
+              />
             </div>
             {t.reflection && (
               <Reveal className="mt-16">

@@ -98,7 +98,12 @@ export function Journal() {
                     <Button type="button" variant="ghost" onClick={() => copy(e)} className="!px-4 !py-2 !text-[14px]">
                       Copy as Markdown
                     </Button>
-                    <Button type="button" variant="ghost" onClick={() => remove(e.id)} className="!px-4 !py-2 !text-[14px]">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => remove(e.id)}
+                      className="!px-4 !py-2 !text-[14px]"
+                    >
                       Delete
                     </Button>
                   </div>

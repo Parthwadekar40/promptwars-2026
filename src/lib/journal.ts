@@ -65,6 +65,26 @@ export async function removeEntry(id: string): Promise<void> {
   if (getProfile()) await deleteDoc(COLLECTION, id);
 }
 
+/** A calendar event template ("revisit this decision") — opens Google Calendar prefilled; no API key, no permissions. */
+export function reviewLink(e: Pick<Entry, 'title' | 'call' | 'changeMind'>, days = 30, now = new Date()): string {
+  const day = (offset: number) =>
+    new Date(now.getTime() + offset * 86_400_000).toISOString().slice(0, 10).replace(/-/g, '');
+  const details = [
+    `You wrote: "${e.call}"`,
+    e.changeMind && `What would change your mind: ${e.changeMind}`,
+    'Ask yourself: which assumptions held? What do I know now that I did not know then?',
+  ]
+    .filter(Boolean)
+    .join('\n\n');
+  const q = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: `Revisit my decision: ${e.title}`,
+    details: details.slice(0, 800),
+    dates: `${day(days)}/${day(days + 1)}`,
+  });
+  return `https://calendar.google.com/calendar/render?${q}`;
+}
+
 export function toMarkdown(e: Omit<Entry, 'id' | 'owner'>): string {
   const when = new Date(e.at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
   const parts = [

@@ -18,12 +18,22 @@ describe('Firestore REST — one private space per user', () => {
     expect(url).toContain('/users/u1/reflections/e1');
     expect(init.method).toBe('PATCH');
     expect((init.headers as Record<string, string>).Authorization).toBe(`Bearer ${jwt('u1')}`);
-    expect(JSON.parse(String(init.body)).fields).toEqual({ at: { stringValue: '5' }, json: { stringValue: '{"a":1}' } });
+    expect(JSON.parse(String(init.body)).fields).toEqual({
+      at: { stringValue: '5' },
+      json: { stringValue: '{"a":1}' },
+    });
   });
 
   it('lists documents with their ids', async () => {
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-      reply({ documents: [{ name: 'projects/p/databases/(default)/documents/users/u1/reflections/e9', fields: { title: { stringValue: 'Hi' } } }] }),
+      reply({
+        documents: [
+          {
+            name: 'projects/p/databases/(default)/documents/users/u1/reflections/e9',
+            fields: { title: { stringValue: 'Hi' } },
+          },
+        ],
+      }),
     );
     expect(await listDocs('reflections')).toEqual({ ok: true, data: [{ id: 'e9', title: 'Hi' }] });
   });

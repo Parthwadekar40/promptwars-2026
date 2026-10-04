@@ -120,8 +120,9 @@ type ReflectInput = {
 export async function reflectOn(input: ReflectInput): Promise<Result<{ reflection: Reflection; removed: number }>> {
   const bullets = (xs: string[]) => xs.map((x) => `- ${cleanInput(x, 200)}`).join('\n') || '(none)';
   const answers =
-    input.answers.map((a) => `Q: ${cleanInput(a.question, 300)}\nA: ${cleanInput(a.answer, LIMITS.answer)}`).join('\n\n') ||
-    '(none yet)';
+    input.answers
+      .map((a) => `Q: ${cleanInput(a.question, 300)}\nA: ${cleanInput(a.answer, LIMITS.answer)}`)
+      .join('\n\n') || '(none yet)';
   const body = [
     buildPrompt(input.decision, input.leaning).replace('\n\nReturn the JSON analysis.', ''),
     `<answers>\n${answers}\n</answers>`,

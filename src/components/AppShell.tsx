@@ -7,9 +7,6 @@ import { DEFAULT_TITLE, NAV, TITLES } from './shell/nav';
 import { clearProfile, useProfile } from '../lib/auth';
 import { hasSession, refreshSession, signOut } from '../lib/db';
 
-
-
-
 /** App shell — hairline header, accessible nav (hamburger on mobile), quiet footer, page-wide gradient follow. */
 export function AppShell({ children }: { children: ReactNode }) {
   const route = useRoute().split('?')[0];
@@ -51,7 +48,6 @@ export function AppShell({ children }: { children: ReactNode }) {
         }}
       />
 
-
       <SiteHeader route={route} links={links} profile={profile} onLogout={logout} />
 
       <main id="main" tabIndex={-1} className="relative z-[2] flex-1 outline-none">
@@ -59,7 +55,6 @@ export function AppShell({ children }: { children: ReactNode }) {
       </main>
 
       <SiteFooter links={links} />
-
     </div>
   );
 }

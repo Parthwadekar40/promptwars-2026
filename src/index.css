@@ -1,10 +1,10 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --font-display: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-display: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-serif: 'Instrument Serif', Georgia, serif;
 
   --color-paper: #e4ded3;
   --color-ink: #171412;
@@ -116,51 +116,105 @@ em {
 /* ————— animated atmosphere (code-generated motion) ————— */
 
 @keyframes aurora-a {
-  from { transform: translate(0, 0) scale(1); }
-  to   { transform: translate(6rem, -3rem) scale(1.15); }
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(6rem, -3rem) scale(1.15);
+  }
 }
 @keyframes aurora-b {
-  from { transform: translate(0, 0) scale(1.1); }
-  to   { transform: translate(-5rem, 4rem) scale(0.95); }
+  from {
+    transform: translate(0, 0) scale(1.1);
+  }
+  to {
+    transform: translate(-5rem, 4rem) scale(0.95);
+  }
 }
 @keyframes aurora-c {
-  from { transform: translate(0, 0) scale(0.95); }
-  to   { transform: translate(4rem, 5rem) scale(1.12); }
+  from {
+    transform: translate(0, 0) scale(0.95);
+  }
+  to {
+    transform: translate(4rem, 5rem) scale(1.12);
+  }
 }
-.animate-aurora-a { animation: aurora-a 22s ease-in-out infinite alternate; }
-.animate-aurora-b { animation: aurora-b 28s ease-in-out infinite alternate; animation-delay: -8s; }
-.animate-aurora-c { animation: aurora-c 25s ease-in-out infinite alternate; animation-delay: -14s; }
+.animate-aurora-a {
+  animation: aurora-a 22s ease-in-out infinite alternate;
+}
+.animate-aurora-b {
+  animation: aurora-b 28s ease-in-out infinite alternate;
+  animation-delay: -8s;
+}
+.animate-aurora-c {
+  animation: aurora-c 25s ease-in-out infinite alternate;
+  animation-delay: -14s;
+}
 
 @keyframes grid-drift {
-  from { background-position: 0 0; }
-  to   { background-position: 72px 36px; }
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 72px 36px;
+  }
 }
-.animate-grid { animation: grid-drift 40s linear infinite; }
+.animate-grid {
+  animation: grid-drift 40s linear infinite;
+}
 
 @keyframes sparkle-rise {
-  0%   { transform: translateY(0) scale(0.6); opacity: 0; }
-  30%  { opacity: 1; }
-  100% { transform: translateY(-3.5rem) scale(1); opacity: 0; }
+  0% {
+    transform: translateY(0) scale(0.6);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-3.5rem) scale(1);
+    opacity: 0;
+  }
 }
-.animate-sparkle { animation: sparkle-rise 7s ease-in-out infinite; }
+.animate-sparkle {
+  animation: sparkle-rise 7s ease-in-out infinite;
+}
 
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
-.animate-marquee { animation: marquee 36s linear infinite; }
+.animate-marquee {
+  animation: marquee 36s linear infinite;
+}
 
 @keyframes silk-drift {
-  from { transform: scale(1.04) translateX(-1.5%); }
-  to   { transform: scale(1.12) translateX(1.5%); }
+  from {
+    transform: scale(1.04) translateX(-1.5%);
+  }
+  to {
+    transform: scale(1.12) translateX(1.5%);
+  }
 }
-.animate-silk { animation: silk-drift 24s ease-in-out infinite alternate; }
+.animate-silk {
+  animation: silk-drift 24s ease-in-out infinite alternate;
+}
 
 @keyframes float-slow {
-  from { transform: translateY(0) rotate(var(--tilt, 0deg)); }
-  to   { transform: translateY(-1.25rem) rotate(var(--tilt, 0deg)); }
+  from {
+    transform: translateY(0) rotate(var(--tilt, 0deg));
+  }
+  to {
+    transform: translateY(-1.25rem) rotate(var(--tilt, 0deg));
+  }
 }
-.animate-float { animation: float-slow 9s ease-in-out infinite alternate; }
+.animate-float {
+  animation: float-slow 9s ease-in-out infinite alternate;
+}
 
 /* loading: a sphere breathing in its own penumbra */
 .pen-orb {
@@ -168,21 +222,32 @@ em {
   height: 72px;
   border-radius: 9999px;
   background: radial-gradient(circle at 32% 28%, #fff, var(--color-brand-200) 38%, var(--color-brand-500) 100%);
-  box-shadow: 0 0 0 0 rgba(109, 95, 247, 0.35), 0 18px 40px -12px rgba(23, 20, 18, 0.35);
+  box-shadow:
+    0 0 0 0 rgba(109, 95, 247, 0.35),
+    0 18px 40px -12px rgba(23, 20, 18, 0.35);
   animation: pen-pulse 2.4s ease-in-out infinite;
 }
 @keyframes pen-pulse {
   50% {
     transform: scale(1.05);
-    box-shadow: 0 0 0 28px rgba(109, 95, 247, 0), 0 18px 40px -12px rgba(23, 20, 18, 0.35);
+    box-shadow:
+      0 0 0 28px rgba(109, 95, 247, 0),
+      0 18px 40px -12px rgba(23, 20, 18, 0.35);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pen-orb { animation: none; }
-  .animate-aurora-a, .animate-aurora-b, .animate-aurora-c,
-  .animate-grid, .animate-sparkle, .animate-marquee,
-  .animate-silk, .animate-float {
+  .pen-orb {
+    animation: none;
+  }
+  .animate-aurora-a,
+  .animate-aurora-b,
+  .animate-aurora-c,
+  .animate-grid,
+  .animate-sparkle,
+  .animate-marquee,
+  .animate-silk,
+  .animate-float {
     animation: none !important;
   }
 }

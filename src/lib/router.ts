@@ -6,8 +6,7 @@ const subscribe = (cb: () => void) => {
 };
 
 /** Minimal hash router — zero dependencies. */
-export const useRoute = (): string =>
-  useSyncExternalStore(subscribe, () => window.location.hash.slice(1) || '/');
+export const useRoute = (): string => useSyncExternalStore(subscribe, () => window.location.hash.slice(1) || '/');
 
 export const navigate = (to: string): void => {
   window.location.hash = to;

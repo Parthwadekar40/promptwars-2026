@@ -24,8 +24,8 @@ export function MirrorSection() {
               Hold your thinking up to <em className="text-ink-muted">a&nbsp;mirror.</em>
             </h2>
             <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-ink-muted">
-              Answer the questions in your own words and Penumbra reflects them back — quoting you, noticing where one answer
-              pulls against another, naming what is still unexamined. It never tells you which side is right.
+              Answer the questions in your own words and Penumbra reflects them back — quoting you, noticing where one
+              answer pulls against another, naming what is still unexamined. It never tells you which side is right.
             </p>
             <ul className="mt-8 grid max-w-xl gap-px overflow-hidden rounded-[14px] border border-line bg-line sm:grid-cols-3">
               {[
@@ -39,7 +39,10 @@ export function MirrorSection() {
                 </li>
               ))}
             </ul>
-            <a href="#/think?sample" className="mt-7 inline-block text-[15px] font-medium text-brand-700 underline underline-offset-4">
+            <a
+              href="#/think?sample"
+              className="mt-7 inline-block text-[15px] font-medium text-brand-700 underline underline-offset-4"
+            >
               See a reflection in the sample →
             </a>
           </div>

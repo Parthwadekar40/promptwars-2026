@@ -4,7 +4,8 @@ import { ensureUser, getIdToken, refreshSession } from './db';
 /** Firestore over REST — private documents under users/{uid}/… (see firestore.rules). */
 const PROJECT_ID = (import.meta.env.VITE_FIREBASE_PROJECT_ID as string) || '';
 
-const FS_ROOT = (): string => `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+const FS_ROOT = (): string =>
+  `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 type Fields = Record<string, { stringValue?: string }>;
 
 /** Authenticated Firestore call under users/{uid}/… — refreshes an expired token once, then retries. */

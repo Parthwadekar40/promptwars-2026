@@ -3,8 +3,17 @@ import userEvent from '@testing-library/user-event';
 import { Journal } from './Journal';
 
 const entry = (id: string, title: string, at: number) => ({
-  id, at, owner: 'device', title, decision: `Decision text for ${title}`, leaning: '', examined: 3, total: 19,
-  answers: [], call: `My call on ${title}`, changeMind: '',
+  id,
+  at,
+  owner: 'device',
+  title,
+  decision: `Decision text for ${title}`,
+  leaning: '',
+  examined: 3,
+  total: 19,
+  answers: [],
+  call: `My call on ${title}`,
+  changeMind: '',
 });
 
 describe('Journal page', () => {
@@ -17,7 +26,10 @@ describe('Journal page', () => {
   });
 
   it('lists reflections newest first and deletes one on request', async () => {
-    localStorage.setItem('pw_journal', JSON.stringify([entry('a', 'Older decision', 1), entry('b', 'Newer decision', 2)]));
+    localStorage.setItem(
+      'pw_journal',
+      JSON.stringify([entry('a', 'Older decision', 1), entry('b', 'Newer decision', 2)]),
+    );
     render(<Journal />);
     const titles = await screen.findAllByText(/^(Older|Newer) decision$/);
     expect(titles.map((t) => t.textContent)).toEqual(['Newer decision', 'Older decision']);

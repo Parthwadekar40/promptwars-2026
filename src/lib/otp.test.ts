@@ -31,7 +31,10 @@ describe('email one-time code', () => {
     vi.useFakeTimers();
     await issueOtp('a@b.co', 'A');
     const code = lastCode();
-    expect(verifyOtp(code === '000000' ? '111111' : '000000')).toEqual({ ok: false, error: expect.stringMatching(/not correct/i) });
+    expect(verifyOtp(code === '000000' ? '111111' : '000000')).toEqual({
+      ok: false,
+      error: expect.stringMatching(/not correct/i),
+    });
     vi.advanceTimersByTime(5 * 60_000 + 1);
     expect(verifyOtp(code)).toEqual({ ok: false, error: expect.stringMatching(/expired/i) });
   });

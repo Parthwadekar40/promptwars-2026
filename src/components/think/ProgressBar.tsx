@@ -20,10 +20,19 @@ export function ProgressBar({ done, total, reflecting, error, onReflect }: Props
             aria-valuenow={done}
             className="mt-1.5 h-1 overflow-hidden rounded-full bg-ink/10"
           >
-            <div className="h-full rounded-full bg-gradient-to-r from-brand-500 to-mint-300 transition-[width] duration-700" style={{ width: `${pct}%` }} />
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-brand-500 to-mint-300 transition-[width] duration-700"
+              style={{ width: `${pct}%` }}
+            />
           </div>
         </div>
-        <Button type="button" variant={done > 0 ? 'primary' : 'ghost'} onClick={onReflect} disabled={done === 0 || reflecting} className="!px-4 !py-2 !text-[14px]">
+        <Button
+          type="button"
+          variant={done > 0 ? 'primary' : 'ghost'}
+          onClick={onReflect}
+          disabled={done === 0 || reflecting}
+          className="!px-4 !py-2 !text-[14px]"
+        >
           {reflecting ? 'Reflecting…' : 'Reflect'}
         </Button>
       </div>

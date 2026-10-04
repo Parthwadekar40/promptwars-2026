@@ -79,9 +79,7 @@ export function Auth({ mode }: { mode: Mode }) {
       return;
     }
     setBusy(true);
-    const r = isUp
-      ? await signUpEmail(name.trim(), mail, password)
-      : await signInEmail(mail, password);
+    const r = isUp ? await signUpEmail(name.trim(), mail, password) : await signInEmail(mail, password);
     setBusy(false);
     if (!r.ok) {
       setStatus(`⚠ ${r.error}`);
@@ -117,14 +115,16 @@ export function Auth({ mode }: { mode: Mode }) {
         />
         <div
           className="absolute inset-0"
-          style={{ background: 'linear-gradient(140deg, rgba(109,95,247,0.12), transparent 45%, rgba(110,231,183,0.14))' }}
+          style={{
+            background: 'linear-gradient(140deg, rgba(109,95,247,0.12), transparent 45%, rgba(110,231,183,0.14))',
+          }}
         />
         <div className="relative flex h-full flex-col justify-between p-12">
           <Badge>PRIVATE BY DESIGN</Badge>
           <div>
             <p className="t-quote max-w-md">
-              Your thinking, your journal —{' '}
-              <em className="font-serif font-normal italic">nothing leaves</em> without you.
+              Your thinking, your journal — <em className="font-serif font-normal italic">nothing leaves</em> without
+              you.
             </p>
             <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-muted">
               Password + email OTP · Firebase-backed sessions
@@ -316,7 +316,10 @@ export function Auth({ mode }: { mode: Mode }) {
                 </h1>
                 <p className="mt-2 text-sm text-ink-muted">You’re verified. Taking you in…</p>
                 <a
-                  href={whatsappLink(WHATSAPP_OWNER, `Hi Parth! ${pending?.name ?? 'A new user'} just joined Penumbra.`)}
+                  href={whatsappLink(
+                    WHATSAPP_OWNER,
+                    `Hi Parth! ${pending?.name ?? 'A new user'} just joined Penumbra.`,
+                  )}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-5 inline-flex items-center gap-1.5 rounded-[8px] border border-line px-3 py-1.5 text-[13px] font-medium text-ink transition-colors hover:border-ink/25 hover:bg-white/60"

@@ -111,33 +111,35 @@ export async function generate(prompt: string, opts: GenOpts = {}): Promise<Resu
   });
 
   const won: string[] = []; // models that answered, in order — the first is the winner
-  const attempt = (model: string): Attempt => async (signal) => {
-    try {
-      const res = await ai.models.generateContent({
-        model,
-        contents: prompt,
-        config: { ...configFor(model), abortSignal: signal },
-      });
-      if (res.text) {
-        won.push(model);
-        return { ok: true, data: res.text };
+  const attempt =
+    (model: string): Attempt =>
+    async (signal) => {
+      try {
+        const res = await ai.models.generateContent({
+          model,
+          contents: prompt,
+          config: { ...configFor(model), abortSignal: signal },
+        });
+        if (res.text) {
+          won.push(model);
+          return { ok: true, data: res.text };
+        }
+        return {
+          ok: false,
+          error:
+            res.candidates?.[0]?.finishReason === 'MAX_TOKENS'
+              ? 'Response truncated — retry with a shorter task or thinking mode.'
+              : 'Empty response',
+        };
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        if (signal.aborted) return { ok: false, error: 'Cancelled' };
+        if (/API key|401|403/i.test(msg)) return { ok: false, error: 'Invalid API key — check and re-connect.' };
+        if (/429|RESOURCE_EXHAUSTED|quota|503|504|UNAVAILABLE|overloaded|high demand|timeout|DEADLINE/i.test(msg))
+          coolUntil.set(model, Date.now() + COOLDOWN_MS);
+        return { ok: false, error: msg };
       }
-      return {
-        ok: false,
-        error:
-          res.candidates?.[0]?.finishReason === 'MAX_TOKENS'
-            ? 'Response truncated — retry with a shorter task or thinking mode.'
-            : 'Empty response',
-      };
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : String(e);
-      if (signal.aborted) return { ok: false, error: 'Cancelled' };
-      if (/API key|401|403/i.test(msg)) return { ok: false, error: 'Invalid API key — check and re-connect.' };
-      if (/429|RESOURCE_EXHAUSTED|quota|503|504|UNAVAILABLE|overloaded|high demand|timeout|DEADLINE/i.test(msg))
-        coolUntil.set(model, Date.now() + COOLDOWN_MS);
-      return { ok: false, error: msg };
-    }
-  };
+    };
 
   const r = await firstSuccess(chain().map(attempt), HEDGE_MS);
   if (r.ok && won[0]) preferred = won[0];

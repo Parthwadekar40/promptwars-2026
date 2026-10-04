@@ -63,7 +63,10 @@ export function Spotlight({ className = 'relative h-[clamp(280px,40vh,400px)]' }
     const drift = (now: number) => {
       if (!hovering && visible) {
         const s = (now - t0) / 1000;
-        aim(el.clientWidth * (0.5 + 0.34 * Math.sin(s * 0.42)), el.clientHeight * (0.5 + 0.32 * Math.sin(s * 0.67 + 1)));
+        aim(
+          el.clientWidth * (0.5 + 0.34 * Math.sin(s * 0.42)),
+          el.clientHeight * (0.5 + 0.32 * Math.sin(s * 0.67 + 1)),
+        );
       }
       raf = requestAnimationFrame(drift);
     };
@@ -90,7 +93,8 @@ export function Spotlight({ className = 'relative h-[clamp(280px,40vh,400px)]' }
     };
   }, [reduce]);
 
-  const mask = 'radial-gradient(210px circle at var(--sx, 50%) var(--sy, 50%), #000 0%, rgba(0,0,0,0.55) 45%, transparent 100%)';
+  const mask =
+    'radial-gradient(210px circle at var(--sx, 50%) var(--sy, 50%), #000 0%, rgba(0,0,0,0.55) 45%, transparent 100%)';
   return (
     <div ref={ref} className={`touch-pan-y overflow-hidden ${className}`}>
       <Layer className="text-white/[0.13]" />
@@ -100,7 +104,10 @@ export function Spotlight({ className = 'relative h-[clamp(280px,40vh,400px)]' }
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{ background: 'radial-gradient(260px circle at var(--sx, 50%) var(--sy, 50%), rgba(255,255,255,0.09), transparent 70%)' }}
+        style={{
+          background:
+            'radial-gradient(260px circle at var(--sx, 50%) var(--sy, 50%), rgba(255,255,255,0.09), transparent 70%)',
+        }}
       />
     </div>
   );

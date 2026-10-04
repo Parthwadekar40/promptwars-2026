@@ -39,6 +39,7 @@ A *penumbra* is the half-lit edge of a shadow — the part you half-see. That is
 | **Gemini API** (`@google/genai`, Google AI Studio key) | Structured analysis + reflection via `responseSchema` JSON output. Model chain across **7 Gemini models** (independent quota buckets) with instant failover, 60 s cool-down for rate-limited models and **hedged requests** (the next model races a slow one; the loser is aborted) | `src/lib/gemini.ts`, `src/lib/analyze.ts` |
 | **Firebase Authentication** (Identity Toolkit REST) | Email + password accounts, session refresh | `src/lib/db.ts`, `src/pages/Auth.tsx` |
 | **Cloud Firestore** (REST) | Private per-user **decision journal** at `users/{uid}/reflections`; owner-only security rules | `src/lib/db.ts`, `src/lib/journal.ts`, [`firestore.rules`](firestore.rules) |
+| **Google Calendar** (event template link — no API key, no permissions) | *Review in 30 days*: a prefilled all-day event that quotes your call and what would change your mind, so you revisit the decision with fresh eyes | `src/lib/journal.ts` → `reviewLink()` |
 | **Google Fonts** | Instrument Sans / Instrument Serif / Inter / JetBrains Mono | `index.html` |
 
 *(Firebase is called over REST — ~3 KB instead of the ~120 KB SDK.)*
@@ -58,7 +59,7 @@ A *penumbra* is the half-lit edge of a shadow — the part you half-see. That is
 - **Illuminate** — spotlight card (noticed first ⟷ outside the light), then **seven lenses**: assumptions · conflicts in your reasoning · risks · overlooked factors · the other side · thinking traps · questions.
 - **Examine** — tick items you have actually checked; answer the questions. A sticky meter counts *blind spots examined* (it measures your reflection, never the decision).
 - **Reflect** — what your answers changed, a tension worth noticing, what is still unexamined, one question to sit with.
-- **Your call** — written by you; saved to the **journal** (device, or private cloud when signed in); copy as Markdown; delete any time.
+- **Your call** — written by you; saved to the **journal** (device, or private cloud when signed in); copy as Markdown; **add a 30-day review to your calendar**; delete any time.
 - **Instant sample** — `#/think?sample` loads a pre-written analysis with zero latency (also the graceful fallback when the AI is rate-limited and the untouched starter example is used).
 - A **care note** appears first if the situation touches someone's safety or wellbeing.
 
@@ -92,7 +93,7 @@ Stack: Vite 7 · React 19 · TypeScript (strict) · Tailwind CSS v4 · Framer Mo
 - Typical analysis: **≈ 3–5 s**; reflection **≈ 2–4 s**.
 - Journal merge is **O(n)** (`Map` by id); progress is derived with `useMemo`; the pointer-spotlight animation pauses off-screen (`IntersectionObserver`) and cleans up on unmount.
 
-### Security
+### Security  ·  full threat model in [`SECURITY.md`](SECURITY.md)
 - **No secrets in the repo.** Keys are injected at build time from GitHub Actions secrets; `.env*` is git-ignored. A user's own AI key stays in their browser (`localStorage`) and is sent only to the AI provider. (A static site cannot hide a shared demo key — production would proxy it server-side.)
 - **Content-Security-Policy** (build-time `<meta>`): scripts `'self'`; network limited to the four Google endpoints + the mail API; `object-src 'none'`.
 - **Prompt-injection hardening:** user text is stripped of control characters and `<` `>` (so it cannot close the data tags), length-bounded, and delimited as data.
@@ -109,7 +110,7 @@ Stack: Vite 7 · React 19 · TypeScript (strict) · Tailwind CSS v4 · Framer Mo
 - `prefers-reduced-motion` disables every animation, the flashlight drift and the reveal effects.
 - **Verified two ways:** automated axe-core audits run *inside the test suite* (landing, Think empty + full results, sign-in, privacy), and again in a real browser against the live site — **0 violations** on every view, including colour contrast.
 
-### Testing — `npm test` (52 tests in 13 files, run in CI before every deploy) · `npm run coverage` → **82 % lines**
+### Testing — `npm test` (53 tests in 13 files, run in CI before every deploy) · `npm run coverage` → **82 % lines**
 | Area | What is proven |
 |---|---|
 | Neutrality guard | flags advice ("you should", "I recommend", "better option"); lets questions through; removes & counts offending lines in analyses and reflections; leaves clean output untouched |
@@ -130,7 +131,8 @@ npm install
 cp .env.example .env     # add a free Google AI Studio key (VITE_GEMINI_API_KEY) — optional: Firebase / EmailJS
 npm run dev              # dev server
 npm run lint             # ESLint
-npm test                 # 52 tests (npm run coverage for the report)
+npm run format:check     # Prettier
+npm test                 # 53 tests (npm run coverage for the report)
 npm run build            # type-check + production build → dist/
 ```
 

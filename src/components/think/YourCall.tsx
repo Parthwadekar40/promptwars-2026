@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
-import { Button, GlassCard, Textarea } from '../ui';
+import { Button, GlassCard, Textarea, buttonClass } from '../ui';
 import { useProfile } from '../../lib/auth';
-import { newEntryId, saveEntry, toMarkdown } from '../../lib/journal';
+import { newEntryId, reviewLink, saveEntry, toMarkdown } from '../../lib/journal';
 import type { Answered } from '../../lib/analyze';
 
 type Props = { title: string; decision: string; leaning: string; answers: Answered[]; examined: number; total: number };
@@ -16,8 +16,16 @@ export function YourCall({ title, decision, leaning, answers, examined, total }:
   const [saved, setSaved] = useState(false);
 
   const entry = () => ({
-    id: id.current, at: Date.now(), title, decision, leaning, examined, total, answers,
-    call: call.trim(), changeMind: changeMind.trim(),
+    id: id.current,
+    at: Date.now(),
+    title,
+    decision,
+    leaning,
+    examined,
+    total,
+    answers,
+    call: call.trim(),
+    changeMind: changeMind.trim(),
   });
 
   const missingCall = (): boolean => {
@@ -54,21 +62,41 @@ export function YourCall({ title, decision, leaning, answers, examined, total }:
   return (
     <section aria-labelledby="your-call" className="mt-20">
       <p className="eyebrow">08 · Your call</p>
-      <h2 id="your-call" className="mt-2 font-display text-[clamp(1.45rem,2.6vw,1.9rem)] font-semibold tracking-tight text-ink">
+      <h2
+        id="your-call"
+        className="mt-2 font-display text-[clamp(1.45rem,2.6vw,1.9rem)] font-semibold tracking-tight text-ink"
+      >
         This part is <em>yours.</em>
       </h2>
       <p className="mt-3 max-w-xl text-ink-muted">
-        Penumbra stays out of it. Write where you have landed — or where you are leaning now — and what would change your mind.
+        Penumbra stays out of it. Write where you have landed — or where you are leaning now — and what would change
+        your mind.
       </p>
       <GlassCard className="mt-6 !p-7 md:!p-9">
         <label htmlFor="call" className="eyebrow">
           My call
         </label>
-        <Textarea id="call" rows={3} maxLength={800} value={call} onChange={(e) => setCall(e.target.value)} className="mt-2.5" placeholder="In my own words…" />
+        <Textarea
+          id="call"
+          rows={3}
+          maxLength={800}
+          value={call}
+          onChange={(e) => setCall(e.target.value)}
+          className="mt-2.5"
+          placeholder="In my own words…"
+        />
         <label htmlFor="mind" className="eyebrow mt-6 block">
           What would change my mind <span className="normal-case tracking-normal">(optional)</span>
         </label>
-        <Textarea id="mind" rows={2} maxLength={500} value={changeMind} onChange={(e) => setChangeMind(e.target.value)} className="mt-2.5" placeholder="If I learned that…" />
+        <Textarea
+          id="mind"
+          rows={2}
+          maxLength={500}
+          value={changeMind}
+          onChange={(e) => setChangeMind(e.target.value)}
+          className="mt-2.5"
+          placeholder="If I learned that…"
+        />
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <Button type="button" onClick={save}>
             Save to my journal
@@ -76,6 +104,16 @@ export function YourCall({ title, decision, leaning, answers, examined, total }:
           <Button type="button" variant="ghost" onClick={copy}>
             Copy as Markdown
           </Button>
+          {call.trim() && (
+            <a
+              href={reviewLink({ title, call: call.trim(), changeMind: changeMind.trim() })}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={buttonClass('ghost')}
+            >
+              Review in 30 days ↗
+            </a>
+          )}
           {saved && (
             <a href="#/journal" className="text-[14px] font-medium text-brand-700 underline underline-offset-4">
               Open journal →

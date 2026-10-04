@@ -13,7 +13,9 @@ export function Perspective() {
           />
           <div
             className="absolute inset-0"
-            style={{ background: 'radial-gradient(65% 75% at 50% 50%, rgba(228,222,211,0.55), rgba(228,222,211,0) 72%)' }}
+            style={{
+              background: 'radial-gradient(65% 75% at 50% 50%, rgba(228,222,211,0.55), rgba(228,222,211,0) 72%)',
+            }}
           />
           <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
             <p className="eyebrow">PERSPECTIVE</p>

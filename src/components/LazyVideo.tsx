@@ -22,5 +22,17 @@ export function LazyVideo({ src, poster, className }: { src: string; poster: str
     return () => io.disconnect();
   }, [reduce]);
 
-  return <video ref={ref} className={className} src={near ? src : undefined} poster={poster} autoPlay={near} muted loop playsInline aria-hidden />;
+  return (
+    <video
+      ref={ref}
+      className={className}
+      src={near ? src : undefined}
+      poster={poster}
+      autoPlay={near}
+      muted
+      loop
+      playsInline
+      aria-hidden
+    />
+  );
 }

@@ -4,9 +4,18 @@ import { EASE } from './shared';
 
 const STEPS = [
   { title: 'Describe', body: 'Give the details of the decision — and your own reasons for leaning one way.' },
-  { title: 'Illuminate', body: 'See what sits outside your light: unstated assumptions, conflicts within your own reasoning, risks, and factors you overlooked.' },
-  { title: 'Examine', body: 'Answer questions written for your situation. Mark what you have actually checked. Reflect on what shifted.' },
-  { title: 'Decide', body: 'You write the call — and what would change your mind. Penumbra never does. It files the entry in a private journal.' },
+  {
+    title: 'Illuminate',
+    body: 'See what sits outside your light: unstated assumptions, conflicts within your own reasoning, risks, and factors you overlooked.',
+  },
+  {
+    title: 'Examine',
+    body: 'Answer questions written for your situation. Mark what you have actually checked. Reflect on what shifted.',
+  },
+  {
+    title: 'Decide',
+    body: 'You write the call — and what would change your mind. Penumbra never does. It files the entry in a private journal.',
+  },
 ];
 
 export function HowItWorks() {
