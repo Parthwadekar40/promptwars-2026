@@ -253,7 +253,7 @@ export function Landing() {
               WebkitMaskImage: 'linear-gradient(to bottom, transparent 0, #000 26%)',
             }}
           />
-          <Spotlight className="absolute inset-x-0 top-0 h-[62%]" />
+          <Spotlight className="absolute inset-x-0 top-0 h-[50%] md:h-[60%]" />
         </div>
         <p className="sr-only">
           Thoughts that sit just outside attention: an assumption, sunk cost, who is missing, second-order effects, the deadline,
