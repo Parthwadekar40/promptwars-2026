@@ -1,5 +1,5 @@
 {
-  "name": "promptwars-app",
+  "name": "penumbra",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -30,7 +30,7 @@
     "vite": "^7.0.0",
     "vitest": "^3.0.0"
   },
-  "description": "PromptWars 2026 \u2014 an intelligent workspace powered by Google Gemini.",
+  "description": "Penumbra \u2014 a thinking companion that shows you what you might be missing, and leaves the decision to you. PromptWars 2026 \u00b7 The Blind Spot.",
   "author": "Parth Wadekar",
   "license": "MIT",
   "homepage": "https://parthwadekar40.github.io/promptwars-2026/",

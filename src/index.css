@@ -8,7 +8,7 @@
 
   --color-paper: #e4ded3;
   --color-ink: #171412;
-  --color-ink-muted: #6f675c;
+  --color-ink-muted: #5f574c; /* 5.3:1 on paper — WCAG AA */
   --color-line: #d8d0c2;
 
   --color-brand-50: #efedff;
@@ -46,6 +46,11 @@ body {
   outline: 2px solid var(--color-brand-600);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* programmatic focus targets (main, results heading) are not interactive — no ring */
+[tabindex='-1']:focus-visible {
+  outline: none;
 }
 
 .eyebrow {
@@ -157,7 +162,24 @@ em {
 }
 .animate-float { animation: float-slow 9s ease-in-out infinite alternate; }
 
+/* loading: a sphere breathing in its own penumbra */
+.pen-orb {
+  width: 72px;
+  height: 72px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 32% 28%, #fff, var(--color-brand-200) 38%, var(--color-brand-500) 100%);
+  box-shadow: 0 0 0 0 rgba(109, 95, 247, 0.35), 0 18px 40px -12px rgba(23, 20, 18, 0.35);
+  animation: pen-pulse 2.4s ease-in-out infinite;
+}
+@keyframes pen-pulse {
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 28px rgba(109, 95, 247, 0), 0 18px 40px -12px rgba(23, 20, 18, 0.35);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .pen-orb { animation: none; }
   .animate-aurora-a, .animate-aurora-b, .animate-aurora-c,
   .animate-grid, .animate-sparkle, .animate-marquee,
   .animate-silk, .animate-float {

@@ -353,7 +353,7 @@ export function Auth({ mode }: { mode: Mode }) {
                 </h1>
                 <p className="mt-2 text-sm text-ink-muted">You’re verified. Taking you in…</p>
                 <a
-                  href={whatsappLink(WHATSAPP_OWNER, `Hi Parth! ${pending?.name ?? 'A new user'} just joined PromptWars App.`)}
+                  href={whatsappLink(WHATSAPP_OWNER, `Hi Parth! ${pending?.name ?? 'A new user'} just joined Penumbra.`)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-5 inline-flex items-center gap-1.5 rounded-[8px] border border-line px-3 py-1.5 text-[13px] font-medium text-ink transition-colors hover:border-ink/25 hover:bg-white/60"

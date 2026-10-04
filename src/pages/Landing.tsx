@@ -1,69 +1,54 @@
-import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Badge, Button, GlassCard, Input, Section, Stat } from '../components/ui';
-import { Icon } from '../components/Icon';
+import { Badge, Button, GlassCard, Section, Stat } from '../components/ui';
 import { Atmosphere } from '../components/Atmosphere';
 import { Marquee } from '../components/Marquee';
+import { Reveal } from '../components/Reveal';
+import { Spotlight } from '../components/Spotlight';
 import { navigate } from '../lib/router';
-import { sendEmail } from '../lib/mail';
-import { clearProfile, useProfile } from '../lib/auth';
-import { signOut } from '../lib/db';
-
-const CAPABILITIES = [
-  { title: 'Understands, then delivers', body: 'Google Gemini reasons through your request and produces finished work in real time.' },
-  { title: 'Private by default', body: 'Your key stays in your browser. Nothing sensitive is ever stored on a server.' },
-  { title: 'Feels instant', body: 'Lean architecture, tested core paths, and motion that never gets in the way.' },
-  { title: 'Quietly beautiful', body: 'Editorial design with considered type, spacing, light, and generous space.' },
-];
-
-const MARQUEE_WORDS = [
-  'RESEARCH', 'ANALYZE', 'CREATE', 'AUTOMATE', 'SUMMARIZE', 'TRANSLATE', 'PLAN', 'SHIP', 'ITERATE', 'IMAGINE',
-];
+import { useProfile } from '../lib/auth';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
+const ASSETS = `${import.meta.env.BASE_URL}assets`;
 
-/** Landing template — copy is a slot: swap with problem-specific language at T+0. */
+const LENSES = [
+  'ASSUMPTIONS', 'RISKS', 'MISSING VOICES', 'TIME HORIZONS', 'REVERSIBILITY',
+  'SECOND-ORDER EFFECTS', 'THE OTHER SIDE', 'ANCHORS',
+];
+
+const STEPS = [
+  { title: 'Describe', body: 'Tell it the decision the way you would tell a friend — and which way you are leaning.' },
+  { title: 'Illuminate', body: 'See what sits outside your light: hidden assumptions, risks in the shadows, voices you never mentioned.' },
+  { title: 'Examine', body: 'Answer questions written for your situation. Mark what you have actually checked. Reflect on what shifted.' },
+  { title: 'Decide', body: 'You write the call — and what would change your mind. Penumbra never does. It files the entry in a private journal.' },
+];
+
+const PRINCIPLES = [
+  { title: 'Questions, not answers', body: 'Every output is a question, an observation, or a case for the side you are not on — never a verdict.' },
+  { title: 'Specific, never generic', body: 'It works from your details, your numbers, your constraints. "Weigh the pros and cons" is not allowed.' },
+  { title: 'Your call, always', body: 'The last step belongs to you alone: write the decision, and what would change your mind.' },
+];
+
+/** Landing — the problem, the one rule, and the way in. */
 export function Landing() {
   const reduce = useReducedMotion();
-  const [notifyEmail, setNotifyEmail] = useState('');
-  const [notifyStatus, setNotifyStatus] = useState<string>();
-  const [notifyBusy, setNotifyBusy] = useState(false);
-
-  const notify = async () => {
-    const email = notifyEmail.trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setNotifyStatus('⚠ Please enter a valid email.');
-      return;
-    }
-    setNotifyBusy(true);
-    setNotifyStatus('Adding you…');
-    const r = await sendEmail(email, {
-      user_name: email,
-      message: `New waitlist signup from the landing page: ${email}`,
-    });
-    setNotifyStatus(r.ok ? "✅ You're on the list — we'll be in touch." : `⚠ ${r.error}`);
-    setNotifyBusy(false);
-  };
-
   const profile = useProfile();
-  const words = profile ? ['Welcome,'] : ['Solve', 'it'];
-  const accent = profile ? `${profile.name}.` : 'beautifully,';
-  const tail = profile ? [] : ['in', 'minutes.'];
+  const words = profile ? ['Welcome,'] : ['Think', 'past', 'what', 'you'];
+  const accent = profile ? `${profile.name}.` : 'noticed first.';
 
   return (
     <>
-      {/* ————— HERO — brutal scale, cursor spotlight, delayed word reveal ————— */}
+      {/* ————— HERO ————— */}
       <section className="relative overflow-hidden">
         <Atmosphere />
 
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 pb-14 pt-20 md:grid-cols-[1.08fr_0.92fr] md:pb-20 md:pt-28">
           <div>
             <motion.div initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.2 }}>
-              <Badge>Intelligent workspace</Badge>
+              <Badge>A thinking companion</Badge>
             </motion.div>
 
             <h1 className="t-hero mt-7 font-display font-semibold tracking-[-0.025em] text-ink">
-              {[...words, accent, ...tail].map((w, i) => (
+              {[...words, accent].map((w, i) => (
                 <motion.span
                   key={w}
                   initial={reduce ? false : { opacity: 0, y: '0.55em', filter: 'blur(8px)' }}
@@ -71,11 +56,7 @@ export function Landing() {
                   transition={{ duration: 1, delay: 0.35 + i * 0.16, ease: EASE }}
                   className="mr-[0.28em] inline-block"
                 >
-                  {w === accent ? (
-                    <em className="text-gradient font-serif font-normal italic tracking-normal">{accent}</em>
-                  ) : (
-                    w
-                  )}
+                  {w === accent ? <em className="text-gradient font-serif font-normal italic tracking-normal">{accent}</em> : w}
                 </motion.span>
               ))}
             </h1>
@@ -87,8 +68,8 @@ export function Landing() {
               className="mt-7 max-w-lg text-[18px] leading-relaxed text-ink-muted"
             >
               {profile
-                ? "You're signed in to PromptWars App — everything below is ready when you are."
-                : 'An intelligent workspace that turns your ideas into finished work — fast, private, and a genuine pleasure to use.'}
+                ? "Bring a decision when you're ready. Penumbra will show you what is outside the light — and leave the choice to you."
+                : 'Describe a decision. Penumbra shows the assumptions, risks and missing pieces you overlooked, asks the questions worth sitting with, then steps back. The decision stays yours.'}
             </motion.p>
 
             <motion.div
@@ -97,25 +78,12 @@ export function Landing() {
               transition={{ duration: 1, delay: 1.65, ease: EASE }}
               className="mt-9 flex flex-wrap items-center gap-3"
             >
-              {profile ? (
-                <>
-                  <Button type="button" onClick={() => navigate('/connect')}>
-                    Go to Settings
-                  </Button>
-                  <Button type="button" variant="ghost" onClick={() => { signOut(); clearProfile(); }}>
-                    Sign out
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button type="button" onClick={() => navigate('/signup')}>
-                    Get started
-                  </Button>
-                  <Button type="button" variant="ghost" onClick={() => navigate('/connect')}>
-                    Connect AI key
-                  </Button>
-                </>
-              )}
+              <Button type="button" onClick={() => navigate('/think')}>
+                Start thinking
+              </Button>
+              <Button type="button" variant="ghost" onClick={() => navigate(profile ? '/journal' : '/think?sample')}>
+                {profile ? 'Open journal' : 'See a sample'}
+              </Button>
             </motion.div>
           </div>
 
@@ -126,32 +94,28 @@ export function Landing() {
             className="flex justify-center md:justify-end"
           >
             <motion.img
-              src={`${import.meta.env.BASE_URL}assets/img/orb-main-alpha.webp`}
-              alt="Iridescent glass orb with soft pastel reflections"
+              src={`${ASSETS}/img/orb-main-alpha.webp`}
+              alt="A glass sphere casting a soft shadow"
               width="1024"
               height="1024"
               fetchPriority="high"
-              className="float-art w-full max-w-[380px] md:max-w-[540px]"
+              className="float-art mask-fade-all w-full max-w-[380px] md:max-w-[540px]"
               animate={reduce ? undefined : { y: [0, -12, 0] }}
               transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
             />
           </motion.div>
         </div>
 
-        <motion.div
-          initial={reduce ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.2, delay: 1.9 }}
-        >
-          <Marquee items={MARQUEE_WORDS} />
+        <motion.div initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, delay: 1.9 }}>
+          <Marquee items={LENSES} />
         </motion.div>
 
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-6 py-12 md:grid-cols-4">
           {[
-            { v: 'Gemini', l: 'Google AI models' },
-            { v: '100%', l: 'Accessible & tested' },
-            { v: '<1s', l: 'Feels instant' },
-            { v: '0', l: 'Servers holding your key' },
+            { v: '0', l: 'Verdicts, by design' },
+            { v: '6', l: 'Lenses on every decision' },
+            { v: '4–5', l: 'Questions written for you' },
+            { v: '1', l: 'Decision-maker: you' },
           ].map((s, i) => (
             <motion.div
               key={s.l}
@@ -166,27 +130,27 @@ export function Landing() {
         </div>
       </section>
 
-      {/* ————— FEATURES — glass-bar rule at brutal width, slab bleeding, deep staggers ————— */}
-      <section id="features" className="relative overflow-hidden">
+      {/* ————— HOW IT WORKS ————— */}
+      <section id="how" className="relative overflow-hidden">
         <div className="mx-auto w-full max-w-7xl px-6 py-24">
-          <Badge>Capabilities</Badge>
+          <Badge>How it works</Badge>
           <h2 className="t-h2 mt-5 max-w-2xl font-display font-semibold tracking-tight text-ink">
-            Everything you need. <em className="font-serif font-normal italic tracking-normal text-ink-muted">Nothing you don't.</em>
+            Four steps. <em className="text-ink-muted">One of them is entirely yours.</em>
           </h2>
-          <div className="mt-12 grid gap-px overflow-hidden rounded-[16px] border border-line bg-line sm:grid-cols-2">
-            {CAPABILITIES.map((c, i) => (
+          <div className="mt-12 grid gap-px overflow-hidden rounded-[16px] border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+            {STEPS.map((s, i) => (
               <motion.div
-                key={c.title}
+                key={s.title}
                 initial={reduce ? false : { opacity: 0, y: 26 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.9, delay: 0.25 + i * 0.28, ease: EASE }}
+                transition={{ duration: 0.9, delay: 0.2 + i * 0.22, ease: EASE }}
                 className="bg-paper"
               >
-                <div className="h-full p-9">
+                <div className="h-full p-8">
                   <div className="eyebrow">0{i + 1}</div>
-                  <h3 className="mt-4 font-display text-xl font-semibold tracking-tight text-ink">{c.title}</h3>
-                  <p className="mt-2.5 leading-relaxed text-ink-muted">{c.body}</p>
+                  <h3 className="mt-4 font-display text-xl font-semibold tracking-tight text-ink">{s.title}</h3>
+                  <p className="mt-2.5 leading-relaxed text-ink-muted">{s.body}</p>
                 </div>
               </motion.div>
             ))}
@@ -194,13 +158,13 @@ export function Landing() {
         </div>
       </section>
 
-      {/* ————— GLASS FILM — the material itself, looping, melting into paper ————— */}
-      <section aria-label="Glass study" className="relative overflow-hidden">
+      {/* ————— PERSPECTIVE FILM ————— */}
+      <section aria-label="Perspectives" className="relative overflow-hidden">
         <div className="relative h-[clamp(300px,46vh,500px)]">
           <video
-            className="absolute inset-0 size-full object-cover mask-fade-y"
-            src={`${import.meta.env.BASE_URL}assets/video/glass-spheres-loop.mp4`}
-            poster={`${import.meta.env.BASE_URL}assets/img/glass-study.webp`}
+            className="mask-fade-y absolute inset-0 size-full object-cover"
+            src={`${ASSETS}/video/glass-spheres-loop.mp4`}
+            poster={`${ASSETS}/img/glass-study.webp`}
             autoPlay={!reduce}
             muted
             loop
@@ -209,136 +173,94 @@ export function Landing() {
           />
           <div
             className="absolute inset-0"
-            style={{ background: 'radial-gradient(65% 75% at 50% 50%, rgba(228,222,211,0.5), rgba(228,222,211,0) 72%)' }}
+            style={{ background: 'radial-gradient(65% 75% at 50% 50%, rgba(228,222,211,0.55), rgba(228,222,211,0) 72%)' }}
           />
           <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
-            <p className="eyebrow">THE MATERIAL</p>
-            <h2 className="t-h2 mt-3">
-              Your idea, taking <em>form</em>.
+            <p className="eyebrow">PERSPECTIVE</p>
+            <h2 className="t-h2 mt-3 font-display font-semibold tracking-tight text-ink">
+              One decision. <em>Many angles.</em>
             </h2>
           </div>
-          <p className="absolute bottom-6 left-6 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-muted">
-            Study 01 · Glass &amp; light
-          </p>
         </div>
       </section>
 
-      {/* ————— QUOTE BAND — the pebble floats free, quote in its sky ————— */}
-      <section className="relative overflow-hidden">
-        <div className="mx-auto max-w-4xl px-6 pt-24 text-center md:pt-32">
-          <motion.p
-            initial={reduce ? false : { opacity: 0, y: 22 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-120px' }}
-            transition={{ duration: 1.1, delay: 0.3, ease: EASE }}
-            className="t-quote font-serif italic leading-snug text-ink/85"
-          >
-            “Simplicity is the soul of efficiency —<br />and beauty is its proof.”
-          </motion.p>
-        </div>
-        <motion.img
-          src={`${import.meta.env.BASE_URL}assets/img/pebble-empty-alpha.webp`}
+      {/* ————— THE BLIND SPOT — dark, with a light you move ————— */}
+      <section className="relative isolate overflow-hidden bg-[#0b0a10]">
+        <img
+          src={`${ASSETS}/img/dark-divider.webp`}
           alt=""
           aria-hidden
           loading="lazy"
           decoding="async"
-          width="1024"
-          height="1024"
-          initial={reduce ? false : { opacity: 0, y: 26 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 1.2, delay: 0.5, ease: EASE }}
-          className="float-art mx-auto -mt-4 w-[520px] max-w-full"
-        />
-      </section>
-
-      {/* ————— ORB-WIDE INTERLUDE — art melts into the paper ————— */}
-      <section className="relative overflow-hidden border-y border-line">
-        <img
-          src={`${import.meta.env.BASE_URL}assets/img/orb-wide-alpha.webp`}
-          alt="Iridescent orb with a soft rainbow refraction across a cream studio floor"
-          loading="lazy"
-          decoding="async"
           width="1376"
           height="768"
-          className="animate-silk mask-fade-y w-full"
+          className="animate-silk absolute inset-0 -z-10 size-full object-cover opacity-80"
         />
-        <motion.div
-          initial={reduce ? false : { opacity: 0, x: -24 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 1.1, delay: 0.4, ease: EASE }}
-          className="absolute bottom-8 left-8 max-w-xs"
-        >
-          <p className="eyebrow !text-ink/60">Designed in light</p>
-          <p className="mt-2 font-display text-xl font-semibold tracking-tight text-ink">Every detail, considered.</p>
-        </motion.div>
-      </section>
-
-      {/* ————— DARK STORY BAND — live mist loop, delayed reveals ————— */}
-      <section className="relative isolate overflow-hidden bg-[#0b0612]">
-        {reduce ? (
-          <img
-            src={`${import.meta.env.BASE_URL}assets/img/dark-divider.webp`}
-            alt=""
-            aria-hidden
-            loading="lazy"
-            decoding="async"
-            width="1376"
-            height="768"
-            className="absolute inset-0 -z-10 size-full object-cover opacity-90"
-          />
-        ) : (
-          <video
-            aria-hidden
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            poster={`${import.meta.env.BASE_URL}assets/img/dark-divider.webp`}
-            className="absolute inset-0 -z-10 size-full object-cover opacity-90"
-          >
-            <source src={`${import.meta.env.BASE_URL}assets/video/mist-loop.mp4`} type="video/mp4" />
-          </video>
-        )}
         <Atmosphere dark />
-        <div className="mx-auto max-w-7xl px-6 py-28 md:py-36">
-          <motion.p
-            initial={reduce ? false : { opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: '-140px' }}
-            transition={{ duration: 1.2, delay: 0.35 }}
-            className="eyebrow !text-white/60"
-          >
-            Our philosophy
-          </motion.p>
-          <motion.h2
-            initial={reduce ? false : { opacity: 0, y: 26 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-140px' }}
-            transition={{ duration: 1.15, delay: 0.65, ease: EASE }}
-            className="t-h2 mt-6 max-w-3xl font-display font-semibold tracking-tight text-white"
-          >
-            Technology should feel like{' '}
-            <em className="font-serif font-normal italic tracking-normal text-white/75">light</em> — quiet,
-            precise, and quietly beautiful.
-          </motion.h2>
+        <div className="mx-auto max-w-4xl px-6 pt-28 text-center md:pt-36">
+          <p className="eyebrow !text-white/60">The blind spot</p>
+          <Reveal>
+            <h2 className="t-quote mt-6 font-serif font-normal italic leading-snug text-white">
+              “We rarely decide in the dark. We decide in a small circle of light — and mistake it for the whole room.”
+            </h2>
+          </Reveal>
+          <p className="mt-6 text-white/65">Move through the dark. Everything here was always in the room.</p>
         </div>
+        <Spotlight />
+        <p className="sr-only">
+          Thoughts that sit just outside attention: an assumption, sunk cost, who is missing, second-order effects, the deadline,
+          reversibility, the other side, anchoring.
+        </p>
       </section>
 
-      {/* ————— CTA — drifting silk — gone from the page once you're signed in ————— */}
-      {!profile && (
-      <Section id="cta" eyebrow="Get started" title={<>Ready when <em className="font-serif font-normal italic tracking-normal text-ink-muted">you</em> are.</>}>
-        <motion.div
-          initial={reduce ? false : { opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 1, delay: 0.35, ease: EASE }}
-        >
+      {/* ————— THE ONE RULE ————— */}
+      <Section id="rule" eyebrow="The one rule" title={<>It never decides. <em className="text-ink-muted">You do.</em></>}>
+        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <Reveal>
+            <GlassCard className="flex h-full flex-col justify-between gap-8">
+              <div>
+              <p className="eyebrow">The neutrality guard — in action</p>
+              <ul className="mt-6 space-y-4 text-[15px] leading-relaxed">
+                {[
+                  { kept: false, text: 'You should take the offer.' },
+                  { kept: false, text: 'Honestly, the better option is to stay.' },
+                  { kept: true, text: 'What would have to be true for taking the offer to be the right call?' },
+                  { kept: true, text: 'What are you assuming about how quickly you would build a life there?' },
+                ].map((l) => (
+                  <li key={l.text} className="flex gap-4">
+                    <span className={`eyebrow w-16 shrink-0 pt-0.5 ${l.kept ? '!text-emerald-800' : '!text-red-700'}`}>{l.kept ? 'Kept' : 'Removed'}</span>
+                    <span className={l.kept ? 'text-ink' : 'text-ink-muted line-through decoration-red-700/50'}>“{l.text}”</span>
+                  </li>
+                ))}
+              </ul>
+              </div>
+              <p className="border-t border-line pt-5 text-[14px] leading-relaxed text-ink-muted">
+                Every response is checked in code before you see it. Advice-shaped sentences are removed; only questions and
+                observations survive.
+              </p>
+            </GlassCard>
+          </Reveal>
+          <ul className="grid gap-4">
+            {PRINCIPLES.map((p, i) => (
+              <li key={p.title}>
+                <Reveal delay={0.15 + i * 0.15}>
+                  <div className="hairline rounded-[14px] bg-white/40 p-6">
+                    <h3 className="font-display text-lg font-semibold tracking-tight text-ink">{p.title}</h3>
+                    <p className="mt-1.5 leading-relaxed text-ink-muted">{p.body}</p>
+                  </div>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Section>
+
+      {/* ————— BEGIN ————— */}
+      <Section id="begin" eyebrow="Begin" title={<>Bring a decision. <em className="text-ink-muted">Leave with better questions.</em></>}>
+        <Reveal>
           <GlassCard className="relative overflow-hidden text-center">
             <img
-              src={`${import.meta.env.BASE_URL}assets/img/silk-backdrop.webp`}
+              src={`${ASSETS}/img/silk-backdrop.webp`}
               alt=""
               aria-hidden
               loading="lazy"
@@ -348,39 +270,29 @@ export function Landing() {
               className="animate-silk mask-fade-all absolute inset-0 z-0 size-full object-cover opacity-80"
             />
             <div className="relative z-10">
-              <p className="text-ink-muted">Create your space and let the AI do the heavy lifting.</p>
+              <p className="mx-auto max-w-md text-ink-muted">
+                No sign-up needed. Your words are used only to write the analysis — nothing is saved unless you choose to.
+              </p>
               <div className="mt-6 flex flex-wrap justify-center gap-3">
-                <Button type="button" onClick={() => navigate('/signin')}>
-                  Create your account
+                <Button type="button" onClick={() => navigate('/think')}>
+                  Start thinking
                 </Button>
-                <Button type="button" variant="ghost" onClick={() => navigate('/connect')}>
-                  Settings
+                <Button type="button" variant="ghost" onClick={() => navigate('/think?sample')}>
+                  See a sample
                 </Button>
               </div>
-              <div className="mx-auto mt-8 max-w-sm">
-                <label htmlFor="cta-email" className="eyebrow">Stay in the loop</label>
-                <div className="mt-2 flex gap-2">
-                  <Input
-                    id="cta-email"
-                    type="email"
-                    placeholder="you@example.com"
-                    value={notifyEmail}
-                    onChange={(e) => setNotifyEmail(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') void notify();
-                    }}
-                  />
-                  <Button type="button" variant="ghost" aria-label="Notify me" onClick={notify} disabled={notifyBusy}>
-                    <Icon name="bell" className="size-4" />
-                  </Button>
-                </div>
-                <p aria-live="polite" className="mt-2 min-h-5 text-[13px] text-ink-muted">{notifyStatus}</p>
-              </div>
+              {!profile && (
+                <p className="mt-6 text-[14px] text-ink-muted">
+                  Want a journal that follows you across devices?{' '}
+                  <a href="#/signup" className="font-medium text-brand-700 underline underline-offset-4">
+                    Create a free account
+                  </a>
+                </p>
+              )}
             </div>
           </GlassCard>
-        </motion.div>
+        </Reveal>
       </Section>
-      )}
     </>
   );
 }

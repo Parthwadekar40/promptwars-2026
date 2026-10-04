@@ -8,19 +8,46 @@ import { whatsappLink } from '../lib/mail';
 
 const NAV = [
   { to: '/', label: 'Home' },
+  { to: '/think', label: 'Think' },
+  { to: '/journal', label: 'Journal' },
   { to: '/signin', label: 'Sign in' },
   { to: '/connect', label: 'Settings' },
 ];
 
+const TITLES: Record<string, string> = {
+  '/think': 'Think',
+  '/journal': 'Journal',
+  '/signin': 'Sign in',
+  '/signup': 'Create account',
+  '/connect': 'Settings',
+  '/privacy': 'Privacy',
+};
+const DEFAULT_TITLE = 'Penumbra — a thinking companion for better decisions';
+
 const GITHUB = 'https://github.com/Parthwadekar40';
 const LINKEDIN = 'https://www.linkedin.com/in/parth-wadekar-18027728b';
 const INSTAGRAM = 'https://www.instagram.com/parthwadekar16';
+const REPO = 'https://github.com/Parthwadekar40/promptwars-2026';
+
+/** The orb mark — a sphere in its own light. */
+function Brand({ testId }: { testId?: string }) {
+  return (
+    <a href="#/" className="flex items-center gap-2.5 font-display text-[17px] font-semibold tracking-tight text-ink">
+      <span
+        aria-hidden
+        className="size-[22px] rounded-full bg-[radial-gradient(circle_at_32%_28%,#fff,var(--color-brand-300)_45%,var(--color-brand-600))] shadow-[0_3px_8px_-2px_rgba(91,75,245,0.5)]"
+      />
+      <span data-testid={testId}>Penumbra</span>
+    </a>
+  );
+}
 
 /** App shell — hairline header, accessible nav (hamburger on mobile), quiet footer, page-wide gradient follow. */
 export function AppShell({ children }: { children: ReactNode }) {
-  const route = useRoute();
+  const route = useRoute().split('?')[0];
   const [open, setOpen] = useState(false);
   const profile = useProfile();
+  const links = NAV.filter((i) => !(profile && i.to === '/signin'));
 
   const logout = () => {
     signOut();
@@ -34,6 +61,11 @@ export function AppShell({ children }: { children: ReactNode }) {
     if (hasSession()) void refreshSession();
   }, []);
 
+  useEffect(() => {
+    const page = TITLES[route];
+    document.title = page ? `${page} · Penumbra` : DEFAULT_TITLE;
+  }, [route]);
+
   return (
     <div
       className="flex min-h-dvh flex-col"
@@ -43,6 +75,17 @@ export function AppShell({ children }: { children: ReactNode }) {
         el.style.setProperty('--my', `${e.clientY}px`);
       }}
     >
+      <a
+        href="#/"
+        onClick={(e) => {
+          e.preventDefault();
+          document.getElementById('main')?.focus();
+        }}
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-[10px] focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"
+      >
+        Skip to content
+      </a>
+
       {/* the brand gradient from the top, following the cursor through the whole page */}
       <div
         aria-hidden
@@ -55,13 +98,10 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <header className="sticky top-0 z-40 border-b border-line bg-paper/85 backdrop-blur-xl">
         <nav aria-label="Main" className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5">
-          <a href="#/" className="flex items-center gap-2.5 font-display text-[17px] font-semibold tracking-tight text-ink">
-            <span aria-hidden className="size-[22px] rounded-[6px] bg-gradient-to-br from-brand-500 via-brand-300 to-mint-300" />
-            <span data-testid="brand">PromptWars App</span>
-          </a>
+          <Brand testId="brand" />
 
           <ul className="hidden items-center gap-1 md:flex">
-            {NAV.map((item) => (
+            {links.map((item) => (
               <li key={item.to}>
                 <a
                   href={`#${item.to}`}
@@ -83,8 +123,8 @@ export function AppShell({ children }: { children: ReactNode }) {
               </li>
             ) : (
               <li>
-                <Button type="button" onClick={() => navigate('/signup')} className="!px-4 !py-2 !text-[14px]">
-                  Get started
+                <Button type="button" onClick={() => navigate('/think')} className="!px-4 !py-2 !text-[14px]">
+                  Start thinking
                 </Button>
               </li>
             )}
@@ -106,7 +146,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
         {open && (
           <ul className="border-t border-line px-6 pb-4 pt-2 md:hidden">
-            {NAV.map((item) => (
+            {links.map((item) => (
               <li key={item.to}>
                 <a
                   href={`#${item.to}`}
@@ -129,11 +169,11 @@ export function AppShell({ children }: { children: ReactNode }) {
                 </button>
               ) : (
                 <a
-                  href="#/signup"
+                  href="#/think"
                   onClick={() => setOpen(false)}
                   className="block rounded-[8px] px-3 py-2.5 text-[15px] font-medium text-ink"
                 >
-                  Get started
+                  Start thinking
                 </a>
               )}
             </li>
@@ -141,7 +181,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         )}
       </header>
 
-      <main id="main" className="relative z-[2] flex-1">
+      <main id="main" tabIndex={-1} className="relative z-[2] flex-1 outline-none">
         {children}
       </main>
 
@@ -149,13 +189,9 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="mx-auto max-w-7xl px-6 py-14">
           <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
             <div>
-              <a href="#/" className="flex items-center gap-2.5 font-display text-[17px] font-semibold tracking-tight text-ink">
-                <span aria-hidden className="size-[22px] rounded-[6px] bg-gradient-to-br from-brand-500 via-brand-300 to-mint-300" />
-                <span>PromptWars App</span>
-              </a>
+              <Brand />
               <p className="mt-4 max-w-xs text-[13px] leading-relaxed text-ink-muted">
-                An intelligent workspace that turns your ideas into finished work — fast, private, and a genuine
-                pleasure to use.
+                A thinking companion. It shows you what you might be missing — and leaves the decision to you.
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
                 {[
@@ -180,18 +216,17 @@ export function AppShell({ children }: { children: ReactNode }) {
             <nav aria-label="Explore">
               <p className="eyebrow">EXPLORE</p>
               <ul className="mt-4 space-y-2.5 text-[13px] text-ink-muted">
-                <li><a className="transition-colors hover:text-ink" href="#/">Home</a></li>
-                <li><a className="transition-colors hover:text-ink" href="#/signin">Sign in</a></li>
-                <li><a className="transition-colors hover:text-ink" href="#/connect">Settings</a></li>
+                {links.map((i) => (
+                  <li key={i.to}><a className="transition-colors hover:text-ink" href={`#${i.to}`}>{i.label}</a></li>
+                ))}
               </ul>
             </nav>
 
-            <nav aria-label="Legal">
-              <p className="eyebrow">LEGAL</p>
+            <nav aria-label="Trust">
+              <p className="eyebrow">TRUST</p>
               <ul className="mt-4 space-y-2.5 text-[13px] text-ink-muted">
-                <li><a className="transition-colors hover:text-ink" href="#/">Privacy</a></li>
-                <li><a className="transition-colors hover:text-ink" href="#/">Terms</a></li>
-                <li><a className="transition-colors hover:text-ink" href="#/connect">Contact</a></li>
+                <li><a className="transition-colors hover:text-ink" href="#/privacy">Privacy</a></li>
+                <li><a className="transition-colors hover:text-ink" href={REPO} target="_blank" rel="noopener noreferrer">Source code ↗</a></li>
               </ul>
             </nav>
           </div>

@@ -16,6 +16,26 @@ describe('App shell', () => {
     expect(screen.getAllByRole('link', { name: /sign in/i }).length).toBeGreaterThan(0);
   });
 
+  it('brands the app and links the thinking workspace', () => {
+    render(<App />);
+    expect(screen.getByTestId('brand')).toHaveTextContent('Penumbra');
+    expect(screen.getAllByRole('link', { name: /^think$/i }).length).toBeGreaterThan(0);
+  });
+
+  it('shows the designed 404 for an unknown route', () => {
+    window.location.hash = '#/nope';
+    render(<App />);
+    expect(screen.getByText(/this page doesn't exist/i)).toBeInTheDocument();
+    window.location.hash = '#/';
+  });
+
+  it('opens the instant sample straight from a shared link', async () => {
+    window.location.hash = '#/think?sample';
+    render(<App />);
+    expect(await screen.findByRole('heading', { level: 1, name: /bengaluru offer/i })).toBeInTheDocument();
+    window.location.hash = '#/';
+  });
+
   it('navigates to the sign-in page from the nav', async () => {
     render(<App />);
     await userEvent.click(screen.getAllByRole('link', { name: /sign in/i })[0]);

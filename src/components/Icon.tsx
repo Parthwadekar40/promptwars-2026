@@ -1,7 +1,6 @@
 const ICONS = {
   user: 'icon-user.webp',
   trash: 'icon-trash.webp',
-  bell: 'icon-bell.webp',
   gear: 'icon-gear.webp',
 } as const;
 

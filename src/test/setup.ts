@@ -10,3 +10,6 @@ class IntersectionObserverStub {
   }
 }
 globalThis.IntersectionObserver = IntersectionObserverStub as unknown as typeof IntersectionObserver;
+
+// jsdom does not implement scrolling
+window.scrollTo = (() => {}) as typeof window.scrollTo;

@@ -1,4 +1,4 @@
-import type { ReactNode, InputHTMLAttributes, ButtonHTMLAttributes } from 'react';
+import type { ReactNode, InputHTMLAttributes, ButtonHTMLAttributes, TextareaHTMLAttributes } from 'react';
 
 /** Design-system primitives — warm-paper editorial recipe (hairlines, 12px radii, mono eyebrows). */
 
@@ -48,6 +48,15 @@ export function Input(props: InputHTMLAttributes<HTMLInputElement>) {
     <input
       {...props}
       className={`hairline w-full rounded-[10px] bg-white/70 px-4 py-2.5 text-[15px] text-ink placeholder:text-ink-muted/60 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-400/30 ${props.className ?? ''}`}
+    />
+  );
+}
+
+export function Textarea(props: TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  return (
+    <textarea
+      {...props}
+      className={`hairline w-full resize-y rounded-[10px] bg-white/70 px-4 py-3 text-[15px] leading-relaxed text-ink placeholder:text-ink-muted/80 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-400/30 ${props.className ?? ''}`}
     />
   );
 }
