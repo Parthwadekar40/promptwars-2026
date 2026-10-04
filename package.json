@@ -29,5 +29,13 @@
     "typescript": "^5.7.0",
     "vite": "^7.0.0",
     "vitest": "^3.0.0"
+  },
+  "description": "PromptWars 2026 \u2014 an intelligent workspace powered by Google Gemini.",
+  "author": "Parth Wadekar",
+  "license": "MIT",
+  "homepage": "https://parthwadekar40.github.io/promptwars-2026/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Parthwadekar40/promptwars-2026.git"
   }
 }

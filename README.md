@@ -12,6 +12,12 @@
 - **Sign in** — Firebase Anonymous Auth (no passwords to leak) + display-name capture.
 - **Settings** — connect a Google AI Studio key (stored in the visitor's `localStorage` only) + one-tap live health checks for every integration.
 
+## Demo path (2 minutes)
+
+1. **Sign up** with your email → the OTP code lands in your inbox → verify → the hero greets you by name.
+2. **Settings** → paste a free Google AI Studio key → run the three service checks (Gemini · Firebase · EmailJS — all green ●).
+3. Explore the landing: glass-study film loop, drifting atmosphere, the brand gradient following your cursor.
+
 ## Stack
 
 - Vite 7 · React 19 · TypeScript (strict) · Tailwind CSS v4 · Framer Motion

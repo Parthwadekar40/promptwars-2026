@@ -201,7 +201,7 @@ export function Landing() {
             className="absolute inset-0 size-full object-cover mask-fade-y"
             src={`${import.meta.env.BASE_URL}assets/video/glass-spheres-loop.mp4`}
             poster={`${import.meta.env.BASE_URL}assets/img/glass-study.webp`}
-            autoPlay
+            autoPlay={!reduce}
             muted
             loop
             playsInline

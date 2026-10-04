@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://parthwadekar40.github.io/promptwars-2026/sitemap.xml

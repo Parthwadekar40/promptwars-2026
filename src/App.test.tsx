@@ -29,4 +29,15 @@ describe('App shell', () => {
     expect(await screen.findByLabelText(/gemini api key/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /save key/i })).toBeInTheDocument();
   });
+
+  it('validates the sign-up form before any network call', async () => {
+    render(<App />);
+    await userEvent.click(screen.getAllByRole('link', { name: /sign in/i })[0]);
+    await userEvent.click(screen.getAllByRole('button', { name: /sign up/i })[0]);
+    await userEvent.type(screen.getByLabelText(/display name/i), 'Parth');
+    await userEvent.type(screen.getByLabelText(/^email$/i), 'parth@example.com');
+    await userEvent.type(screen.getByLabelText(/^password$/i), '123');
+    await userEvent.click(screen.getByRole('button', { name: /create account/i }));
+    expect(await screen.findByText(/at least 6 characters/i)).toBeInTheDocument();
+  });
 });
