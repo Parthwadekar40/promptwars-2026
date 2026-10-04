@@ -1,5 +1,5 @@
 import { getProfile } from './auth';
-import { deleteDoc, listDocs, saveDoc } from './db';
+import { deleteDoc, listDocs, saveDoc } from './firestore';
 import type { Answered } from './analyze';
 
 export type Entry = {

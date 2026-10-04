@@ -42,11 +42,6 @@ export function verifyOtp(code: string): Result<void> {
   return { ok: true, data: undefined };
 }
 
-/** Which mailbox the pending code went to (for the UI). */
-export function otpTarget(): string | null {
-  return read()?.email ?? null;
-}
-
 export function cancelOtp(): void {
   sessionStorage.removeItem(KEY);
 }

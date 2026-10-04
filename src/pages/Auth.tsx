@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Badge, Button, GlassCard, Input } from '../components/ui';
 import { Icon } from '../components/Icon';
-import { signInEmail, signUpEmail, saveDoc } from '../lib/db';
+import { OtpInput } from '../components/OtpInput';
+import { signInEmail, signUpEmail } from '../lib/db';
+import { saveDoc } from '../lib/firestore';
 import { issueOtp, verifyOtp, cancelOtp } from '../lib/otp';
 import { setProfile, type Profile } from '../lib/auth';
 import { navigate } from '../lib/router';
@@ -13,46 +15,6 @@ type Mode = 'signin' | 'signup';
 type Step = 'credentials' | 'otp' | 'done';
 
 const WHATSAPP_OWNER = '919975181905';
-
-/** Six-box OTP input — auto-advance, backspace-previous, paste-aware. */
-function OtpInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  const refs = useRef<Array<HTMLInputElement | null>>([]);
-  const digits = value.padEnd(6, ' ').slice(0, 6).split('');
-
-  return (
-    <div className="flex justify-between gap-2" role="group" aria-label="Verification code">
-      {digits.map((d, i) => (
-        <input
-          key={i}
-          ref={(el) => {
-            refs.current[i] = el;
-          }}
-          inputMode="numeric"
-          maxLength={1}
-          aria-label={`Digit ${i + 1}`}
-          className="hairline size-11 rounded-[10px] bg-white/70 text-center text-lg font-semibold text-ink focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-400/30 sm:size-12"
-          value={d.trim()}
-          onChange={(e) => {
-            const ch = e.target.value.replace(/\D/g, '').slice(-1);
-            const next = value.padEnd(6, ' ').split('');
-            next[i] = ch;
-            onChange(next.join('').replace(/ /g, '').slice(0, 6));
-            if (ch && i < 5) refs.current[i + 1]?.focus();
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Backspace' && !digits[i].trim() && i > 0) refs.current[i - 1]?.focus();
-          }}
-          onPaste={(e) => {
-            e.preventDefault();
-            const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
-            onChange(pasted);
-            refs.current[Math.min(pasted.length, 5)]?.focus();
-          }}
-        />
-      ))}
-    </div>
-  );
-}
 
 /** Full auth page — Sign in / Sign up, then email OTP verification. */
 export function Auth({ mode }: { mode: Mode }) {
@@ -161,7 +123,8 @@ export function Auth({ mode }: { mode: Mode }) {
           <Badge>PRIVATE BY DESIGN</Badge>
           <div>
             <p className="t-quote max-w-md">
-              Your space, your keys, your work — <em>nothing leaves</em> without you.
+              Your thinking, your journal —{' '}
+              <em className="font-serif font-normal italic">nothing leaves</em> without you.
             </p>
             <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-muted">
               Password + email OTP · Firebase-backed sessions

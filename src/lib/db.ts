@@ -115,7 +115,7 @@ export function signOut(): void {
 }
 
 /** Anonymous sign-in via Identity Toolkit — no login UI needed. */
-export async function signInAnonymously(): Promise<Result<string>> {
+async function signInAnonymously(): Promise<Result<string>> {
   if (!dbConfigured()) return { ok: false, error: 'Firebase not configured' };
   try {
     const r = await fetch(
@@ -149,68 +149,4 @@ export async function ensureUser(): Promise<Result<string>> {
   return signInAnonymously();
 }
 
-function token(): string {
-  return localStorage.getItem(ID_TOKEN_KEY) ?? '';
-}
-
-const FS_ROOT = (): string => `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
-type Fields = Record<string, { stringValue?: string }>;
-
-/** Authenticated Firestore call under users/{uid}/… — refreshes an expired token once, then retries. */
-async function fsCall(path: string, init: RequestInit = {}): Promise<Result<Response>> {
-  const user = await ensureUser();
-  if (!user.ok) return user;
-  const send = () =>
-    fetch(`${FS_ROOT()}/users/${user.data}/${path}`, {
-      ...init,
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
-    });
-  try {
-    let r = await send();
-    if (r.status === 401 && (await refreshSession()).ok) r = await send();
-    return { ok: true, data: r };
-  } catch {
-    return { ok: false, error: 'Network error' };
-  }
-}
-
-const toFields = (data: Record<string, unknown>) => ({
-  fields: Object.fromEntries(Object.entries(data).map(([k, v]) => [k, { stringValue: String(v) }])),
-});
-const fromFields = (fields: Fields = {}): Record<string, string> =>
-  Object.fromEntries(Object.entries(fields).map(([k, v]) => [k, v.stringValue ?? '']));
-
-/** Create/overwrite a document: users/{uid}/{collection}/{id} */
-export async function saveDoc(collection: string, id: string, data: Record<string, unknown>): Promise<Result<string>> {
-  const r = await fsCall(`${collection}/${id}`, { method: 'PATCH', body: JSON.stringify(toFields(data)) });
-  if (!r.ok) return r;
-  return r.data.ok ? { ok: true, data: id } : { ok: false, error: `Save failed (${r.data.status})` };
-}
-
-/** Read one document back. */
-export async function loadDoc<T = Record<string, string>>(collection: string, id: string): Promise<Result<T>> {
-  const r = await fsCall(`${collection}/${id}`);
-  if (!r.ok) return r;
-  if (r.data.status === 404) return { ok: false, error: 'Not found' };
-  if (!r.data.ok) return { ok: false, error: `Load failed (${r.data.status})` };
-  const d = (await r.data.json()) as { fields?: Fields };
-  return { ok: true, data: fromFields(d.fields) as T };
-}
-
-/** List one collection of the signed-in user's documents (each includes its `id`). */
-export async function listDocs(collection: string): Promise<Result<Array<Record<string, string>>>> {
-  const r = await fsCall(`${collection}?pageSize=100`);
-  if (!r.ok) return r;
-  if (!r.data.ok) return { ok: false, error: `List failed (${r.data.status})` };
-  const d = (await r.data.json()) as { documents?: Array<{ name: string; fields?: Fields }> };
-  return {
-    ok: true,
-    data: (d.documents ?? []).map((x) => ({ id: x.name.split('/').pop() ?? '', ...fromFields(x.fields) })),
-  };
-}
-
-export async function deleteDoc(collection: string, id: string): Promise<Result<string>> {
-  const r = await fsCall(`${collection}/${id}`, { method: 'DELETE' });
-  if (!r.ok) return r;
-  return r.data.ok ? { ok: true, data: id } : { ok: false, error: `Delete failed (${r.data.status})` };
-}
+export const getIdToken = (): string => localStorage.getItem(ID_TOKEN_KEY) ?? '';

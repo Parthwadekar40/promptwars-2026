@@ -2,6 +2,9 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Think } from './Think';
 import { SAMPLE } from '../data/examples';
+import * as analyze from '../lib/analyze';
+
+vi.mock('../lib/analyze', async (orig) => ({ ...(await orig<typeof import('../lib/analyze')>()), reflectOn: vi.fn() }));
 
 describe('Think workspace', () => {
   beforeEach(() => localStorage.clear());
@@ -39,5 +42,28 @@ describe('Think workspace', () => {
     const status = await screen.findByText(/saved on this device/i);
     expect(within(status.parentElement as HTMLElement).getByRole('link', { name: /open journal/i })).toBeInTheDocument();
     expect(JSON.parse(localStorage.getItem('pw_journal') ?? '[]')).toHaveLength(1);
+  });
+
+  it('reflects on your own answers: tension, what is still open, one question — and says what failed if it cannot', async () => {
+    const reflectOn = vi.mocked(analyze.reflectOn);
+    reflectOn.mockResolvedValueOnce({
+      ok: true,
+      data: { removed: 0, reflection: { shifted: ['You named the stipend as the real driver.'], tension: 'You want learning, but ranked pay first.', stillOpen: ['Who would mentor you?'], oneQuestion: 'What would make this worth the study time?' } },
+    });
+    render(<Think />);
+    await userEvent.click(screen.getByRole('button', { name: /see a sample/i }));
+    expect(screen.getByRole('button', { name: /^reflect$/i })).toBeDisabled(); // nothing examined yet
+    await userEvent.click(await screen.findByRole('button', { name: /examined: .industry experience. will automatically/i }));
+    await userEvent.click(screen.getByRole('button', { name: /^reflect$/i }));
+    expect(await screen.findByText(/a tension worth noticing/i)).toBeInTheDocument();
+    expect(screen.getByText(/you want learning, but ranked pay first/i)).toBeInTheDocument();
+    // what we sent: the examined item travels as examined, the rest as still open
+    const sent = reflectOn.mock.calls[0][0];
+    expect(sent.examined).toHaveLength(1);
+    expect(sent.open.length).toBeGreaterThan(5);
+
+    reflectOn.mockResolvedValueOnce({ ok: false, error: 'The shared AI quota is busy right now.' });
+    await userEvent.click(screen.getByRole('button', { name: /^reflect$/i }));
+    expect(await screen.findByRole('alert')).toHaveTextContent(/quota is busy/i);
   });
 });

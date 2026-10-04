@@ -1,5 +1,7 @@
 # Penumbra — a thinking companion for *The Blind Spot*
 
+[![Deploy](https://github.com/Parthwadekar40/promptwars-2026/actions/workflows/deploy.yml/badge.svg)](https://github.com/Parthwadekar40/promptwars-2026/actions/workflows/deploy.yml) — every push runs **lint → tests → build → deploy**.
+
 > Describe a decision. Penumbra shows you what you are **not** looking at — the assumptions, risks and missing pieces — asks the questions worth sitting with, and then steps back. **The decision stays yours.**
 
 **Live:** https://parthwadekar40.github.io/promptwars-2026/ · **Try it in 10 seconds:** [open the instant sample](https://parthwadekar40.github.io/promptwars-2026/#/think?sample)
@@ -64,24 +66,28 @@ A *penumbra* is the half-lit edge of a shadow — the part you half-see. That is
 
 ```
 src/
-  lib/         analyze.ts   prompts · response schema · defensive parsing · analyze & reflect
-               guard.ts     neutrality guard (pure functions)
-               gemini.ts    model chain · cool-down · hedged requests · structured output
-               journal.ts   device + cloud journal, Markdown export     db.ts  Firebase REST (auth + Firestore)
+  lib/         analyze.ts    analyze & reflect: validation, prompt building, defensive parsing, guard
+               prompts.ts    system rules, field guides and response schemas (the product's brain)
+               guard.ts      neutrality guard — pure functions
+               gemini.ts     model chain · cool-down · preferred model · hedged requests · structured output
+               journal.ts    device + cloud journal, Markdown export
+               db.ts         Firebase Auth over REST (sign-up/in, session refresh)
+               firestore.ts  Firestore over REST — users/{uid}/… with token refresh + retry
                auth.ts · otp.ts · mail.ts · router.ts · result.ts
   hooks/       useThinking.ts   one session: describe → illuminate → examine → reflect
-  components/  think/ (Compose · Pending · Results · SpotlightCard · ProgressBar · ReflectionCard · YourCall)
-               Spotlight · Reveal · Atmosphere · Marquee · AppShell · ErrorBoundary · ui
-  pages/       Landing · Think · Journal · Auth · Connect (settings) · Privacy · NotFound
-  data/        examples.ts   starter decisions + the instant sample
+  components/  think/   Compose · Pending · Results · SpotlightCard · ProgressBar · ReflectionCard · YourCall
+               shell/   SiteHeader · SiteFooter · Brand · nav          AppShell · ErrorBoundary
+               Spotlight · Reveal · LazyVideo · Atmosphere · Marquee · OtpInput · ui
+  pages/       Landing (+ landing/ sections) · Think · Journal · Auth · Connect (settings) · Privacy · NotFound
+  data/        examples.ts   starter decisions (the brief's internship first) + the instant sample
 ```
 
-Stack: Vite 7 · React 19 · TypeScript (strict) · Tailwind CSS v4 · Framer Motion · Vitest + React Testing Library · GitHub Actions → GitHub Pages.
+Stack: Vite 7 · React 19 · TypeScript (strict) · Tailwind CSS v4 · Framer Motion · Vitest + React Testing Library + axe-core · ESLint · GitHub Actions → GitHub Pages.
 
 ## 6 · Quality
 
 ### Efficiency
-- First load ≈ **125 KB gzip** (app 79 KB + motion 45 KB). The Gemini SDK (56 KB gz) and the Think workspace (10 KB gz) are **lazy chunks** loaded only when needed.
+- First load ≈ **125 KB gzip** (app 80 KB + motion 45 KB); the decorative film loads only when it nears the viewport (`LazyVideo`) and never for reduced-motion visitors. The Gemini SDK (56 KB gz) and the Think workspace (10 KB gz) are **lazy chunks** loaded only when needed.
 - **Failover without waiting:** the SDK's built-in 5× retry cost ~25 s on a rate-limited model — it is disabled; failover is instant. Hedged requests cap the tail latency at ~7 s + one normal call. Losers are cancelled with `AbortController`.
 - Typical analysis: **≈ 3–5 s**; reflection **≈ 2–4 s**.
 - Journal merge is **O(n)** (`Map` by id); progress is derived with `useMemo`; the pointer-spotlight animation pauses off-screen (`IntersectionObserver`) and cleans up on unmount.
@@ -91,6 +97,7 @@ Stack: Vite 7 · React 19 · TypeScript (strict) · Tailwind CSS v4 · Framer Mo
 - **Content-Security-Policy** (build-time `<meta>`): scripts `'self'`; network limited to the four Google endpoints + the mail API; `object-src 'none'`.
 - **Prompt-injection hardening:** user text is stripped of control characters and `<` `>` (so it cannot close the data tags), length-bounded, and delimited as data.
 - Firestore rules ([`firestore.rules`](firestore.rules)): a user can read/write only `users/{their uid}/…`; everything else is denied.
+- The email one-time code is a UX confirmation, not a security boundary (it is checked in the browser); the real credential is the Firebase password. Two moderate advisories exist in dev-only test tooling (`@vitest/mocker`) — nothing from it ships to users.
 - No `dangerouslySetInnerHTML`; external links use `rel="noopener noreferrer"`; an error boundary keeps stack traces out of the UI; a [privacy page](https://parthwadekar40.github.io/promptwars-2026/#/privacy) states exactly what happens to your words.
 
 ### Accessibility
@@ -100,15 +107,21 @@ Stack: Vite 7 · React 19 · TypeScript (strict) · Tailwind CSS v4 · Framer Mo
 - Fully keyboard-operable (native `<details>` for the journal); visible `:focus-visible` ring.
 - **Contrast:** secondary text darkened to **5.3 : 1** on the paper background (WCAG AA).
 - `prefers-reduced-motion` disables every animation, the flashlight drift and the reveal effects.
+- **Verified two ways:** automated axe-core audits run *inside the test suite* (landing, Think empty + full results, sign-in, privacy), and again in a real browser against the live site — **0 violations** on every view, including colour contrast.
 
-### Testing — `npm test` (28 tests, run in CI before every deploy)
+### Testing — `npm test` (52 tests in 13 files, run in CI before every deploy) · `npm run coverage` → **82 % lines**
 | Area | What is proven |
 |---|---|
 | Neutrality guard | flags advice ("you should", "I recommend", "better option"); lets questions through; removes & counts offending lines in analyses and reflections; leaves clean output untouched |
-| Analysis engine | rejects too-short input before any network call; strips `<` `>` so user text cannot break out of its data tags; parses messy model output without throwing |
-| Failover | a faster hedged model wins and the slow one is aborted; instant failover on error; last error reported when all fail; model chain has independent buckets |
-| Journal | Markdown export; device save / newest-first / delete; saving twice overwrites instead of duplicating |
-| UI flows | empty-input guard; sample → counting examined blind spots; the final call needs the user's words, then lands in the journal; 404; shared-link sample; auth validation; `Button` styling regression |
+| Analysis pipeline (model mocked) | the answer is mapped to the UI shape; advice is stripped *before* display; user text travels as delimited data; a rate-limit becomes plain language with a way forward; an empty answer is refused; the reflection quotes the answers it was given |
+| Analysis engine | too-short input rejected before any network call; `<` `>` stripped so user text cannot break out of its data tags; messy model output parsed without throwing |
+| Model failover | a faster hedged model wins and the slow one is aborted; instant failover on error; last error reported when all fail |
+| One-time code | emailed to the typed address only; right code accepted once; wrong and 5-minute-old codes rejected; cancel discards; delivery failure surfaced |
+| Firestore REST | saves under `users/{uid}/…` with the bearer token; lists with ids; **refreshes an expired token once and retries**; failures and network errors reported, never thrown |
+| Journal | Markdown export; save / newest-first / delete; saving twice overwrites; page empty state and deletion |
+| The brief's scenario | the default example carries the brief's details and reasons; the sample covers academics, mentorship, long-term prospects, assumptions and conflicts; it passes the guard untouched |
+| UI flows | empty-input guard; sample → counting examined blind spots; reflect (tension, still-open, one question, failure message); the final call needs the user's words; 404; shared-link sample; auth validation; `Button` regression |
+| Accessibility | axe-core WCAG 2.1 A/AA on landing, Think (empty + results), sign-in, privacy |
 
 ## 7 · Run it
 
@@ -116,7 +129,8 @@ Stack: Vite 7 · React 19 · TypeScript (strict) · Tailwind CSS v4 · Framer Mo
 npm install
 cp .env.example .env     # add a free Google AI Studio key (VITE_GEMINI_API_KEY) — optional: Firebase / EmailJS
 npm run dev              # dev server
-npm test                 # 28 tests
+npm run lint             # ESLint
+npm test                 # 52 tests (npm run coverage for the report)
 npm run build            # type-check + production build → dist/
 ```
 

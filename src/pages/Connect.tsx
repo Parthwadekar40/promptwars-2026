@@ -53,13 +53,13 @@ export function Connect() {
   return (
     <section className="mx-auto flex max-w-2xl flex-col gap-6 px-6 py-16">
       <motion.img
-        src={`${import.meta.env.BASE_URL}assets/img/orbs-trio-alpha.webp`}
+        src={`${import.meta.env.BASE_URL}assets/img/hero-sphere.webp`}
         alt=""
         aria-hidden
         initial={reduce ? false : { opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.25 }}
-        className="float-art mx-auto w-56"
+        className="mx-auto -mb-6 w-52"
       />
       <GlassCard>
         <Icon name="gear" className="size-10" />

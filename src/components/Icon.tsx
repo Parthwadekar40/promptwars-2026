@@ -4,7 +4,7 @@ const ICONS = {
   gear: 'icon-gear.webp',
 } as const;
 
-export type IconName = keyof typeof ICONS;
+type IconName = keyof typeof ICONS;
 
 /** 3D iridescent icon set — consistent sizing via `size-*` classes, object-contain keeps scale honest. */
 export function Icon({
