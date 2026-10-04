@@ -75,17 +75,6 @@ export function AppShell({ children }: { children: ReactNode }) {
         el.style.setProperty('--my', `${e.clientY}px`);
       }}
     >
-      <a
-        href="#/"
-        onClick={(e) => {
-          e.preventDefault();
-          document.getElementById('main')?.focus();
-        }}
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-[10px] focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"
-      >
-        Skip to content
-      </a>
-
       {/* the brand gradient from the top, following the cursor through the whole page */}
       <div
         aria-hidden
@@ -97,6 +86,16 @@ export function AppShell({ children }: { children: ReactNode }) {
       />
 
       <header className="sticky top-0 z-40 border-b border-line bg-paper/85 backdrop-blur-xl">
+        <a
+          href="#/"
+          onClick={(e) => {
+            e.preventDefault();
+            document.getElementById('main')?.focus();
+          }}
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-[10px] focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"
+        >
+          Skip to content
+        </a>
         <nav aria-label="Main" className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5">
           <Brand testId="brand" />
 

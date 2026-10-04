@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { analyzeDecision, reflectOn, validateDecision } from '../lib/analyze';
 import type { Analysis, Answered, Item, Reflection } from '../lib/analyze';
 import { EXAMPLES, SAMPLE } from '../data/examples';
@@ -24,7 +24,7 @@ export function useThinking() {
   const [reflecting, setReflecting] = useState(false);
   const [reflectError, setReflectError] = useState('');
 
-  const show = (a: Analysis, n: number, isSample: boolean) => {
+  const show = useCallback((a: Analysis, n: number, isSample: boolean) => {
     setAnalysis(a);
     setRemoved(n);
     setSample(isSample);
@@ -33,13 +33,13 @@ export function useThinking() {
     setReflection(null);
     setReflectError('');
     setPhase('results');
-  };
+  }, []);
 
-  const loadSample = () => {
+  const loadSample = useCallback(() => {
     setDecision(EXAMPLES[0].decision);
     setLeaning(EXAMPLES[0].leaning);
     show(SAMPLE, 0, true);
-  };
+  }, [show]);
 
   const submit = async () => {
     const invalid = validateDecision(decision);

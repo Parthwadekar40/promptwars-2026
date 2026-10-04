@@ -18,7 +18,7 @@ export function Think({ autoSample = false }: { autoSample?: boolean }) {
 
   useEffect(() => {
     if (autoSample) loadSample();
-  }, [autoSample]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [autoSample, loadSample]);
 
   useEffect(() => {
     if (t.phase !== 'results') return;

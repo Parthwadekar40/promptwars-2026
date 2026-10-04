@@ -82,7 +82,13 @@ const REFLECT_SCHEMA = {
 
 /** Strip control characters and angle brackets (they could close our data tags), then bound the length. */
 export function cleanInput(text: string, max: number): string {
-  return text.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F<>]/g, '').trim().slice(0, max);
+  let out = '';
+  for (const ch of text.slice(0, max * 2)) {
+    const c = ch.codePointAt(0) ?? 0;
+    const control = c < 32 && c !== 9 && c !== 10 && c !== 13; // keep tab / newline
+    if (!control && ch !== '<' && ch !== '>') out += ch;
+  }
+  return out.trim().slice(0, max);
 }
 
 export function validateDecision(text: string): string | null {
