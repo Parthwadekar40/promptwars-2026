@@ -20,7 +20,7 @@ describe('App shell', () => {
     render(<App />);
     await userEvent.click(screen.getAllByRole('link', { name: /sign in/i })[0]);
     expect(await screen.findByRole('heading', { name: /welcome/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/display name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
   });
 
   it('renders settings with labeled key input', async () => {

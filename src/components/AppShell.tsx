@@ -2,6 +2,9 @@ import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { navigate, useRoute } from '../lib/router';
 import { Button } from './ui';
+import { clearProfile, useProfile } from '../lib/auth';
+import { signOut } from '../lib/db';
+import { whatsappLink } from '../lib/mail';
 
 const NAV = [
   { to: '/', label: 'Home' },
@@ -15,6 +18,14 @@ const GITHUB = 'https://github.com/Parthwadekar40';
 export function AppShell({ children }: { children: ReactNode }) {
   const route = useRoute();
   const [open, setOpen] = useState(false);
+  const profile = useProfile();
+
+  const logout = () => {
+    signOut();
+    clearProfile();
+    setOpen(false);
+    navigate('/');
+  };
 
   return (
     <div
@@ -56,11 +67,20 @@ export function AppShell({ children }: { children: ReactNode }) {
                 </a>
               </li>
             ))}
-            <li>
-              <Button type="button" onClick={() => navigate('/signin')} className="!px-4 !py-2 !text-[14px]">
-                Get started
-              </Button>
-            </li>
+            {profile ? (
+              <li className="flex items-center gap-2.5">
+                <span className="px-2 text-[14px] font-medium text-ink">{profile.name}</span>
+                <Button type="button" variant="ghost" onClick={logout} className="!px-4 !py-2 !text-[14px]">
+                  Sign out
+                </Button>
+              </li>
+            ) : (
+              <li>
+                <Button type="button" onClick={() => navigate('/signup')} className="!px-4 !py-2 !text-[14px]">
+                  Get started
+                </Button>
+              </li>
+            )}
           </ul>
 
           {/* mobile: hamburger */}
@@ -91,6 +111,25 @@ export function AppShell({ children }: { children: ReactNode }) {
                 </a>
               </li>
             ))}
+            <li>
+              {profile ? (
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="block w-full rounded-[8px] px-3 py-2.5 text-left text-[15px] text-ink-muted"
+                >
+                  Sign out ({profile.name})
+                </button>
+              ) : (
+                <a
+                  href="#/signup"
+                  onClick={() => setOpen(false)}
+                  className="block rounded-[8px] px-3 py-2.5 text-[15px] font-medium text-ink"
+                >
+                  Get started
+                </a>
+              )}
+            </li>
           </ul>
         )}
       </header>
@@ -111,14 +150,24 @@ export function AppShell({ children }: { children: ReactNode }) {
                 An intelligent workspace that turns your ideas into finished work — fast, private, and a genuine
                 pleasure to use.
               </p>
-              <a
-                href={GITHUB}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-5 inline-flex items-center gap-1.5 rounded-[8px] border border-line px-3 py-1.5 text-[13px] font-medium text-ink transition-colors hover:border-ink/25 hover:bg-ink/[0.04]"
-              >
-                GitHub ↗
-              </a>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <a
+                  href={GITHUB}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-[8px] border border-line px-3 py-1.5 text-[13px] font-medium text-ink transition-colors hover:border-ink/25 hover:bg-ink/[0.04]"
+                >
+                  GitHub ↗
+                </a>
+                <a
+                  href={whatsappLink('919975181905', 'Hi Parth!')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-[8px] border border-line px-3 py-1.5 text-[13px] font-medium text-ink transition-colors hover:border-ink/25 hover:bg-ink/[0.04]"
+                >
+                  WhatsApp ↗
+                </a>
+              </div>
             </div>
 
             <nav aria-label="Explore">

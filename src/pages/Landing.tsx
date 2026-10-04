@@ -6,6 +6,8 @@ import { Atmosphere } from '../components/Atmosphere';
 import { Marquee } from '../components/Marquee';
 import { navigate } from '../lib/router';
 import { sendEmail } from '../lib/mail';
+import { clearProfile, useProfile } from '../lib/auth';
+import { signOut } from '../lib/db';
 
 const CAPABILITIES = [
   { title: 'Understands, then delivers', body: 'Google Gemini reasons through your request and produces finished work in real time.' },
@@ -43,9 +45,10 @@ export function Landing() {
     setNotifyBusy(false);
   };
 
-  const words = ['Solve', 'it'];
-  const accent = 'beautifully,';
-  const tail = ['in', 'minutes.'];
+  const profile = useProfile();
+  const words = profile ? ['Welcome,'] : ['Solve', 'it'];
+  const accent = profile ? `${profile.name}.` : 'beautifully,';
+  const tail = profile ? [] : ['in', 'minutes.'];
 
   return (
     <>
@@ -83,8 +86,9 @@ export function Landing() {
               transition={{ duration: 1, delay: 1.35, ease: EASE }}
               className="mt-7 max-w-lg text-[18px] leading-relaxed text-ink-muted"
             >
-              An intelligent workspace that turns your ideas into finished work — fast, private, and a genuine
-              pleasure to use.
+              {profile
+                ? "You're signed in to PromptWars App — everything below is ready when you are."
+                : 'An intelligent workspace that turns your ideas into finished work — fast, private, and a genuine pleasure to use.'}
             </motion.p>
 
             <motion.div
@@ -93,12 +97,25 @@ export function Landing() {
               transition={{ duration: 1, delay: 1.65, ease: EASE }}
               className="mt-9 flex flex-wrap items-center gap-3"
             >
-              <Button type="button" onClick={() => navigate('/signin')}>
-                Get started
-              </Button>
-              <Button type="button" variant="ghost" onClick={() => navigate('/connect')}>
-                Connect AI key
-              </Button>
+              {profile ? (
+                <>
+                  <Button type="button" onClick={() => navigate('/connect')}>
+                    Go to Settings
+                  </Button>
+                  <Button type="button" variant="ghost" onClick={() => { signOut(); clearProfile(); }}>
+                    Sign out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button type="button" onClick={() => navigate('/signup')}>
+                    Get started
+                  </Button>
+                  <Button type="button" variant="ghost" onClick={() => navigate('/connect')}>
+                    Connect AI key
+                  </Button>
+                </>
+              )}
             </motion.div>
           </div>
 
@@ -310,7 +327,8 @@ export function Landing() {
         </div>
       </section>
 
-      {/* ————— CTA — drifting silk, delayed entry ————— */}
+      {/* ————— CTA — drifting silk — gone from the page once you're signed in ————— */}
+      {!profile && (
       <Section id="cta" eyebrow="Get started" title={<>Ready when <em className="font-serif font-normal italic tracking-normal text-ink-muted">you</em> are.</>}>
         <motion.div
           initial={reduce ? false : { opacity: 0, y: 28 }}
@@ -362,6 +380,7 @@ export function Landing() {
           </GlassCard>
         </motion.div>
       </Section>
+      )}
     </>
   );
 }
